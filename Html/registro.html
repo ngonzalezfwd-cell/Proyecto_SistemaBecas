@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - EduGrant</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            background-color: var(--secondary-bg);
+        }
+        .auth-card {
+            width: 100%;
+            max-width: 400px;
+        }
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .auth-header h2 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .auth-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="card auth-card">
+            <div class="auth-header">
+                <h2>EduGrant</h2>
+                <p>Crea tu cuenta para postular a becas</p>
+            </div>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="reg-fullname">Nombre Completo</label>
+                    <input type="text" id="reg-fullname" required placeholder="Ej. Juan Pérez">
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">Correo Electrónico</label>
+                    <input type="email" id="reg-email" required placeholder="usuario@ejemplo.com">
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Contraseña</label>
+                    <input type="password" id="reg-password" required minlength="6" placeholder="******">
+                </div>
+                <div class="form-group">
+                    <label for="reg-confirm-password">Confirmar Contraseña</label>
+                    <input type="password" id="reg-confirm-password" required placeholder="******">
+                </div>
+                <div class="form-group">
+                    <label for="reg-role">Tipo de Usuario</label>
+                    <select id="reg-role" required>
+                        <option value="applicant">Estudiante</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Registrarse</button>
+            </form>
+            <div class="auth-footer">
+                ¿Ya tienes una cuenta? <a href="login.html">Inicia sesión aquí</a>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="../js/registro.js"></script>
+</body>
+</html>

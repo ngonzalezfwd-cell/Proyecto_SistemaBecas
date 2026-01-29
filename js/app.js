@@ -16,12 +16,28 @@ const form = document.getElementById('application-form');
 
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
+    checkSession();
     renderDashboard();
     setupNavigation();
     setupForm();
     setupAdmin();
     updateUserInterface();
 });
+
+function checkSession() {
+    const user = JSON.parse(localStorage.getItem('edugrant_current_user'));
+    if (!user) {
+        // Redirect to login if not authenticated
+        window.location.href = 'login.html';
+        return;
+    }
+    
+    // Update Profile UI
+    document.getElementById('user-name').textContent = user.fullName;
+    document.getElementById('user-role').textContent = user.role === 'admin' ? 'Administrador' : 'Estudiante';
+    document.getElementById('user-avatar').textContent = user.fullName.charAt(0).toUpperCase();
+    currentUserRole = user.role;
+}
 
 // --- Navigation ---
 function setupNavigation() {
@@ -71,10 +87,16 @@ function setupNavigation() {
     });
 
     switchRoleBtn.addEventListener('click', () => {
-        currentUserRole = currentUserRole === 'applicant' ? 'admin' : 'applicant';
-        updateUserInterface();
-        // Go back to dashboard on role switch
-        document.querySelector('[data-target="dashboard"]').click();
+        if (confirm("Para cambiar de rol debes iniciar sesión con otra cuenta. ¿Deseas cerrar sesión?")) {
+            localStorage.removeItem('edugrant_current_user');
+            window.location.href = '../login.html';
+        }
+    });
+
+    // Logout Handler
+    document.getElementById('logout-btn').addEventListener('click', () => {
+        localStorage.removeItem('edugrant_current_user');
+        window.location.href = 'login.html';
     });
 }
 
