@@ -1,3 +1,4 @@
+
 export const SCHOLARSHIPS = [
     {
         id: 1,
@@ -8,7 +9,7 @@ export const SCHOLARSHIPS = [
             maxAge: 25,
             minIncome: 0 // No restriction
         },
-        amount: "$5,000 / semestre"
+        amount: "30.000 ₡ / semestre"
     },
     {
         id: 2,
@@ -19,7 +20,7 @@ export const SCHOLARSHIPS = [
             maxAge: 30,
             maxIncome: 15000 // Annual family income limit
         },
-        amount: "$3,000 / semestre"
+        amount: "50.000 ₡ / semestre"
     },
     {
         id: 3,
@@ -27,10 +28,10 @@ export const SCHOLARSHIPS = [
         description: "Para atletas destacados que representen a la institución en competencias oficiales.",
         requirements: {
             minGPA: 8.0,
-            maxAge: 28,
+            maxAge: 23,
             minIncome: 0
         },
-        amount: "$4,000 / semestre"
+        amount: "20.000 ₡ / semestre"
     }
 ];
 
