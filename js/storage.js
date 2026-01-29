@@ -1,14 +1,18 @@
+
 import { SCHOLARSHIPS, MOCK_APPLICATIONS } from './data.js';
 
 const KEY_APPLICATIONS = 'edugrant_applications';
 const KEY_INIT = 'edugrant_initialized';
 
 export class StorageService {
+
     constructor() {
+
         this.init();
     }
 
     init() {
+        
         if (!localStorage.getItem(KEY_INIT)) {
             // Seed initial data
             console.log("Seeding initial data...");
