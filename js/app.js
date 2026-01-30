@@ -43,7 +43,6 @@ function checkSession() {
     };
     document.getElementById('user-role').textContent = roleLabels[currentUser.role] || 'Usuario';
 }
-
 // --- Navigation ---
 function setupNavigation() {
     navLinks.forEach(link => {

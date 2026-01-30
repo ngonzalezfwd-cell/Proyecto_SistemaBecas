@@ -11,7 +11,7 @@ form.addEventListener('submit', (e) => {
     const email = document.getElementById('reg-email').value;
     const password = document.getElementById('reg-password').value;
     const confirmPassword = document.getElementById('reg-confirm-password').value;
-    const role = 'applicant'; // Default role
+    const role = document.getElementById('reg-role').value;
 
     // Restricted Emails
     const restrictedEmails = ['gnaomy276@gmail', 'tormentionrex@gmail.com'];
