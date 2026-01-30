@@ -3,6 +3,29 @@ Un pequeño proyecto en equipo para el lunes, sobre un Sistema de Gestión de Be
 
 ---
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gonzalez:
 # Guía para el (Main): Cómo Aceptar Cambios
 
 Esta sección es exclusiva para quien maneja la rama `main`. Su trabajo es unir el trabajo de los 3 o 4 compañeros sin que explote nada XD
