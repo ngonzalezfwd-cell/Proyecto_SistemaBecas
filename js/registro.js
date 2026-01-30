@@ -11,7 +11,14 @@ form.addEventListener('submit', (e) => {
     const email = document.getElementById('reg-email').value;
     const password = document.getElementById('reg-password').value;
     const confirmPassword = document.getElementById('reg-confirm-password').value;
-    const role = document.getElementById('reg-role').value;
+    const role = 'applicant'; // Default role
+
+    // Restricted Emails
+    const restrictedEmails = ['gnaomy276@gmail', 'tormentionrex@gmail.com'];
+    if (restrictedEmails.includes(email.toLowerCase())) {
+        alert("Este correo está reservado para uso del sistema.");
+        return;
+    }
 
     // Basic Validation
     if (password !== confirmPassword) {
@@ -40,7 +47,7 @@ form.addEventListener('submit', (e) => {
     localStorage.setItem('edugrant_users', JSON.stringify(users));
 
     alert("¡Registro exitoso! Redirigiendo al inicio...");
-    
+
     // Redirect to login (both in Html folder)
     window.location.href = 'login.html';
 });

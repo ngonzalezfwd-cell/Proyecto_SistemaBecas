@@ -10,19 +10,32 @@ form.addEventListener('submit', (e) => {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
 
-    // Get users from localStorage (Simulation)
+    // --- Special Roles Bypass ---
+    if (email === 'gnaomy276@gmail' && password === '123456') {
+        const adminUser = { fullName: 'Administrador Principal', email, role: 'admin' };
+        localStorage.setItem('edugrant_current_user', JSON.stringify(adminUser));
+        alert("¡Bienvenido, Administrador!");
+        window.location.href = 'index.html';
+        return;
+    }
+
+    if (email === 'tormentionrex@gmail.com' && password === 'undertale') {
+        const evalUser = { fullName: 'Evaluador Experto', email, role: 'evaluator' };
+        localStorage.setItem('edugrant_current_user', JSON.stringify(evalUser));
+        alert("¡Bienvenido, Evaluador!");
+        window.location.href = 'index.html';
+        return;
+    }
+
+    // --- Standard User Check ---
     const users = JSON.parse(localStorage.getItem('edugrant_users') || '[]');
-    
-    // Find user
     const user = users.find(u => u.email === email && u.password === password);
 
     if (user) {
-        // Save current user for the session (Simulation)
+        // Ensure standard users are applicants
+        user.role = 'applicant';
         localStorage.setItem('edugrant_current_user', JSON.stringify(user));
-        
-        alert(`¡Bienvenido de nuevo, ${user.fullName}!`);
-        
-        // Redirect to main app
+        alert(`¡Hola de nuevo, ${user.fullName}!`);
         window.location.href = 'index.html';
     } else {
         alert("Correo o contraseña incorrectos.");
