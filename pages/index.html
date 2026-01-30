@@ -116,14 +116,14 @@
                 style="margin-bottom: 3rem; position: relative; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); height: 400px;">
                 <div class="carousel-container" id="main-carousel">
                     <div class="carousel-slide active">
-                        <img src="../imgs/BS EduHelper.png" alt="EduHelper Banner">
+                        <img src="../imgs/imgcarrusel1.jpg" alt="EduHelper Banner">
                         <div class="carousel-caption">
                             <h3>Gestión Inteligente de Becas</h3>
                             <p>Todo el proceso desde tu computadora en pocos pasos.</p>
                         </div>
                     </div>
                     <div class="carousel-slide">
-                        <img src="../imgs/img-registrer.jpeg" alt="Registro">
+                        <img src="../imgs/imgcarrusel2.jpg" alt="Registro">
                         <div class="carousel-caption">
                             <h3>Oportunidades para Todos</h3>
                             <p>Explora becas de las mejores instituciones del país.</p>
@@ -131,7 +131,7 @@
                     </div>
                     <!-- Agregado de UCR como imagen de ejemplo para el carrusel -->
                     <div class="carousel-slide">
-                        <img src="../imgs/UCR.jpg" alt="Instituciones">
+                        <img src="../imgs/imgcarrusel3.jpg" alt="Instituciones">
                         <div class="carousel-caption">
                             <h3>Alianzas con Educadores</h3>
                             <p>Trabajamos con las instituciones públicas y privadas más prestigiosas.</p>
@@ -215,10 +215,41 @@
                 <!-- View: Apply Form -->
                 <section id="apply" class="view hidden">
                     <div class="card form-card">
-                        <h3>Nueva Postulación</h3>
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                            <h3 style="margin: 0;">Formulario de Postulación Oficial</h3>
+                            <button type="button" class="btn-secondary" id="open-help-btn"
+                                style="display: flex; align-items: center; gap: 8px;">
+                                <span class="icon">❓</span> ¿Necesitas Ayuda?
+                            </button>
+                        </div>
+
+                        <!-- Gonzalez: Guía Visual de Pasos -->
+                        <div class="steps-guide"
+                            style="display: flex; justify-content: space-between; margin-bottom: 3rem; position: relative;">
+                            <div class="step-item active">
+                                <div class="step-number">1</div>
+                                <div class="step-text">Seleccionar Beca</div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-number">2</div>
+                                <div class="step-text">Datos Personales</div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-number">3</div>
+                                <div class="step-text">Enviar Solicitud</div>
+                            </div>
+                            <div class="step-line"></div>
+                        </div>
+
                         <form id="application-form">
+                            <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-style: italic;">
+                                Estimado estudiante, por favor complete todos los campos con información verídica para
+                                procesar su solicitud.
+                            </p>
+
                             <div class="form-group">
-                                <label for="scholarship-select">Seleccionar Beca</label>
+                                <label for="scholarship-select">Beca a la que desea postular</label>
                                 <select id="scholarship-select" required>
                                     <option value="">-- Seleccione una opción --</option>
                                 </select>
@@ -226,23 +257,42 @@
 
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="full-name">Nombre Completo</label>
-                                    <input type="text" id="full-name" required placeholder="Juan Pérez">
+                                    <label for="student-id">Identificación (Cédula / Pasaporte)</label>
+                                    <input type="text" id="student-id" required placeholder="0-0000-0000">
                                 </div>
                                 <div class="form-group">
-                                    <label for="age">Edad</label>
-                                    <input type="number" id="age" required min="10" max="100">
+                                    <label for="full-name">Nombre Completo del Solicitante</label>
+                                    <input type="text" id="full-name" required placeholder="Nombre y Apellidos">
                                 </div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="gpa">Promedio (GPA)</label>
-                                    <input type="number" id="gpa" required min="0" max="10" step="0.1">
+                                    <label for="age">Edad Actual</label>
+                                    <input type="number" id="age" required min="10" max="100">
                                 </div>
                                 <div class="form-group">
-                                    <label for="income">Ingreso Familiar Anual (₡)</label>
-                                    <input type="number" id="income" required min="0">
+                                    <label for="phone">Teléfono de Contacto</label>
+                                    <input type="tel" id="phone" required placeholder="8888-8888">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="education">Institución Educativa de Procedencia</label>
+                                <input type="text" id="education" required
+                                    placeholder="Nombre del Colegio o Universidad">
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="gpa">Promedio Académico (GPA 0-10)</label>
+                                    <input type="number" id="gpa" required min="0" max="10" step="0.1"
+                                        placeholder="Ej: 9.2">
+                                </div>
+                                <div class="form-group">
+                                    <label for="income">Ingreso Familiar Mensual Aproximado (₡)</label>
+                                    <input type="number" id="income" required min="0"
+                                        placeholder="Monto neto en colones">
                                 </div>
                             </div>
 
@@ -254,6 +304,49 @@
 
                             <button type="submit" class="btn-primary">Enviar Postulación</button>
                         </form>
+                    </div>
+                </section>
+
+                <!-- View: Full User Guide (The "Redirección Aparte") -->
+                <section id="user-guide" class="view hidden">
+                    <div class="card" style="max-width: 900px; margin: 0 auto; padding: 3rem;">
+                        <h2
+                            style="color: var(--primary-color); margin-bottom: 2rem; display: flex; align-items: center; gap: 15px;">
+                            <span class="icon" style="font-size: 2.5rem;">📖</span> Guía Completa del Postulante
+                        </h2>
+
+                        <div class="guide-content" style="line-height: 1.8; color: var(--text-color);">
+                            <h3 style="margin-top: 2rem;">Introducción</h3>
+                            <p>Esta guía ha sido diseñada para ayudarle a completar su solicitud de beca en EduHelper de
+                                manera exitosa. Nuestro sistema busca apoyar a los estudiantes más dedicados y con
+                                mayores necesidades económicas.</p>
+
+                            <h3 style="margin-top: 2rem;">Paso 1: Preparación de Documentos</h3>
+                            <p>Antes de iniciar, asegúrese de tener a mano:</p>
+                            <ul>
+                                <li>Su cédula de identidad física para verificar el número.</li>
+                                <li>Su informe de notas oficial para ingresar el promedio exacto.</li>
+                                <li>Un comprobante de ingresos o conocimiento claro del ingreso mensual de su hogar.
+                                </li>
+                            </ul>
+
+                            <h3 style="margin-top: 2rem;">Paso 2: Completado del Formulario</h3>
+                            <p>Sea extremadamente cuidadoso con el campo de <strong>Motivación</strong>. Los evaluadores
+                                prestan especial atención a sus aspiraciones personales y profesionales.</p>
+
+                            <h3 style="margin-top: 2rem;">Paso 3: Seguimiento</h3>
+                            <p>Una vez enviado el formulario, no podrá editarlo. Podrá monitorear el estado de su
+                                revisión en la pestaña <strong>"Mis Becas"</strong> de su menú lateral.</p>
+                        </div>
+
+                        <div
+                            style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color); text-align: center;">
+                            <button class="btn-primary"
+                                onclick="document.querySelector('[data-target=\'apply\']').click()"
+                                style="padding: 1rem 2rem;">
+                                Regresar al Formulario
+                            </button>
+                        </div>
                     </div>
                 </section>
 
@@ -360,6 +453,51 @@
             <div class="modal-actions">
                 <button id="btn-approve" class="btn-success">Aprobar</button>
                 <button id="btn-reject" class="btn-danger">Rechazar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Guía de Ayuda (Postulación) -->
+    <div id="help-modal" class="modal hidden">
+        <div class="modal-content" style="width: 600px; max-height: 80vh; overflow-y: auto;">
+            <span class="close-modal" id="close-help-modal">&times;</span>
+            <h2 style="color: var(--primary-color); margin-bottom: 1.5rem;">Guía de Postulación EduHelper</h2>
+
+            <div class="help-content" style="text-align: left; line-height: 1.6;">
+                <p>Bienvenido al proceso de postulación. Siga estas instrucciones para asegurar que su solicitud sea
+                    procesada correctamente:</p>
+
+                <h4 style="margin-top: 1.5rem; color: var(--text-color);">1. Identificación y Datos Personales</h4>
+                <p>Asegúrese de ingresar su número de cédula exacto. El nombre debe coincidir con su identificación
+                    oficial.</p>
+
+                <h4 style="margin-top: 1.5rem; color: var(--text-color);">2. Información Académica</h4>
+                <p>El promedio (GPA) se calcula en una escala de 0 a 10. Si su institución usa escala de 0 a 100,
+                    simplemente divida entre 10.</p>
+
+                <h4 style="margin-top: 1.5rem; color: var(--text-color);">3. Situación Socioeconómica</h4>
+                <p>El ingreso familiar debe ser el monto mensual neto (después de rebajos de ley) de todo el núcleo
+                    familiar conviviente.</p>
+
+                <h4 style="margin-top: 1.5rem; color: var(--text-color);">4. Carta de Motivación</h4>
+                <p>Este es el espacio para contarnos por qué usted merece la beca. Sea sincero sobre sus metas y cómo
+                    este apoyo impactará su vida académica.</p>
+
+                <div style="background: #f0f7ff; padding: 1.5rem; border-radius: 8px; margin-top: 2rem;">
+                    <p style="margin: 0 0 1rem 0; font-size: 0.95rem; color: var(--primary-color);">
+                        <strong>¿Aún tienes dudas?</strong> Hemos preparado una guía completa con todos los detalles.
+                    </p>
+                    <button class="btn-secondary"
+                        onclick="document.getElementById('help-modal').classList.add('hidden'); switchView('user-guide');"
+                        style="width: 100%; border-color: var(--primary-color); color: var(--primary-color);">
+                        Ver Guía Completa de Postulación
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-primary"
+                    onclick="document.getElementById('help-modal').classList.add('hidden')">Entendido</button>
             </div>
         </div>
     </div>

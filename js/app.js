@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupForm();
     setupViews();
     updateUserInterface();
+    setupHelpModal();
 });
 
 function checkSession() {
@@ -48,40 +49,46 @@ function setupNavigation() {
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             const targetId = link.getAttribute('data-target');
-
-            // --- Permissions Guard ---
-            if (targetId === 'scholarship-management' && currentUser.role !== 'admin') {
-                alert("Acceso exclusivo para Administradores.");
-                return;
-            }
-            if (targetId === 'evaluations' && !['admin', 'evaluator'].includes(currentUser.role)) {
-                alert("Acceso restringido a Evaluadores o Administradores.");
-                return;
-            }
-            if (targetId === 'reports' && currentUser.role !== 'admin') {
-                alert("Acceso exclusivo para Administradores.");
-                return;
-            }
-
-            // Update UI
-            navLinks.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-
-            // Switch View
-            views.forEach(view => {
-                view.classList.add('hidden');
-                view.classList.remove('active');
-            });
-            const activeView = document.getElementById(targetId);
-            if (activeView) {
-                activeView.classList.remove('hidden');
-                activeView.classList.add('active');
-            }
-
-            // Update Title & Refresh Data
-            updateViewContent(targetId);
+            window.switchView(targetId);
         });
     });
+
+    window.switchView = function (targetId) {
+        // --- Permissions Guard ---
+        if (targetId === 'scholarship-management' && currentUser.role !== 'admin') {
+            alert("Acceso exclusivo para Administradores.");
+            return;
+        }
+        if (targetId === 'evaluations' && !['admin', 'evaluator'].includes(currentUser.role)) {
+            alert("Acceso restringido a Evaluadores o Administradores.");
+            return;
+        }
+        if (targetId === 'reports' && currentUser.role !== 'admin') {
+            alert("Acceso exclusivo para Administradores.");
+            return;
+        }
+
+        // Update UI
+        navLinks.forEach(l => {
+            l.classList.remove('active');
+            if (l.getAttribute('data-target') === targetId) l.classList.add('active');
+        });
+
+        // Switch View
+        views.forEach(view => {
+            view.classList.add('hidden');
+            view.classList.remove('active');
+        });
+
+        const targetView = document.getElementById(targetId);
+        if (targetView) {
+            targetView.classList.remove('hidden');
+            targetView.classList.add('active');
+        }
+
+        // Update Title & Refresh Data
+        updateViewContent(targetId);
+    };
 
     switchRoleBtn.addEventListener('click', () => {
         if (confirm("Para cambiar de cuenta debes cerrar sesión. ¿Continuar?")) {
@@ -108,7 +115,10 @@ function updateViewContent(targetId) {
             break;
         case 'history':
             pageTitle.textContent = 'Mi Historial';
-            renderHistoryTable();
+            renderHistory();
+            break;
+        case 'user-guide':
+            pageTitle.textContent = 'Guía de Usuario';
             break;
         case 'scholarship-management':
             pageTitle.textContent = 'Gestión de Becas';
@@ -231,9 +241,12 @@ function setupForm() {
         const formData = {
             id: 'app_' + Date.now(),
             scholarshipId: scholarshipId,
+            studentId: document.getElementById('student-id').value,
             applicantName: document.getElementById('full-name').value,
             applicantEmail: currentUser.email,
             age: parseInt(document.getElementById('age').value),
+            phone: document.getElementById('phone').value,
+            education: document.getElementById('education').value,
             gpa: parseFloat(document.getElementById('gpa').value),
             income: parseFloat(document.getElementById('income').value),
             motivation: document.getElementById('motivation').value,
@@ -379,8 +392,13 @@ window.openEvaluation = (appId) => {
 
     document.getElementById('modal-details').innerHTML = `
         <p><strong>Candidato:</strong> ${app.applicantName}</p>
+        <p><strong>Identificación:</strong> ${app.studentId || 'No provista'}</p>
+        <p><strong>Teléfono:</strong> ${app.phone || 'No provisto'}</p>
+        <p><strong>Institución:</strong> ${app.education || 'No provista'}</p>
+        <hr style="margin: 10px 0; border: 0; border-top: 1px solid #eee;">
         <p><strong>Beca:</strong> ${sch ? sch.title : '---'}</p>
         <p><strong>Promedio:</strong> ${app.gpa}</p>
+        <p><strong>Ingreso Mensual:</strong> ₡${app.income || 0}</p>
         <p><strong>Motivación:</strong> "${app.motivation}"</p>
     `;
     evalModal.classList.remove('hidden');
@@ -478,3 +496,39 @@ document.addEventListener('DOMContentLoaded', () => {
         startAutoSlide();
     }, 100);
 });
+// Gonzalez: Lógica para el Modal de Ayuda y Guía de Pasos
+function setupHelpModal() {
+    const helpModal = document.getElementById('help-modal');
+    const openBtn = document.getElementById('open-help-btn');
+    const closeBtn = document.getElementById('close-help-modal');
+
+    if (openBtn) {
+        openBtn.onclick = () => helpModal.classList.remove('hidden');
+    }
+    if (closeBtn) {
+        closeBtn.onclick = () => helpModal.classList.add('hidden');
+    }
+
+    // Lógica visual simple para los pasos
+    const formInputs = document.querySelectorAll('#application-form input, #application-form select, #application-form textarea');
+    const steps = document.querySelectorAll('.step-item');
+
+    formInputs.forEach(input => {
+        input.addEventListener('focus', () => {
+            if (input.id === 'scholarship-select') {
+                updateStepUI(0);
+            } else if (['student-id', 'full-name', 'age', 'phone', 'education'].includes(input.id)) {
+                updateStepUI(1);
+            } else if (['gpa', 'income', 'motivation'].includes(input.id)) {
+                updateStepUI(2);
+            }
+        });
+    });
+
+    function updateStepUI(index) {
+        steps.forEach((s, i) => {
+            if (i <= index) s.classList.add('active');
+            else s.classList.remove('active');
+        });
+    }
+}
