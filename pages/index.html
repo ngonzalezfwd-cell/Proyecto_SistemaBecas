@@ -6,38 +6,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Becas - EduGrant</title>
     <link rel="stylesheet" href="../style/style.css">
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <script src="../js/ui.js" defer></script>
+
 </head>
 
 <body>
 
     <!-- Gonzalez hizo tal cambio: Nuevo Navbar Interactivo -->
+
     <nav class="navbar">
+
         <div class="nav-container">
+
             <div class="logo">
-                <h2>EduGrant</h2>
+                <h2><i>EduHelper</i></h2>
             </div>
+
             <div class="nav-links">
+
                 <button class="nav-link active" data-target="dashboard">Inicio</button>
                 <button class="nav-link" data-target="apply">Postular</button>
                 <button class="nav-link" data-target="reports">Reportes</button>
                 <button class="nav-link" data-target="admin">Admin</button>
+
             </div>
-            <div class="user-profile-nav">
-                <!-- Gonzalez hizo tal cambio: Icono de usuario SVG -->
-                <div class="avatar">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
+
+            <div class="user-profile-nav" style="display: flex; align-items: center;">
+                <div class="user-info"
+                    style="text-align: right; margin-right: 12px; display: flex; flex-direction: column;">
+                    <span id="user-name" style="font-weight: 600; font-size: 0.95rem;">Usuario</span>
+                    <span id="user-role" class="role" style="font-size: 0.75rem; color: #666;">Rol</span>
                 </div>
+
+                <div id="user-avatar" class="avatar"
+                    style="width: 40px; height: 40px; border-radius: 50%; background-color: var(--primary-color); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px;">
+                    U
+                </div>
+
+                <button id="logout-btn" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+                    Salir
+                </button>
             </div>
         </div>
     </nav>
 
     <!-- Gonzalez hizo tal cambio: Hero Section con Banner -->
+
     <header class="hero">
         <div class="hero-content">
             <h1>Encuentra la beca de tus sueños</h1>
@@ -101,32 +118,32 @@
                             <!-- Gonzalez: Reemplaza 'href' con el enlace y 'src' con tu imagen -->
 
                             <a href="https://www.ucr.ac.cr" target="_blank" class="inst-card">
-                                <img src="../assets/UCR.jpg" alt="UCR" class="inst-img">
+                                <img src="../imgs/UCR.jpg" alt="UCR" class="inst-img">
                                 <h3>Universidad de Costa Rica</h3>
                             </a>
 
                             <a href="https://www.tec.ac.cr" target="_blank" class="inst-card">
-                                <img src="../assets/TEC.png" alt="TEC" class="inst-img">
+                                <img src="../imgs/TEC.png" alt="TEC" class="inst-img">
                                 <h3>Tecnológico de Costa Rica</h3>
                             </a>
 
                             <a href="https://www.una.ac.cr" target="_blank" class="inst-card">
-                                <img src="../assets/UNA.png" alt="UNA" class="inst-img">
+                                <img src="../imgs/UNA.png" alt="UNA" class="inst-img">
                                 <h3>Universidad Nacional</h3>
                             </a>
 
                             <a href="https://www.uned.ac.cr" target="_blank" class="inst-card">
-                                <img src="../assets/UNED.jpg" alt="UNED" class="inst-img">
+                                <img src="../imgs/UNED.jpg" alt="UNED" class="inst-img">
                                 <h3>UNED</h3>
                             </a>
 
                             <a href="https://www.ina.ac.cr" target="_blank" class="inst-card">
-                                <img src="../assets/INA.jpg" alt="INA" class="inst-img object-contain">
+                                <img src="../imgs/INA.jpg" alt="INA" class="inst-img object-contain">
                                 <h3>Instituto Nacional de Aprendizaje</h3>
                             </a>
 
                             <a href="#" target="_blank" class="inst-card">
-                                <img src="../assets/FWD.png" alt="FWD" class="inst-img object-contain">
+                                <img src="../imgs/FWD.png" alt="FWD" class="inst-img object-contain">
                                 <h3>Programas FWD</h3>
                             </a>
                         </div>
