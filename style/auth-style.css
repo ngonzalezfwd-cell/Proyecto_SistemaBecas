@@ -1,0 +1,231 @@
+:root {
+    --auth-primary: #3b82f6;
+    /* Blue 500 */
+    --auth-primary-hover: #2563eb;
+    /* Blue 600 */
+    --auth-bg-light: #ffffff;
+    --auth-bg-muted: #f8f9fc;
+    --auth-text-main: #1a1a1a;
+    --auth-text-muted: #667085;
+    --auth-border: #d0d5dd;
+    --auth-radius: 8px;
+    --auth-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--auth-text-main);
+    background-color: var(--auth-bg-light);
+}
+
+.split-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Panel Izquierdo: Formulario */
+.form-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 2.5rem;
+    max-width: 50%;
+}
+
+.brand-container {
+    margin-bottom: 4rem;
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.logo-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--auth-primary);
+    border-radius: 6px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    padding: 4px;
+}
+
+.logo-dot {
+    background: white;
+    border-radius: 1px;
+}
+
+.auth-form-wrapper {
+    max-width: 400px;
+    margin: auto;
+    width: 100%;
+}
+
+.auth-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+    color: var(--auth-text-muted);
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--auth-border);
+    border-radius: var(--auth-radius);
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--auth-primary);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.form-extras {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.forgot-password {
+    color: var(--auth-primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.btn-auth-primary {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--auth-primary);
+    color: white;
+    border: none;
+    border-radius: var(--auth-radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 1rem;
+}
+
+.btn-auth-primary:hover {
+    background-color: var(--auth-primary-hover);
+}
+
+.btn-google {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: white;
+    color: #344054;
+    border: 1px solid var(--auth-border);
+    border-radius: var(--auth-radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.btn-google img {
+    width: 20px;
+    height: 20px;
+}
+
+.auth-redirect {
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--auth-text-muted);
+}
+
+.auth-redirect a {
+    color: var(--auth-primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Panel Derecho: Ilustración */
+.illustration-panel {
+    flex: 1;
+    background-color: #60a5fa;
+    /* Blue 400 */
+    background-image: linear-gradient(135deg, #60a5fa 0%, #93c5fd 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.illustration-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    width: 80%;
+}
+
+.illustration-svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Decoraciones */
+.circle-blur {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    filter: blur(80px);
+    z-index: 1;
+}
+
+@media (max-width: 992px) {
+    .illustration-panel {
+        display: none;
+    }
+
+    .form-panel {
+        max-width: 100%;
+    }
+}
