@@ -1,259 +1,173 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Becas - EduGrant</title>
-    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="../style/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+    <script src="../js/ui.js" defer></script>
 </head>
 
 <body>
 
+    <!-- Gonzalez hizo tal cambio: Nuevo Navbar Interactivo -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h2>EduGrant</h2>
+            </div>
+            <div class="nav-links">
+                <button class="nav-link active" data-target="dashboard">Inicio</button>
+                <button class="nav-link" data-target="apply">Postular</button>
+                <button class="nav-link" data-target="reports">Reportes</button>
+                <button class="nav-link" data-target="admin">Admin</button>
+            </div>
+            <div class="user-profile-nav">
+                <div class="avatar">U</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Gonzalez hizo tal cambio: Hero Section con Banner -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Encuentra la beca de tus sueños</h1>
+            <div class="search-bar-container">
+                <select class="search-input">
+                    <option value="">Tu provincia</option>
+                    <option value="sanjose">San José</option>
+                    <option value="alajuela">Alajuela</option>
+                    <option value="cartago">Cartago</option>
+                    <option value="heredia">Heredia</option>
+                    <option value="guanacaste">Guanacaste</option>
+                    <option value="puntarenas">Puntarenas</option>
+                    <option value="limon">Limón</option>
+                </select>
+                <select class="search-input">
+                    <option value="">Nivel de grado</option>
+                    <option value="escolar">Escolar</option>
+                    <option value="colegiatura">Colegiatura</option>
+                    <option value="bachillerato">Bachillerato Medio</option>
+                    <option value="tecnico_fwd">Técnico (FWD)</option>
+                    <option value="tecnico_ina">Técnico (INA)</option>
+                    <option value="bachillerato_u">Bachillerato Universitario</option>
+                    <option value="licenciatura">Licenciatura</option>
+                </select>
+                <button class="btn-search">BUSCAR</button>
+            </div>
+        </div>
+    </header>
+
     <div class="app-container">
 
-        <!-- Sidebar Navigation -->
-
-        <aside class="sidebar">
-
-            <div class="logo">
-
-                <h2>EduGrant</h2>
-
-            </div>
-
-            <nav class="nav-menu">
-
-                <button class="nav-link active" data-target="dashboard">
-
-                    <span class="icon">🏠</span> Panel
-
-                </button>
-
-                <button class="nav-link" data-target="apply">
-
-                    <span class="icon">📝</span> Postular
-
-                </button>
-
-                <button class="nav-link" data-target="reports">
-
-                    <span class="icon">📊</span> Reportes
-
-                </button>
-
-                <button class="nav-link" data-target="admin">
-
-                    <span class="icon">🔐</span> Admin
-
-                </button>
-
-            </nav>
-            
-
-            <div class="user-profile">
-
-                <div class="avatar">U</div>
-
-                <div class="info">
-
-                    <span class="name">Usuario</span>
-
-                    <span class="role">Estudiante</span>
-
-                </div>
-
-            </div>
-
-        </aside>
-
         <!-- Main Content Area -->
-
         <main class="main-content">
 
-            <!-- Header -->
-
-            <header class="top-bar">
-
-                <h1 id="page-title">Becas Disponibles</h1>
-
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h2 id="page-title" class="section-title">Becas Disponibles</h2>
                 <div class="actions">
-
                     <button class="btn-secondary" id="switch-role-btn">Cambiar Rol (Demo)</button>
-
                 </div>
-
-            </header>
+            </div>
 
             <!-- Dynamic Views -->
-
             <div id="views-container">
-                
+
                 <!-- View: Dashboard (Scholarship List) -->
-
                 <section id="dashboard" class="view active">
-
                     <div class="scholarship-grid" id="scholarships-container">
-
                         <!-- Dynamic Content -->
-
                     </div>
-
                 </section>
 
                 <!-- View: Apply Form -->
-
                 <section id="apply" class="view hidden">
-
                     <div class="card form-card">
-
                         <h3>Nueva Postulación</h3>
-
                         <form id="application-form">
-
                             <div class="form-group">
-                                
                                 <label for="scholarship-select">Seleccionar Beca</label>
-
                                 <select id="scholarship-select" required>
-
                                     <option value="">-- Seleccione una opción --</option>
-
                                 </select>
-                                
                             </div>
-                            
+
                             <div class="form-row">
-
                                 <div class="form-group">
-
                                     <label for="full-name">Nombre Completo</label>
-
                                     <input type="text" id="full-name" required placeholder="Juan Pérez">
-
                                 </div>
-
                                 <div class="form-group">
-
                                     <label for="age">Edad</label>
-
                                     <input type="number" id="age" required min="10" max="100">
-
                                 </div>
-                                
                             </div>
 
                             <div class="form-row">
-
                                 <div class="form-group">
-
                                     <label for="gpa">Promedio (GPA)</label>
-
                                     <input type="number" id="gpa" required min="0" max="10" step="0.1">
-
                                 </div>
-                                
                                 <div class="form-group">
-
                                     <label for="income">Ingreso Familiar Anual ($)</label>
-
                                     <input type="number" id="income" required min="0">
-
                                 </div>
-
                             </div>
 
                             <div class="form-group">
-
                                 <label for="motivation">Carta de Motivación</label>
-
-                                <textarea id="motivation" rows="4" required placeholder="Explique por qué merece esta beca..."></textarea>
-
+                                <textarea id="motivation" rows="4" required
+                                    placeholder="Explique por qué merece esta beca..."></textarea>
                             </div>
 
                             <button type="submit" class="btn-primary">Enviar Postulación</button>
-
                         </form>
-
                     </div>
-
                 </section>
 
                 <!-- View: Admin Panel -->
-
                 <section id="admin" class="view hidden">
-
                     <div class="stats-row">
-
                         <div class="stat-card">
-
                             <h4>Pendientes</h4>
-
                             <span class="stat-number" id="stat-pending">0</span>
-
                         </div>
-
                         <div class="stat-card">
-
                             <h4>Evaluadas</h4>
-
                             <span class="stat-number" id="stat-evaluated">0</span>
-
                         </div>
-
                     </div>
 
                     <div class="table-container card">
-
                         <h3>Solicitudes Recientes</h3>
-
                         <table class="data-table">
-
                             <thead>
-
                                 <tr>
-
                                     <th>Candidato</th>
                                     <th>Beca</th>
                                     <th>Promedio</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
-
                                 </tr>
-
                             </thead>
-
                             <tbody id="applications-table-body">
-
                                 <!-- Dynamic Rows -->
-
                             </tbody>
-
                         </table>
-
                     </div>
-
                 </section>
 
                 <!-- View: Reports -->
-
                 <section id="reports" class="view hidden">
-
                     <div class="card">
-
                         <h3>Reporte General</h3>
-
                         <div id="reports-content">
-
                             <!-- Report charts or lists -->
-
                             <p>Generando estadísticas...</p>
-
                         </div>
-
                     </div>
-
                 </section>
 
             </div>
@@ -286,7 +200,8 @@
 
     </div>
 
-    <script type="module" src="js/app.js"></script>
-    
+    <script type="module" src="../js/app.js"></script>
+
 </body>
+
 </html>
