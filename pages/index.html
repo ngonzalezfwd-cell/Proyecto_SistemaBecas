@@ -25,7 +25,14 @@
                 <button class="nav-link" data-target="admin">Admin</button>
             </div>
             <div class="user-profile-nav">
-                <div class="avatar">U</div>
+                <!-- Gonzalez hizo tal cambio: Icono de usuario SVG -->
+                <div class="avatar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
             </div>
         </div>
     </nav>
@@ -79,6 +86,43 @@
                 <section id="dashboard" class="view active">
                     <div class="scholarship-grid" id="scholarships-container">
                         <!-- Dynamic Content -->
+                    </div>
+
+                    <!-- Gonzalez hizo tal cambio: Sección de Instituciones (Carrusel Interactivo) -->
+                    <div class="institutions-section" style="margin-top: 4rem;">
+                        <div class="section-header-center" style="text-align: center; margin-bottom: 2rem;">
+                            <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Becas por Instituciones otorgantes del
+                                país</h2>
+                            <p style="color: var(--text-muted);">Encuentra becas ofrecidas por las instituciones más
+                                prestigiosas de Costa Rica</p>
+                        </div>
+
+                        <div class="institutions-carousel">
+                            <div class="inst-card">
+                                <div class="inst-img-placeholder" style="background-color: #4dc9f6;">UCR</div>
+                                <h3>Universidad de Costa Rica</h3>
+                            </div>
+                            <div class="inst-card">
+                                <div class="inst-img-placeholder" style="background-color: #004d99;">TEC</div>
+                                <h3>Tecnológico de Costa Rica</h3>
+                            </div>
+                            <div class="inst-card">
+                                <div class="inst-img-placeholder" style="background-color: #d11e32;">UNA</div>
+                                <h3>Universidad Nacional</h3>
+                            </div>
+                            <div class="inst-card">
+                                <div class="inst-img-placeholder" style="background-color: #f7941d;">UNED</div>
+                                <h3>UNED</h3>
+                            </div>
+                            <div class="inst-card">
+                                <div class="inst-img-placeholder" style="background-color: #00aeef;">INA</div>
+                                <h3>Instituto Nacional de Aprendizaje</h3>
+                            </div>
+                            <div class="inst-card">
+                                <div class="inst-img-placeholder" style="background-color: #8cc63f;">FWD</div>
+                                <h3>Programas FWD</h3>
+                            </div>
+                        </div>
                     </div>
                 </section>
 

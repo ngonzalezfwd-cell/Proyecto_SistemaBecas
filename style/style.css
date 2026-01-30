@@ -455,3 +455,71 @@ textarea:focus {
     gap: 1rem;
     justify-content: flex-end;
 }
+
+/* Institutions Section (Gonzalez hizo tal cambio) */
+.institutions-carousel {
+    display: flex;
+    gap: 2rem;
+    overflow-x: auto;
+    padding: 1rem 0.5rem 2rem 0.5rem;
+    /* Bottom padding for shadow visibility */
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    /* Firefox */
+}
+
+.institutions-carousel::-webkit-scrollbar {
+    height: 8px;
+}
+
+.institutions-carousel::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.institutions-carousel::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.inst-card {
+    min-width: 250px;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    scroll-snap-align: start;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.inst-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.inst-img-placeholder {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 800;
+    font-size: 2rem;
+    letter-spacing: 2px;
+}
+
+.inst-card h3 {
+    padding: 1.5rem 1rem;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin: 0;
+}
+
+/* User Avatar SVG adjustment */
+.avatar svg {
+    width: 20px;
+    height: 20px;
+}
