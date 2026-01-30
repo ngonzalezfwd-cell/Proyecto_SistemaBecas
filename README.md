@@ -3,26 +3,45 @@ Un pequeño proyecto en equipo para el lunes, sobre un Sistema de Gestión de Be
 
 ---
 
-## 🚀 Guía Rápida de Git para el Líder (Main) y el Equipo
+# 👑 Guía para el Líder (Main): Cómo Aceptar Cambios
 
-Para evitar borrar el trabajo de los demás, sigue esta regla de oro:  
+Esta sección es exclusiva para quien maneja la rama `main`. Tu trabajo es unir el trabajo de los 3 o 4 compañeros sin que explote nada.
+
+### Paso 1: Ir a "Pull Requests"
+1.  Entra al repositorio en GitHub.
+2.  Haz clic en la pestaña **"Pull Requests"** (arriba a la izquierda).
+3.  Verás una lista con las solicitudes de tus compañeros (ej: "Andres quiere unir cambios", "Cristopher subió navbar", etc.).
+
+### Paso 2: Revisar y Unir (Uno por uno)
+Debes hacer esto con CADA solicitud, una por una:
+
+1.  Dale clic al título del Pull Request (ej: "Cambios de Andres").
+2.  Baja hasta ver el botón verde que dice **"Merge pull request"**.
+    *   *Si el botón es VERDE:* ¡Genial! GitHub lo puede unir automático.
+    *   *Si el botón es GRIS:* Hay conflictos. Debes resolverlos manualmente (GitHub te guiará).
+3.  Presiona **"Merge pull request"**.
+4.  Presiona **"Confirm merge"**.
+5.  (Opcional pero recomendado) Presiona "Delete branch" si ya no se usará esa rama.
+
+### Paso 3: Sincronizar tu PC
+Una vez que aceptaste los 3 o 4 Pull Requests en GitHub, **TU PC TODAVÍA NO LO SABE**.
+Debes descargarlos para tener el proyecto completo:
+
+1.  Abre tu terminal en la carpeta del proyecto.
+2.  Ejecuta: `git pull origin main`
+
+---
+
+# 👷 Guía Rápida para el Equipo
+
+Para evitar borrar el trabajo de los demás, sigue esta regla:  
 **SIEMPRE haz `git pull` antes de hacer `git push`.**
 
-### Flujo de Trabajo Correcto
-
-1.  **En GitHub:**
-    *   Acepta los **Pull Requests** de tus compañeros primero (Merge).
-
-2.  **En tu PC (Localmente):**
-    *   **Guarda tus cambios:**  
-        `git add .`  
-        `git commit -m "Descripción de tus cambios"`
-    
-    *   **Descarga lo nuevo (Sincronizar):**  
-        `git pull origin main`  
-        *(Esto descarga y fusiona el trabajo de tus compañeros con el tuyo)*.
-    
-    *   **Sube todo (Finalizar):**  
-        `git push origin main`
-
-> **Nota:** Si al hacer `git pull` hay conflictos, Git te avisará. Solo debes abrir el archivo conflictivo, decidir qué código se queda y volver a guardar.
+## Flujo de Trabajo
+1.  **Guarda tus cambios:**  
+    `git add .`  
+    `git commit -m "Descripción"`
+2.  **Sincroniza (Descarga lo nuevo):**  
+    `git pull origin main`  
+3.  **Sube tus cambios:**  
+    `git push origin tu-rama`
