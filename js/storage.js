@@ -12,10 +12,28 @@ export class StorageService {
     }
 
     init() {
-        if (!localStorage.getItem(KEY_INIT)) {
-            console.log("Seeding initial data...");
-            localStorage.setItem(KEY_SCHOLARSHIPS, JSON.stringify(SCHOLARSHIPS));
-            localStorage.setItem(KEY_APPLICATIONS, JSON.stringify(MOCK_APPLICATIONS));
+        const hasInit = localStorage.getItem(KEY_INIT);
+        const storedSch = JSON.parse(localStorage.getItem(KEY_SCHOLARSHIPS) || "[]");
+
+        // Si no hay datos o si hemos agregado nuevas becas por defecto en data.js
+        if (!hasInit || storedSch.length < SCHOLARSHIPS.length) {
+            console.log("Actualizando catálogo de becas...");
+
+            // Mantenemos las becas que el usuario haya podido crear manualmente,
+            // pero nos aseguramos de que las 'default' de data.js estén presentes.
+            const mergedScholarships = [...SCHOLARSHIPS];
+
+            // Si el usuario ya tenía becas custom (con IDs altos), las preservamos
+            storedSch.forEach(s => {
+                if (!mergedScholarships.find(ms => ms.id === s.id)) {
+                    mergedScholarships.push(s);
+                }
+            });
+
+            localStorage.setItem(KEY_SCHOLARSHIPS, JSON.stringify(mergedScholarships));
+            if (!localStorage.getItem(KEY_APPLICATIONS)) {
+                localStorage.setItem(KEY_APPLICATIONS, JSON.stringify(MOCK_APPLICATIONS));
+            }
             localStorage.setItem(KEY_INIT, 'true');
         }
     }
