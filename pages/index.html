@@ -83,33 +83,7 @@
         </div>
     </header>
 
-    <!-- Gonzalez hizo tal cambio: Sección de Categorías Rápidas (Los recuadros que faltaban) -->
-    <section class="categories-section">
-        <div class="main-content" style="padding-bottom: 0;">
-            <div class="category-grid">
-                <div class="category-card">
-                    <div class="category-icon">🎓</div>
-                    <h3>Beca de Excelencia</h3>
-                    <p>Para estudiantes con promedios superiores a 9.0 que destacan en sus estudios.</p>
-                </div>
-                <div class="category-card">
-                    <div class="category-icon">🏠</div>
-                    <h3>Beca de Residencia</h3>
-                    <p>Apoyo para estudiantes que viven en zonas alejadas de su centro de estudio.</p>
-                </div>
-                <div class="category-card">
-                    <div class="category-icon">🚌</div>
-                    <h3>Beca de Transporte</h3>
-                    <p>Subsidio mensual para facilitar el traslado diario de los estudiantes.</p>
-                </div>
-                <div class="category-card">
-                    <div class="category-icon">🍱</div>
-                    <h3>Beca de Comedor</h3>
-                    <p>Acceso gratuito o subsidiado al servicio de alimentación institucional.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    </header>
 
     <div class="app-container">
 
@@ -122,6 +96,46 @@
                     <button class="btn-secondary" id="switch-role-btn">Cambiar Rol (Demo)</button>
                 </div>
             </div>
+
+            <!-- Gonzalez: Sección de Requerimientos y Funciones del Sistema -->
+            <section class="info-requirements-section" style="margin-bottom: 3rem;">
+                <div class="requirements-grid">
+                    <div class="req-card">
+                        <h3>4.1 Autenticación y Usuarios</h3>
+                        <ul>
+                            <li>Registro de usuarios.</li>
+                            <li>Inicio de sesión.</li>
+                            <li>Roles.</li>
+                            <li>Cierre de sesión.</li>
+                        </ul>
+                    </div>
+                    <div class="req-card">
+                        <h3>4.2 Gestión de Convocatorias</h3>
+                        <p>Cada convocatoria incluye:</p>
+                        <ul>
+                            <li>Nombre, Descripción y Tipo (económica, académica, social).</li>
+                            <li>Fecha de inicio y cierre.</li>
+                            <li>Requisitos y Estado (abierta / cerrada).</li>
+                        </ul>
+                    </div>
+                    <div class="req-card">
+                        <h3>4.3 Postulación a Becas</h3>
+                        <ul>
+                            <li>Ver convocatorias, formulario de postulación y envío.</li>
+                            <li>Campos: Datos personales, nivel educativo, situación socioeconómica y motivo.</li>
+                        </ul>
+                    </div>
+                    <div class="req-card">
+                        <h3>4.4 Validación de Requisitos</h3>
+                        <ul>
+                            <li>Verificación de campos y criterios mínimos.</li>
+                            <li>Estados: Apta, No apta o Pendiente de revisión.</li>
+                            <li style="color: var(--primary-color); font-weight: 600;">Incluye: Beca de Excelencia
+                                académica, Beca deportiva y Beca de ayuda socioeconómica.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
 
             <!-- Dynamic Views -->
             <div id="views-container">
