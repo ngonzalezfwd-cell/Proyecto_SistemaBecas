@@ -1,13 +1,21 @@
 
+/**
+ * Datos semilla iniciales para la aplicación.
+ * Incluye las becas por defecto y algunas postulaciones de ejemplo.
+ */
 export const SCHOLARSHIPS = [
     {
         id: 1,
         title: "Beca de Excelencia Académica",
         description: "Dirigida a estudiantes con un promedio sobresaliente que demuestren compromiso académico.",
+        type: "Académica",
+        startDate: "2026-02-01",
+        endDate: "2026-06-30",
+        status: "Abierta",
         requirements: {
             minGPA: 9.0,
             maxAge: 25,
-            minIncome: 0 // No restriction
+            minIncome: 0
         },
         amount: "30.000 ₡ / semestre"
     },
@@ -15,10 +23,14 @@ export const SCHOLARSHIPS = [
         id: 2,
         title: "Apoyo Económico Social",
         description: "Ayuda financiera para estudiantes provenientes de hogares con bajos ingresos.",
+        type: "Económica",
+        startDate: "2026-01-15",
+        endDate: "2026-05-30",
+        status: "Abierta",
         requirements: {
             minGPA: 7.5,
             maxAge: 30,
-            maxIncome: 15000 // Annual family income limit
+            maxIncome: 15000
         },
         amount: "50.000 ₡ / semestre"
     },
@@ -26,6 +38,10 @@ export const SCHOLARSHIPS = [
         id: 3,
         title: "Beca Deportiva",
         description: "Para atletas destacados que representen a la institución en competencias oficiales.",
+        type: "Social",
+        startDate: "2026-03-01",
+        endDate: "2026-07-15",
+        status: "Abierta",
         requirements: {
             minGPA: 8.0,
             maxAge: 23,
@@ -56,6 +72,6 @@ export const MOCK_APPLICATIONS = [
         income: 12000,
         motivation: "Necesito apoyo para continuar mis estudios...",
         status: "approved",
-        date: new Date(Date.now() - 86400000).toISOString() // Yesterday
+        date: new Date(Date.now() - 86400000).toISOString()
     }
 ];

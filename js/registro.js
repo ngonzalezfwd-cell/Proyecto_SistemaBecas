@@ -1,4 +1,7 @@
-// JS Logic for Registration
+/**
+ * Lógica para el registro de nuevos usuarios.
+ * Por defecto asigna el rol 'applicant' (Postulante).
+ */
 import { StorageService } from './storage.js';
 
 const db = new StorageService();
@@ -11,12 +14,12 @@ form.addEventListener('submit', (e) => {
     const email = document.getElementById('reg-email').value;
     const password = document.getElementById('reg-password').value;
     const confirmPassword = document.getElementById('reg-confirm-password').value;
-    const role = document.getElementById('reg-role').value;
+    const role = 'applicant'; // Default role for new registrations
 
-    // Restricted Emails
-    const restrictedEmails = ['gnaomy276@gmail', 'tormentionrex@gmail.com'];
+    // Restricted Emails (Staff)
+    const restrictedEmails = ['gnaomy276@gmail.com', 'gnaomy267@gmail.com'];
     if (restrictedEmails.includes(email.toLowerCase())) {
-        alert("Este correo está reservado para uso del sistema.");
+        alert("Este correo está reservado para uso del personal administrativo.");
         return;
     }
 

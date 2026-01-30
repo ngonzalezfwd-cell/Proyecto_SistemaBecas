@@ -3,19 +3,23 @@ import { StorageService } from './storage.js';
 
 const db = new StorageService();
 
-// State
+// Estado global de la aplicación
+
 let currentUser = null;
 
 // DOM Elements
 const views = document.querySelectorAll('.view');
 const navLinks = document.querySelectorAll('.nav-link');
 const pageTitle = document.getElementById('page-title');
-const switchRoleBtn = document.getElementById('switch-role-btn');
 const scholarshipGrid = document.getElementById('scholarships-container');
 const scholarshipSelect = document.getElementById('scholarship-select');
 const form = document.getElementById('application-form');
+const evalMgmtTableBody = document.getElementById('evaluators-mgmt-table-body');
+const evalCrudModal = document.getElementById('evaluator-modal');
+const evalCrudForm = document.getElementById('evaluator-form');
 
-// --- Initialization ---
+// --- Inicialización: Se ejecuta cuando el DOM está listo ---
+
 document.addEventListener('DOMContentLoaded', () => {
     checkSession();
     renderDashboard();
@@ -23,27 +27,71 @@ document.addEventListener('DOMContentLoaded', () => {
     setupForm();
     setupViews();
     updateUserInterface();
+
 });
 
 function checkSession() {
+    // Verificar si el usuario está logueado
+
     currentUser = JSON.parse(localStorage.getItem('edugrant_current_user'));
+
     if (!currentUser) {
         window.location.href = 'login.html';
         return;
     }
 
     // Update Profile UI
+
     document.getElementById('user-name').textContent = currentUser.fullName;
+
     document.getElementById('user-avatar').textContent = currentUser.fullName.charAt(0).toUpperCase();
 
     const roleLabels = {
+
         'admin': 'Administrador',
         'evaluator': 'Evaluador',
         'applicant': 'Postulante'
     };
     document.getElementById('user-role').textContent = roleLabels[currentUser.role] || 'Usuario';
+
+    // Set default view based on role
+    if (currentUser.role === 'admin') {
+
+        switchView('scholarship-management');
+
+    } else if (currentUser.role === 'evaluator') {
+
+        switchView('evaluations');
+    } else {
+        switchView('dashboard');
+    }
 }
-// --- Navigation ---
+
+// Helper para cambiar vistas programáticamente
+function switchView(targetId) {
+    const link = Array.from(navLinks).find(l => l.getAttribute('data-target') === targetId);
+    if (!link) return;
+
+    // Actualizar UI del Nav
+    navLinks.forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+
+    // Cambiar la visibilidad de las secciones
+    views.forEach(view => {
+        view.classList.add('hidden');
+        view.classList.remove('active');
+    });
+    const activeView = document.getElementById(targetId);
+    if (activeView) {
+        activeView.classList.remove('hidden');
+        activeView.classList.add('active');
+    }
+
+    // Actualizar título y contenido
+    updateViewContent(targetId);
+}
+
+// --- Navegación: Controla el cambio de vistas y permisos ---
 function setupNavigation() {
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
@@ -51,6 +99,10 @@ function setupNavigation() {
 
             // --- Permissions Guard ---
             if (targetId === 'scholarship-management' && currentUser.role !== 'admin') {
+                alert("Acceso exclusivo para Administradores.");
+                return;
+            }
+            if (targetId === 'evaluators-management' && currentUser.role !== 'admin') {
                 alert("Acceso exclusivo para Administradores.");
                 return;
             }
@@ -63,31 +115,8 @@ function setupNavigation() {
                 return;
             }
 
-            // Update UI
-            navLinks.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-
-            // Switch View
-            views.forEach(view => {
-                view.classList.add('hidden');
-                view.classList.remove('active');
-            });
-            const activeView = document.getElementById(targetId);
-            if (activeView) {
-                activeView.classList.remove('hidden');
-                activeView.classList.add('active');
-            }
-
-            // Update Title & Refresh Data
-            updateViewContent(targetId);
+            switchView(targetId);
         });
-    });
-
-    switchRoleBtn.addEventListener('click', () => {
-        if (confirm("Para cambiar de cuenta debes cerrar sesión. ¿Continuar?")) {
-            localStorage.removeItem('edugrant_current_user');
-            window.location.href = 'login.html';
-        }
     });
 
     document.getElementById('logout-btn').addEventListener('click', () => {
@@ -114,6 +143,10 @@ function updateViewContent(targetId) {
             pageTitle.textContent = 'Gestión de Becas';
             renderScholarshipMgmtTable();
             break;
+        case 'evaluators-management':
+            pageTitle.textContent = 'Gestión de Evaluadores';
+            renderEvaluatorMgmtTable();
+            break;
         case 'evaluations':
             pageTitle.textContent = 'Panel de Evaluación';
             renderAdminTable();
@@ -126,49 +159,96 @@ function updateViewContent(targetId) {
 }
 
 function updateUserInterface() {
-    // Hide nav links based on role
-    navLinks.forEach(link => {
+    // Ocultar enlaces de navegación según el rol
+    const links = document.querySelectorAll('.nav-link');
+    links.forEach(link => {
         const target = link.getAttribute('data-target');
-        if (target === 'scholarship-management' || target === 'reports') {
-            link.style.display = currentUser.role === 'admin' ? 'block' : 'none';
+        let isVisible = false;
+
+        if (currentUser.role === 'admin') {
+            // El Admin solo ve gestión y reportes
+            isVisible = ['scholarship-management', 'reports', 'evaluators-management', 'evaluations'].includes(target);
+        } else if (currentUser.role === 'evaluator') {
+            // El Evaluador solo ve evaluaciones
+            isVisible = ['evaluations'].includes(target);
+        } else {
+            // El Postulante ve inicio, postular e historial
+            isVisible = ['dashboard', 'apply', 'history'].includes(target);
         }
-        if (target === 'evaluations') {
-            link.style.display = ['admin', 'evaluator'].includes(currentUser.role) ? 'block' : 'none';
-        }
-        if (target === 'history' || target === 'apply') {
-            link.style.display = currentUser.role === 'applicant' ? 'block' : 'none';
-        }
+
+        link.style.setProperty('display', isVisible ? 'block' : 'none', 'important');
     });
 
-    // Special behavior for Hero and Switch button
-    const hero = document.querySelector('.hero');
-    if (currentUser.role !== 'applicant') {
-        if (hero) hero.style.display = 'none';
-        switchRoleBtn.textContent = "Cambiar a Postulante";
-    } else {
-        if (hero) hero.style.display = 'block';
-        switchRoleBtn.textContent = "Cambiar a Admin/Eval";
+    // Dynamic Hero Content
+    const heroTitle = document.getElementById('hero-title');
+    const heroSubtitle = document.getElementById('hero-subtitle');
+    const heroSearch = document.getElementById('hero-search-bar');
+
+    if (heroTitle && heroSubtitle) {
+        if (currentUser.role === 'admin') {
+            heroTitle.textContent = 'Panel de Gestión Administrativa';
+            heroSubtitle.textContent = 'Crea becas y gestiona evaluadores con facilidad.';
+            heroSearch.style.display = 'none';
+        } else if (currentUser.role === 'evaluator') {
+            heroTitle.textContent = 'Panel de Revisión Académica';
+            heroSubtitle.textContent = 'Evalúa postulaciones y toma decisiones hoy mismo.';
+            heroSearch.style.display = 'none';
+        } else {
+            heroTitle.textContent = 'Encuentra la beca de tus sueños';
+            heroSubtitle.textContent = ''; // Leave empty for applicants as they have the search bar
+            heroSearch.style.display = 'flex';
+        }
     }
 }
 
-// --- Features: Dashboard ---
+// --- Funcionalidad: Dashboard - Renderiza las tarjetas de becas ---
 function renderDashboard() {
     const scholarships = db.getScholarships();
     scholarshipGrid.innerHTML = scholarships.map(sch => `
-        <div class="card">
-            <h3>${sch.title}</h3>
-            <p>${sch.description}</p>
-            <div style="margin-bottom: 1rem;">
-                <strong>Requisitos:</strong>
-                <ul style="padding-left: 1.2rem; color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
-                    <li>Promedio mín: ${sch.requirements.minGPA}</li>
-                    <li>Edad máx: ${sch.requirements.maxAge} años</li>
-                    ${sch.requirements.maxIncome ? `<li>Ingreso máx: $${sch.requirements.maxIncome}</li>` : ''}
+        <div class="card scholarship-card">
+            <div class="card-header-flex">
+                <h3 class="card-title-sm">${sch.title}</h3>
+                <span class="status-badge badge-sm ${sch.status === 'Abierta' ? 'status-approved' : 'status-rejected'}">
+                    ${sch.status}
+                </span>
+            </div>
+            <p class="color-text-muted text-sm mb-1rem">${sch.description}</p>
+            
+            <div class="card-info-grid">
+                <div>
+                    <strong class="info-label">Tipo</strong>
+                    <span>${sch.type || 'N/A'}</span>
+                </div>
+                <div>
+                    <strong class="info-label">Monto</strong>
+                    <span class="info-value-primary">${sch.amount}</span>
+                </div>
+                <div>
+                    <strong class="info-label">Apertura</strong>
+                    <span>${sch.startDate || 'N/A'}</span>
+                </div>
+                <div>
+                    <strong class="info-label">Cierre</strong>
+                    <span>${sch.endDate || 'N/A'}</span>
+                </div>
+            </div>
+
+            <div class="card-requirements-box">
+                <strong class="req-title">Requisitos:</strong>
+                <ul class="req-list">
+                    <li>Promedio mín: <strong>${sch.requirements.minGPA}</strong></li>
+                    <li>Edad máx: <strong>${sch.requirements.maxAge} años</strong></li>
+                    ${sch.requirements.maxIncome ? `<li>Ingreso máx: <strong>$${sch.requirements.maxIncome}</strong></li>` : ''}
                 </ul>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
-                <span style="font-weight: bold; color: var(--primary-color);">${sch.amount}</span>
-                ${currentUser.role === 'applicant' ? `<button class="btn-primary" onclick="goToApply(${sch.id})">Postular</button>` : ''}
+
+            <div class="mt-auto">
+                ${currentUser.role === 'applicant' && sch.status === 'Abierta'
+            ? `<button class="btn-primary btn-full" onclick="goToApply(${sch.id})">Postular a esta Beca</button>`
+            : sch.status === 'Cerrada'
+                ? `<button class="btn-secondary btn-full" disabled>Convocatoria Cerrada</button>`
+                : `<button class="btn-secondary btn-full" disabled>Modo Visualización</button>`
+        }
             </div>
         </div>
     `).join('');
@@ -182,14 +262,14 @@ window.goToApply = (scholarshipId) => {
     }, 50);
 };
 
-// --- Features: Applicant History ---
+// --- Funcionalidad: Historial del Postulante ---
 function renderHistoryTable() {
     const apps = db.getUserApplications(currentUser.email);
     const scholarships = db.getScholarships();
     const tbody = document.getElementById('history-table-body');
 
     if (apps.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No tienes postulaciones registradas.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center">No tienes postulaciones registradas.</td></tr>';
         return;
     }
 
@@ -209,7 +289,7 @@ function renderHistoryTable() {
     }).join('');
 }
 
-// --- Features: Application Form ---
+// --- Funcionalidad: Formulario de Aplicación ---
 function populateScholarshipSelect() {
     const scholarships = db.getScholarships();
     scholarshipSelect.innerHTML = '<option value="">-- Seleccione una opción --</option>';
@@ -258,7 +338,7 @@ function setupForm() {
     });
 }
 
-// --- Features: Scholarship Management (Admin) ---
+// --- Funcionalidad: Gestión de Becas (Admin) ---
 let currentSchEditingId = null;
 const schModal = document.getElementById('scholarship-modal');
 const schForm = document.getElementById('scholarship-form');
@@ -286,6 +366,10 @@ window.editSch = (id) => {
     document.getElementById('sch-title').value = sch.title;
     document.getElementById('sch-desc').value = sch.description;
     document.getElementById('sch-amount').value = sch.amount;
+    document.getElementById('sch-type').value = sch.type || 'Académica';
+    document.getElementById('sch-start-date').value = sch.startDate || '';
+    document.getElementById('sch-end-date').value = sch.endDate || '';
+    document.getElementById('sch-status').value = sch.status || 'Abierta';
     document.getElementById('sch-min-gpa').value = sch.requirements.minGPA;
     document.getElementById('sch-max-age').value = sch.requirements.maxAge;
     document.getElementById('sch-max-income').value = sch.requirements.maxIncome || '';
@@ -296,6 +380,28 @@ window.deleteSch = (id) => {
     if (confirm("¿Seguro que quieres eliminar esta beca?")) {
         db.deleteScholarship(id);
         renderScholarshipMgmtTable();
+    }
+};
+
+// --- Features: Evaluator Management (Admin) ---
+function renderEvaluatorMgmtTable() {
+    const list = db.getEvaluators();
+    if (!evalMgmtTableBody) return;
+    evalMgmtTableBody.innerHTML = list.map(ev => `
+        <tr>
+            <td>${ev.fullName}</td>
+            <td>${ev.email}</td>
+            <td>
+                <button class="btn-danger" onclick="deleteEval('${ev.email}')">Borrar</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+window.deleteEval = (email) => {
+    if (confirm(`¿Seguro que quieres eliminar al evaluador ${email}?`)) {
+        db.deleteEvaluator(email);
+        renderEvaluatorMgmtTable();
     }
 };
 
@@ -317,6 +423,10 @@ function setupViews() {
             title: document.getElementById('sch-title').value,
             description: document.getElementById('sch-desc').value,
             amount: document.getElementById('sch-amount').value,
+            type: document.getElementById('sch-type').value,
+            startDate: document.getElementById('sch-start-date').value,
+            endDate: document.getElementById('sch-end-date').value,
+            status: document.getElementById('sch-status').value,
             requirements: {
                 minGPA: parseFloat(document.getElementById('sch-min-gpa').value),
                 maxAge: parseInt(document.getElementById('sch-max-age').value),
@@ -334,13 +444,42 @@ function setupViews() {
         renderScholarshipMgmtTable();
     });
 
+    // Evaluator Modal
+    const addEvalBtn = document.getElementById('add-evaluator-btn');
+    if (addEvalBtn) {
+        addEvalBtn.addEventListener('click', () => {
+            evalCrudForm.reset();
+            evalCrudModal.classList.remove('hidden');
+        });
+    }
+
+    const closeEvalModal = document.querySelector('.close-modal-eval');
+    if (closeEvalModal) {
+        closeEvalModal.addEventListener('click', () => evalCrudModal.classList.add('hidden'));
+    }
+
+    if (evalCrudForm) {
+        evalCrudForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const evalData = {
+                fullName: document.getElementById('eval-name').value,
+                email: document.getElementById('eval-email').value,
+                password: document.getElementById('eval-password').value
+            };
+
+            db.addEvaluator(evalData);
+            evalCrudModal.classList.add('hidden');
+            renderEvaluatorMgmtTable();
+        });
+    }
+
     // Evaluation Modal
     document.querySelector('.close-modal').addEventListener('click', () => evalModal.classList.add('hidden'));
     document.getElementById('btn-approve').addEventListener('click', () => finalizeEvaluation('approved'));
     document.getElementById('btn-reject').addEventListener('click', () => finalizeEvaluation('rejected'));
 }
 
-// --- Features: Evaluation (Admin & Evaluator) ---
+// --- Funcionalidad: Evaluación de Solicitudes (Admin y Evaluador) ---
 const evalModal = document.getElementById('evaluation-modal');
 let currentEvalAppId = null;
 
@@ -394,7 +533,7 @@ function finalizeEvaluation(status) {
     }
 }
 
-// --- Reports ---
+// --- Reportes y Estadísticas ---
 function renderReports() {
     const stats = db.getStats();
     document.getElementById('reports-content').innerHTML = `
@@ -402,6 +541,6 @@ function renderReports() {
             <div class="stat-card"><h4>Total</h4><span class="stat-number">${stats.total}</span></div>
             <div class="stat-card"><h4>Aprobadas</h4><span class="stat-number">${stats.approved}</span></div>
         </div>
-        <p style="margin-top:1rem;">Tasa de éxito: ${stats.total > 0 ? Math.round((stats.approved / stats.total) * 100) : 0}%</p>
+        <p class="reports-success-rate">Tasa de éxito: ${stats.total > 0 ? Math.round((stats.approved / stats.total) * 100) : 0}%</p>
     `;
 }

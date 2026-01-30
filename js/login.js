@@ -1,4 +1,8 @@
-// JS Logic for Login
+/**
+ * Lógica para el inicio de sesión.
+ * Maneja tanto credenciales quemadas para staff como usuarios registrados.
+ */
+
 import { StorageService } from './storage.js';
 
 const db = new StorageService();
@@ -11,7 +15,9 @@ form.addEventListener('submit', (e) => {
     const password = document.getElementById('login-password').value;
 
     // --- Special Roles Bypass ---
-    if (email === 'gnaomy276@gmail' && password === '123456') {
+    // Admin
+    
+    if (email === 'gnaomy276@gmail.com' && password === '123456') {
         const adminUser = { fullName: 'Administrador Principal', email, role: 'admin' };
         localStorage.setItem('edugrant_current_user', JSON.stringify(adminUser));
         alert("¡Bienvenido, Administrador!");
@@ -19,7 +25,7 @@ form.addEventListener('submit', (e) => {
         return;
     }
 
-    if (email === 'tormentionrex@gmail.com' && password === 'undertale') {
+    if (email === 'gnaomy267@gmail.com' && password === '123456') {
         const evalUser = { fullName: 'Evaluador Experto', email, role: 'evaluator' };
         localStorage.setItem('edugrant_current_user', JSON.stringify(evalUser));
         alert("¡Bienvenido, Evaluador!");

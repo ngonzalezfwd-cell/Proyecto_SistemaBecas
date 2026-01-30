@@ -1,3 +1,6 @@
+/**
+ * Estilos globales y para el dashboard de EduHelper.
+ */
 :root {
     --primary-color: #2563eb;
     /* Blue 600 */
@@ -114,15 +117,42 @@ body {
 .user-profile-nav .avatar {
     width: 40px;
     height: 40px;
-    background-color: rgba(255, 255, 255, 0.2);
-    /* Semi-transparent white */
-    color: inherit;
+    background-color: var(--primary-color);
+    color: white;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
     border: 2px solid currentColor;
+    margin-right: 12px;
+}
+
+.user-profile-nav {
+    display: flex;
+    align-items: center;
+}
+
+.user-info-staff {
+    text-align: right;
+    margin-right: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name-nav {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.role-nav {
+    font-size: 0.75rem;
+    color: #282936;
+}
+
+.logout-btn-nav {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
 }
 
 /* Hero Section (Gonzalez) */
@@ -166,6 +196,12 @@ body {
     font-weight: 800;
     margin-bottom: 3rem;
     text-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
 }
 
 /* Search Bar Container */
@@ -239,7 +275,122 @@ body {
     padding-left: 1rem;
 }
 
+.section-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.mt-4rem {
+    margin-top: 4rem;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mb-2rem {
+    margin-bottom: 2rem;
+}
+
+.mb-1rem {
+    margin-bottom: 1rem;
+}
+
+.mr-12px {
+    margin-right: 12px;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.inst-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.mgmt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
 /* Cards & Grid */
+.card-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.card-title-sm {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.badge-sm {
+    font-size: 0.7rem;
+}
+
+.text-sm {
+    font-size: 0.9rem;
+}
+
+.card-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+}
+
+.info-label {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.info-value-primary {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.card-requirements-box {
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    background: var(--secondary-bg);
+    border-radius: 8px;
+}
+
+.req-title {
+    font-size: 0.8rem;
+    display: block;
+    margin-bottom: 0.4rem;
+}
+
+.req-list {
+    padding-left: 1.2rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin: 0;
+}
+
 .scholarship-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -431,14 +582,37 @@ textarea:focus {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 2000;
 }
 
 .modal-content {
     background: white;
     padding: 2rem;
     border-radius: var(--radius);
-    width: 500px;
+    width: 600px;
+    max-width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
     position: relative;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
 }
 
 .close-modal {
@@ -451,9 +625,34 @@ textarea:focus {
 
 .modal-actions {
     margin-top: 1.5rem;
-    display: flex;
     gap: 1rem;
     justify-content: flex-end;
+}
+
+.modal-header-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+.sch-modal-title i {
+    font-style: italic;
+}
+
+.btn-full {
+    width: 100%;
+}
+
+.reports-success-rate {
+    margin-top: 1rem;
+}
+
+.object-contain {
+    object-fit: contain;
+}
+
+.color-text-muted {
+    color: var(--text-muted);
 }
 
 /* Institutions Section (Gonzalez hizo tal cambio) */

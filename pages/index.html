@@ -9,57 +9,75 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <script src="../js/ui.js" defer></script>
+
 </head>
 
 <body>
 
-    <!-- Gonzalez hizo tal cambio: Nuevo Navbar Interactivo -->
+    <!-- Navbar principal: Contiene el logo, enlaces de navegación y perfil de usuario -->
 
     <nav class="navbar">
 
         <div class="nav-container">
 
             <div class="logo">
+
                 <h2><i>EduHelper</i></h2>
+
             </div>
 
             <div class="nav-links">
+
+                <!-- vista del Postulante -->
+
                 <button class="nav-link active" data-target="dashboard">Inicio</button>
+
                 <button class="nav-link" data-target="apply">Postular</button>
+
                 <button class="nav-link" data-target="history">Mis Becas</button>
+
+                <!-- vista del Administrador -->
+
                 <button class="nav-link" data-target="scholarship-management">Gestionar Becas</button>
+
+                <button class="nav-link" data-target="evaluators-management">Gestionar Evaluadores</button>
+
                 <button class="nav-link" data-target="reports">Reportes</button>
                 <button class="nav-link" data-target="evaluations">Evaluaciones</button>
             </div>
 
-            <div class="user-profile-nav" style="display: flex; align-items: center;">
-                <div class="user-info"
-                    style="text-align: right; margin-right: 12px; display: flex; flex-direction: column;">
-                    <span id="user-name" style="font-weight: 600; font-size: 0.95rem;">Usuario</span>
-                    <span id="user-role" class="role" style="font-size: 0.75rem; color: #666;">Rol</span>
+            <!-- Perfil de usuario -->
+
+            <div class="user-profile-nav">
+
+                <div class="user-info-staff">
+                    <span id="user-name" class="user-name-nav">Usuario</span>
+                    <span id="user-role" class="role role-nav">Rol</span>
                 </div>
 
-                <div id="user-avatar" class="avatar"
-                    style="width: 40px; height: 40px; border-radius: 50%; background-color: var(--primary-color); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px;">
-                    U
+                <div id="user-avatar" class="avatar">
+
                 </div>
 
-                <button id="logout-btn" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
-                    Salir
-                </button>
+                <button id="logout-btn" class="btn-secondary logout-btn-nav">Cerrar
+                    Sesión</button>
+
             </div>
+
         </div>
+
     </nav>
 
-    <!-- Gonzalez hizo tal cambio: Hero Section con Banner -->
-
     <header class="hero">
+
         <div class="hero-content">
-            <h1>Encuentra la beca de tus sueños</h1>
-            <div class="search-bar-container">
+
+            <h1 id="hero-title">Encuentra la beca de tus sueños</h1>
+            <p id="hero-subtitle" class="hero-subtitle"></p>
+
+            <div class="search-bar-container" id="hero-search-bar">
+                <label for="provincia">Provincia</label>
                 <select class="search-input">
-                    <option value="">Tu provincia</option>
                     <option value="sanjose">San José</option>
                     <option value="alajuela">Alajuela</option>
                     <option value="cartago">Cartago</option>
@@ -68,8 +86,10 @@
                     <option value="puntarenas">Puntarenas</option>
                     <option value="limon">Limón</option>
                 </select>
+
+                <label for="nivel-grado">Nivel de grado</label>
+
                 <select class="search-input">
-                    <option value="">Nivel de grado</option>
                     <option value="escolar">Escolar</option>
                     <option value="colegiatura">Colegiatura</option>
                     <option value="bachillerato">Bachillerato Medio</option>
@@ -78,43 +98,55 @@
                     <option value="bachillerato_u">Bachillerato Universitario</option>
                     <option value="licenciatura">Licenciatura</option>
                 </select>
+
                 <button class="btn-search">BUSCAR</button>
+
             </div>
+
         </div>
+
     </header>
 
     <div class="app-container">
 
-        <!-- Main Content Area -->
+        <!-- Contenido principal: Área donde se cargan las diferentes vistas dinámicamente -->
+
         <main class="main-content">
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div class="section-header-flex">
+
                 <h2 id="page-title" class="section-title">Becas Disponibles</h2>
-                <div class="actions">
-                    <button class="btn-secondary" id="switch-role-btn">Cambiar Rol (Demo)</button>
-                </div>
+
             </div>
 
-            <!-- Dynamic Views -->
+            <!-- Contenedor de vistas: Aquí se muestran las secciones según la navegación -->
+
             <div id="views-container">
 
-                <!-- View: Dashboard (Scholarship List) -->
+                <!-- Vista: Dashboard - Muestra las tarjetas de becas disponibles -->
+
                 <section id="dashboard" class="view active">
+
                     <div class="scholarship-grid" id="scholarships-container">
-                        <!-- Dynamic Content -->
+                        <!-- contenido dinamico: JS -->
+
                     </div>
 
                     <!-- Gonzalez hizo tal cambio: Sección de Instituciones (Carrusel Interactivo) -->
-                    <div class="institutions-section" style="margin-top: 4rem;">
-                        <div class="section-header-center" style="text-align: center; margin-bottom: 2rem;">
-                            <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Becas por Instituciones otorgantes del
+
+                    <div class="institutions-section mt-4rem">
+
+                        <div class="text-center mb-2rem">
+                            <h2 class="inst-title">Becas por Instituciones otorgantes del
                                 país</h2>
-                            <p style="color: var(--text-muted);">Encuentra becas ofrecidas por las instituciones más
+
+                            <p class="color-text-muted">Encuentra becas ofrecidas por las instituciones más
                                 prestigiosas de Costa Rica</p>
                         </div>
 
                         <div class="institutions-carousel">
-                            <!-- Gonzalez: Reemplaza 'href' con el enlace y 'src' con tu imagen -->
+
+                            <!-- Lista de Universidades -->
 
                             <a href="https://www.ucr.ac.cr" target="_blank" class="inst-card">
                                 <img src="../imgs/UCR.jpg" alt="UCR" class="inst-img">
@@ -146,84 +178,130 @@
                                 <h3>Programas FWD</h3>
                             </a>
                         </div>
+
                     </div>
+
                 </section>
 
-                <!-- View: Apply Form -->
+                <!-- Vista: Formulario de Postulación - Permite a los estudiantes aplicar a becas -->
+
                 <section id="apply" class="view hidden">
+
                     <div class="card form-card">
+
                         <h3>Nueva Postulación</h3>
+
                         <form id="application-form">
+
                             <div class="form-group">
                                 <label for="scholarship-select">Seleccionar Beca</label>
+
                                 <select id="scholarship-select" required>
                                     <option value="">-- Seleccione una opción --</option>
+
                                 </select>
+
                             </div>
 
                             <div class="form-row">
+
                                 <div class="form-group">
                                     <label for="full-name">Nombre Completo</label>
-                                    <input type="text" id="full-name" required placeholder="Juan Pérez">
+
+                                    <input type="text" id="full-name" required placeholder="Ana Maria">
                                 </div>
+
                                 <div class="form-group">
                                     <label for="age">Edad</label>
                                     <input type="number" id="age" required min="10" max="100">
+
                                 </div>
+
                             </div>
 
                             <div class="form-row">
+
                                 <div class="form-group">
                                     <label for="gpa">Promedio (GPA)</label>
-                                    <input type="number" id="gpa" required min="0" max="10" step="0.1">
+                                    <input type="number" id="gpa" required min="0" max="100" step="0.1">
+
                                 </div>
+
                                 <div class="form-group">
                                     <label for="income">Ingreso Familiar Anual ($)</label>
                                     <input type="number" id="income" required min="0">
                                 </div>
+
                             </div>
 
                             <div class="form-group">
-                                <label for="motivation">Carta de Motivación</label>
+                                <label for="motivation">Carta Para explicar su motivo de postulación</label>
+
                                 <textarea id="motivation" rows="4" required
                                     placeholder="Explique por qué merece esta beca..."></textarea>
                             </div>
 
                             <button type="submit" class="btn-primary">Enviar Postulación</button>
+
                         </form>
+
                     </div>
+
                 </section>
 
-                <!-- View: My History (Applicant) -->
+                <!-- Vista: Mi Historial - Permite al postulante ver sus solicitudes anteriores -->
+
                 <section id="history" class="view hidden">
+
                     <div class="card">
+
                         <h3>Mi Historial de Postulaciones</h3>
+
                         <div class="table-container">
+
                             <table class="data-table">
+
                                 <thead>
+
                                     <tr>
                                         <th>Beca</th>
                                         <th>Fecha</th>
                                         <th>Estado</th>
+
                                     </tr>
+
                                 </thead>
+
                                 <tbody id="history-table-body">
+
                                     <!-- Dynamic Rows -->
+
                                 </tbody>
+
                             </table>
+
                         </div>
+
                     </div>
+
                 </section>
 
-                <!-- View: Scholarship Management (Admin) -->
+                <!-- Vista: Gestión de Becas - Panel exclusivo para administradores -->
+
                 <section id="scholarship-management" class="view hidden">
+
                     <div class="card">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+
+                        <div class="mgmt-header">
+
                             <h3>Gestión de Convocatorias</h3>
+
                             <button class="btn-primary" id="add-scholarship-btn">+ Nueva Beca</button>
+
                         </div>
+
                         <div class="table-container">
+
                             <table class="data-table">
                                 <thead>
                                     <tr>
@@ -232,31 +310,78 @@
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
+
                                 <tbody id="scholarships-mgmt-table-body">
                                     <!-- Dynamic Rows -->
                                 </tbody>
+
                             </table>
+
                         </div>
+
                     </div>
+
                 </section>
 
-                <!-- View: Evaluations (Evaluator & Admin) -->
+                <!-- View: Evaluators Management (Admin) -->
+
+                <section id="evaluators-management" class="view hidden">
+
+                    <div class="card">
+                        <div class="mgmt-header">
+                            <h3>Gestión de Evaluadores</h3>
+                            <button class="btn-primary" id="add-evaluator-btn">+ Nuevo Evaluador</button>
+                        </div>
+
+                        <div class="table-container">
+
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Email</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="evaluators-mgmt-table-body">
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- Vista: Panel de Evaluación - Para evaluadores y administradores -->
+
                 <section id="evaluations" class="view hidden">
                     <div class="stats-row">
+
                         <div class="stat-card">
                             <h4>Pendientes</h4>
                             <span class="stat-number" id="stat-pending">0</span>
                         </div>
+
                         <div class="stat-card">
                             <h4>Evaluadas</h4>
                             <span class="stat-number" id="stat-evaluated">0</span>
+
                         </div>
+
                     </div>
 
                     <div class="table-container card">
+
                         <h3>Solicitudes Recientes</h3>
+
                         <table class="data-table">
+
                             <thead>
+
                                 <tr>
                                     <th>Candidato</th>
                                     <th>Beca</th>
@@ -264,22 +389,30 @@
                                     <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
+
                             </thead>
+
                             <tbody id="applications-table-body">
                                 <!-- Dynamic Rows -->
                             </tbody>
+
                         </table>
+
                     </div>
+
                 </section>
 
-                <!-- View: Reports -->
+                <!-- Vista: Reportes - Estadísticas globales del sistema -->
+
                 <section id="reports" class="view hidden">
                     <div class="card">
                         <h3>Reporte General</h3>
                         <div id="reports-content">
                             <p>Generando estadísticas...</p>
                         </div>
+
                     </div>
+
                 </section>
 
             </div>
@@ -288,57 +421,177 @@
 
     </div>
 
-    <!-- Modal for Evaluation -->
+    <!-- Modal de Evaluación: Para aprobar o rechazar solicitudes -->
+
     <div id="evaluation-modal" class="modal hidden">
+
         <div class="modal-content">
-            <span class="close-modal">&times;</span>
+
             <h3 id="eval-modal-title">Evaluar Solicitud</h3>
+
             <div id="modal-details"></div>
             <div class="modal-actions">
+
                 <button id="btn-approve" class="btn-success">Aprobar</button>
+
                 <button id="btn-reject" class="btn-danger">Rechazar</button>
+
             </div>
+
         </div>
+
     </div>
 
     <!-- Modal for Scholarship CRUD (Admin) -->
+
     <div id="scholarship-modal" class="modal hidden">
+
         <div class="modal-content">
-            <span class="close-modal-sch">&times;</span>
-            <h3 id="sch-modal-title">Nueva Beca</h3>
+            <div class="modal-header-actions">
+                <button type="button" class="btn-secondary close-modal-sch">Cerrar &times;</button>
+            </div>
+            <h2 id="sch-modal-title" class="sch-modal-title"><i>Nueva Beca</i></h2>
+            <br>
+
             <form id="scholarship-form">
+
                 <input type="hidden" id="sch-id">
+
                 <div class="form-group">
+
                     <label>Título</label>
+
                     <input type="text" id="sch-title" required>
                 </div>
+
                 <div class="form-group">
+
                     <label>Descripción</label>
+
                     <textarea id="sch-desc" rows="3" required></textarea>
+
                 </div>
+
                 <div class="form-row">
+
                     <div class="form-group">
+
                         <label>Monto</label>
+
                         <input type="text" id="sch-amount" required placeholder="Ej: 50.000 ₡">
+
                     </div>
+
+                    <div class="form-group">
+
+                        <label>Tipo</label>
+
+                        <select id="sch-type" required>
+                            <option value="Académica">Académica</option>
+                            <option value="Económica">Económica</option>
+                            <option value="Social">Social</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label>Fecha Inicio</label>
+                        <input type="date" id="sch-start-date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fecha Cierre</label>
+                        <input type="date" id="sch-end-date" required>
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label>Estado</label>
+
+                        <select id="sch-status" required>
+                            <option value="Abierta">Abierta</option>
+                            <option value="Cerrada">Cerrada</option>
+                        </select>
+
+                    </div>
+
                     <div class="form-group">
                         <label>Promedio Mín.</label>
+
                         <input type="number" id="sch-min-gpa" step="0.1" required>
                     </div>
+
                 </div>
+
                 <div class="form-row">
+
                     <div class="form-group">
                         <label>Edad Máx.</label>
+
                         <input type="number" id="sch-max-age" required>
                     </div>
+
                     <div class="form-group">
                         <label>Ingreso Máx. (Opcional)</label>
+
                         <input type="number" id="sch-max-income">
                     </div>
+
                 </div>
+
                 <button type="submit" class="btn-primary" style="width: 100%;">Guardar Beca</button>
+
             </form>
+
         </div>
+
+    </div>
+
+    <!-- Modal for Evaluator CRUD (Admin) -->
+
+    <div id="evaluator-modal" class="modal hidden">
+
+        <div class="modal-content">
+            <div class="modal-header-actions">
+                <button type="button" class="btn-secondary close-modal-eval">Cerrar &times;</button>
+            </div>
+            <h3 id="eval-crud-modal-title">Nuevo Evaluador</h3>
+
+            <form id="evaluator-form">
+
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+
+                    <input type="text" id="eval-name" required>
+                </div>
+
+                <div class="form-group">
+
+                    <label>Email</label>
+
+                    <input type="email" id="eval-email" required>
+                </div>
+
+                <div class="form-group">
+
+                    <label>Contraseña</label>
+
+                    <input type="password" id="eval-password" required>
+                </div>
+
+                <button type="submit" class="btn-primary" style="width: 100%;">Guardar Evaluador</button>
+
+            </form>
+
+        </div>
+
     </div>
 
     <script type="module" src="../js/app.js"></script>

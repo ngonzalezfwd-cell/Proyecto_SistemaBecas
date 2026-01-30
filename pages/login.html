@@ -10,39 +10,49 @@
 </head>
 
 <body>
+
     <div class="split-container">
-        <!-- Panel Izquierdo: Formulario -->
+
+        <!-- Panel izquierdo: Contiene el logo y el formulario de acceso -->
+
         <main class="form-panel">
+
             <header class="brand-container">
+
                 <div class="brand-logo">
+
                     <div class="logo-icon">
                         <div class="logo-dot"></div>
                         <div class="logo-dot"></div>
                         <div class="logo-dot"></div>
                         <div class="logo-dot"></div>
                     </div>
+
                     <span>EduHelper</span>
+
                 </div>
+
             </header>
 
             <div class="auth-form-wrapper">
+
                 <h1 class="auth-title">Bienvenido de nuevo</h1>
+
                 <p class="auth-subtitle">Por favor, introduce tus datos para continuar.</p>
 
                 <form id="login-form">
+
                     <div class="form-group">
                         <label for="login-email">Correo Electrónico</label>
                         <input type="email" id="login-email" required placeholder="Introduce tu correo">
                     </div>
+
                     <div class="form-group">
                         <label for="login-password">Contraseña</label>
                         <input type="password" id="login-password" required placeholder="••••••••">
                     </div>
 
                     <div class="form-extras">
-                        <label class="remember-me">
-                            <input type="checkbox"> Recordar por 30 días
-                        </label>
                         <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
                     </div>
 
@@ -52,29 +62,56 @@
                         <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google">
                         Iniciar sesión con Google
                     </button>
+
                 </form>
 
-                <p class="auth-redirect">
-                    ¿No tienes una cuenta? <a href="registro.html">Regístrate</a>
-                </p>
+                <div class="auth-divider">
+                    <span>O</span>
+                </div>
+
+                <div class="registration-cta text-center">
+
+                    <p class="auth-text-muted fs-0-875 mb-1rem">¿No tienes una
+                        cuenta aún?</p>
+
+                    <a href="registro.html" class="btn-google auth-link-primary">
+                        Crea una cuenta ahora
+                    </a>
+
+                </div>
+
             </div>
+
         </main>
 
-        <!-- Panel Derecho: Imagen -->
+        <!-- Panel derecho: Ilustración y mensaje de bienvenida -->
+
         <aside class="illustration-panel image-mode">
+
             <div class="image-wrapper">
+
                 <img src="../imgs/img-registrer.jpeg" alt="Bienvenido" class="auth-visual-image">
+
                 <div class="image-overlay">
+
                     <div class="overlay-content">
+
                         <h2>Impulsa tu futuro académico</h2>
+
                         <p>Tu puerta directa a las mejores becas del país.</p>
+
                     </div>
+
                 </div>
+
             </div>
+
         </aside>
+
     </div>
 
     <script type="module" src="../js/login.js"></script>
+
 </body>
 
 </html>
