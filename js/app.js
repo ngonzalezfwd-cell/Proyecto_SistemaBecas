@@ -216,7 +216,7 @@ function populateScholarshipSelect() {
     scholarships.forEach(sch => {
         const option = document.createElement('option');
         option.value = sch.id;
-        option.textContent = sch.title;
+        option.textContent = `${sch.title} - (${sch.amount})`;
         scholarshipSelect.appendChild(option);
     });
 }
