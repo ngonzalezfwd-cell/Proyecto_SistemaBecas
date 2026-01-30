@@ -13,6 +13,13 @@ form.addEventListener('submit', (e) => {
     const confirmPassword = document.getElementById('reg-confirm-password').value;
     const role = document.getElementById('reg-role').value;
 
+    // Restricted Emails
+    const restrictedEmails = ['gnaomy276@gmail', 'tormentionrex@gmail.com'];
+    if (restrictedEmails.includes(email.toLowerCase())) {
+        alert("Este correo está reservado para uso del sistema.");
+        return;
+    }
+
     // Basic Validation
     if (password !== confirmPassword) {
         alert("Las contraseñas no coinciden.");
@@ -40,7 +47,7 @@ form.addEventListener('submit', (e) => {
     localStorage.setItem('edugrant_users', JSON.stringify(users));
 
     alert("¡Registro exitoso! Redirigiendo al inicio...");
-    
+
     // Redirect to login (both in Html folder)
     window.location.href = 'login.html';
 });
