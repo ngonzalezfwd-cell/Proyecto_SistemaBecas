@@ -405,3 +405,25 @@ function renderReports() {
         <p style="margin-top:1rem;">Tasa de éxito: ${stats.total > 0 ? Math.round((stats.approved / stats.total) * 100) : 0}%</p>
     `;
 }
+
+// Gonzalez: Función para redirigir al formulario desde las tarjetas de inicio
+window.goToApply = function (scholarshipId) {
+    if (!currentUser || currentUser.role !== 'applicant') {
+        alert("Solo los postulantes registrados pueden solicitar becas.");
+        return;
+    }
+
+    const applyLink = Array.from(navLinks).find(l => l.getAttribute('data-target') === 'apply');
+    if (applyLink) {
+        applyLink.click();
+
+        // Pequeño delay para asegurar que el select se haya poblado
+        setTimeout(() => {
+            if (scholarshipSelect) {
+                scholarshipSelect.value = scholarshipId;
+                // Disparar evento change por si hay lógica asociada
+                scholarshipSelect.dispatchEvent(new Event('change'));
+            }
+        }, 100);
+    }
+};
