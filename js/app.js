@@ -90,7 +90,7 @@ function setupNavigation() {
     switchRoleBtn.addEventListener('click', () => {
         if (confirm("Para cambiar de rol debes iniciar sesión con otra cuenta. ¿Deseas cerrar sesión?")) {
             localStorage.removeItem('edugrant_current_user');
-            window.location.href = '../login.html';
+            window.location.href = 'login.html';
         }
     });
 
