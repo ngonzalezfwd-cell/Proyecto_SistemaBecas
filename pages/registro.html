@@ -1,86 +1,101 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - EduGrant</title>
-    <link rel="stylesheet" href="../style/style.css">
+    <title>Crea tu cuenta - EduHelper</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        .auth-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 2rem;
-            background-color: var(--secondary-bg);
-        }
-        .auth-card {
-            width: 100%;
-            max-width: 400px;
-        }
-        .auth-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .auth-header h2 {
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
-        .auth-footer {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-        .auth-footer a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .auth-footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="../style/auth-style.css">
 </head>
+
 <body>
-    <div class="auth-container">
-        <div class="card auth-card">
-            <div class="auth-header">
-                <h2>EduGrant</h2>
-                <p>Crea tu cuenta para postular a becas</p>
+    <div class="split-container">
+        <!-- Panel Izquierdo: Formulario -->
+        <main class="form-panel">
+            <header class="brand-container">
+                <div class="brand-logo">
+                    <div class="logo-icon">
+                        <div class="logo-dot"></div>
+                        <div class="logo-dot"></div>
+                        <div class="logo-dot"></div>
+                        <div class="logo-dot"></div>
+                    </div>
+                    <span>EduHelper</span>
+                </div>
+            </header>
+
+            <div class="auth-form-wrapper" style="max-width: 450px;">
+                <h1 class="auth-title">Crea tu cuenta</h1>
+                <p class="auth-subtitle">Únete a EduHelper y encuentra la beca ideal para ti.</p>
+
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="reg-fullname">Nombre Completo</label>
+                        <input type="text" id="reg-fullname" required placeholder="Ej. Juan Pérez">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-email">Correo Electrónico</label>
+                        <input type="email" id="reg-email" required placeholder="tu@correo.com">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="reg-password">Contraseña</label>
+                            <input type="password" id="reg-password" required minlength="6" placeholder="••••••••">
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-confirm-password">Confirmar</label>
+                            <input type="password" id="reg-confirm-password" required placeholder="••••••••">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-role">¿Qué tipo de usuario eres?</label>
+                        <select id="reg-role" required>
+                            <option value="applicant">Estudiante / Postulante</option>
+                            <option value="admin">Administrador de Becas</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-auth-primary">Registrarse</button>
+
+                    <button type="button" class="btn-google">
+                        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google">
+                        Registrarse con Google
+                    </button>
+                </form>
+
+                <p class="auth-redirect">
+                    ¿Ya tienes una cuenta? <a href="login.html">Inicia sesión</a>
+                </p>
             </div>
-            <form id="register-form">
-                <div class="form-group">
-                    <label for="reg-fullname">Nombre Completo</label>
-                    <input type="text" id="reg-fullname" required placeholder="Ej. Juan Pérez">
+        </main>
+
+        <!-- Panel Derecho: Ilustración -->
+        <aside class="illustration-panel" style="background-image: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);">
+            <div class="circle-blur" style="top: 20%; left: 10%;"></div>
+            <div class="circle-blur" style="bottom: 20%; right: 10%;"></div>
+
+            <div class="illustration-content">
+                <svg class="illustration-svg" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 300C50 300 100 250 200 250C300 250 350 300 350 300" stroke="white" stroke-width="8"
+                        stroke-opacity="0.3" stroke-linecap="round" />
+                    <rect x="120" y="100" width="160" height="200" rx="10" stroke="white" stroke-width="4"
+                        stroke-opacity="0.5" />
+                    <circle cx="200" cy="180" r="50" fill="white" fill-opacity="0.2" />
+                    <path d="M180 200L220 200" stroke="white" stroke-width="2" />
+                </svg>
+                <div style="color: white; margin-top: 2rem;">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Tu camino al éxito comienza aquí</h2>
+                    <p style="opacity: 0.8;">Accede a cientos de oportunidades educativas en un solo lugar.</p>
                 </div>
-                <div class="form-group">
-                    <label for="reg-email">Correo Electrónico</label>
-                    <input type="email" id="reg-email" required placeholder="usuario@ejemplo.com">
-                </div>
-                <div class="form-group">
-                    <label for="reg-password">Contraseña</label>
-                    <input type="password" id="reg-password" required minlength="6" placeholder="******">
-                </div>
-                <div class="form-group">
-                    <label for="reg-confirm-password">Confirmar Contraseña</label>
-                    <input type="password" id="reg-confirm-password" required placeholder="******">
-                </div>
-                <div class="form-group">
-                    <label for="reg-role">Tipo de Usuario</label>
-                    <select id="reg-role" required>
-                        <option value="applicant">Estudiante</option>
-                        <option value="admin">Administrador</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-primary" style="width: 100%;">Registrarse</button>
-            </form>
-            <div class="auth-footer">
-                ¿Ya tienes una cuenta? <a href="login.html">Inicia sesión aquí</a>
             </div>
-        </div>
+        </aside>
     </div>
+
     <script type="module" src="../js/registro.js"></script>
 </body>
+
 </html>
