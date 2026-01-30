@@ -97,42 +97,26 @@
                 </div>
             </div>
 
-            <!-- Gonzalez: Sección de Requerimientos y Funciones del Sistema -->
+            <!-- Gonzalez: Sección de Accesos Directos a Becas -->
             <section class="info-requirements-section" style="margin-bottom: 3rem;">
-                <div class="requirements-grid">
-                    <div class="req-card">
-                        <h3>4.1 Autenticación y Usuarios</h3>
-                        <ul>
-                            <li>Registro de usuarios.</li>
-                            <li>Inicio de sesión.</li>
-                            <li>Roles.</li>
-                            <li>Cierre de sesión.</li>
-                        </ul>
+                <div class="category-grid">
+                    <div class="category-card clickable-card" onclick="goToApply(1)">
+                        <div class="category-icon">🎓</div>
+                        <h3>Beca de Excelencia Académica</h3>
+                        <p>Para estudiantes con promedios sobresalientes y compromiso académico.</p>
+                        <span class="amount-tag">Monto: 30.000 ₡</span>
                     </div>
-                    <div class="req-card">
-                        <h3>4.2 Gestión de Convocatorias</h3>
-                        <p>Cada convocatoria incluye:</p>
-                        <ul>
-                            <li>Nombre, Descripción y Tipo (económica, académica, social).</li>
-                            <li>Fecha de inicio y cierre.</li>
-                            <li>Requisitos y Estado (abierta / cerrada).</li>
-                        </ul>
+                    <div class="category-card clickable-card" onclick="goToApply(3)">
+                        <div class="category-icon">⚽</div>
+                        <h3>Beca Deportiva</h3>
+                        <p>Para atletas destacados que representan a la institución.</p>
+                        <span class="amount-tag">Monto: 20.000 ₡</span>
                     </div>
-                    <div class="req-card">
-                        <h3>4.3 Postulación a Becas</h3>
-                        <ul>
-                            <li>Ver convocatorias, formulario de postulación y envío.</li>
-                            <li>Campos: Datos personales, nivel educativo, situación socioeconómica y motivo.</li>
-                        </ul>
-                    </div>
-                    <div class="req-card">
-                        <h3>4.4 Validación de Requisitos</h3>
-                        <ul>
-                            <li>Verificación de campos y criterios mínimos.</li>
-                            <li>Estados: Apta, No apta o Pendiente de revisión.</li>
-                            <li style="color: var(--primary-color); font-weight: 600;">Incluye: Beca de Excelencia
-                                académica, Beca deportiva y Beca de ayuda socioeconómica.</li>
-                        </ul>
+                    <div class="category-card clickable-card" onclick="goToApply(2)">
+                        <div class="category-icon">🤝</div>
+                        <h3>Beca de Ayuda Socioeconómica</h3>
+                        <p>Apoyo financiero para estudiantes con recursos limitados.</p>
+                        <span class="amount-tag">Monto: 50.000 ₡</span>
                     </div>
                 </div>
             </section>
