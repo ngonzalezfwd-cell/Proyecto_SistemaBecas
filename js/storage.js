@@ -84,11 +84,11 @@ export class StorageService {
         localStorage.setItem(KEY_APPLICATIONS, JSON.stringify(apps));
     }
 
-    updateStatus(appId, newStatus) {
+    updateApplication(appId, updatedData) {
         const apps = this.getApplications();
         const appIndex = apps.findIndex(a => a.id === appId);
         if (appIndex !== -1) {
-            apps[appIndex].status = newStatus;
+            apps[appIndex] = { ...apps[appIndex], ...updatedData };
             localStorage.setItem(KEY_APPLICATIONS, JSON.stringify(apps));
             return true;
         }

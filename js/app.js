@@ -53,6 +53,13 @@ function setupNavigation() {
         });
     });
 
+    const mainLogo = document.getElementById('main-logo');
+    if (mainLogo) {
+        mainLogo.addEventListener('click', () => {
+            window.switchView('dashboard');
+        });
+    }
+
     window.switchView = function (targetId) {
         // --- Permissions Guard ---
         if (targetId === 'scholarship-management' && currentUser.role !== 'admin') {
@@ -162,26 +169,50 @@ function updateUserInterface() {
 }
 
 // --- Features: Dashboard ---
+function getDeadlineInfo(deadlineStr) {
+    if (!deadlineStr) return null;
+    const deadline = new Date(deadlineStr);
+    const diff = deadline - new Date();
+    const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+
+    if (days <= 3) return { class: 'deadline-urgent', text: `¡Solo quedan ${days} días!` };
+    if (days <= 10) return { class: 'deadline-warning', text: `Quedan ${days} días` };
+    return { class: 'deadline-safe', text: `${days} días restantes` };
+}
+
 function renderDashboard() {
     const scholarships = db.getScholarships();
-    scholarshipGrid.innerHTML = scholarships.map(sch => `
-        <div class="card">
+    scholarshipGrid.innerHTML = scholarships.map(sch => {
+        const deadlineInfo = getDeadlineInfo(sch.deadline);
+        const catClass = `cat-${sch.category.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`;
+
+        return `
+        <div class="card scholarship-card">
+            <div class="category-tag ${catClass}">${sch.category}</div>
             <h3>${sch.title}</h3>
             <p>${sch.description}</p>
-            <div style="margin-bottom: 1rem;">
+            
+            <div class="requirements-container">
                 <strong>Requisitos:</strong>
-                <ul style="padding-left: 1.2rem; color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
+                <ul class="requirements-list">
                     <li>Promedio mín: ${sch.requirements.minGPA}</li>
                     <li>Edad máx: ${sch.requirements.maxAge} años</li>
-                    ${sch.requirements.maxIncome ? `<li>Ingreso máx: $${sch.requirements.maxIncome}</li>` : ''}
+                    ${sch.requirements.maxIncome ? `<li>Ingreso máx: ₡${sch.requirements.maxIncome.toLocaleString()}</li>` : ''}
                 </ul>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
-                <span style="font-weight: bold; color: var(--primary-color);">${sch.amount}</span>
+
+            ${deadlineInfo ? `
+            <div class="deadline-badge ${deadlineInfo.class}">
+                <span>⏳</span> ${deadlineInfo.text}
+            </div>` : ''}
+
+            <div class="card-footer">
+                <span class="scholarship-amount">${sch.amount}</span>
                 ${currentUser.role === 'applicant' ? `<button class="btn-primary" onclick="goToApply(${sch.id})">Postular</button>` : ''}
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
 }
 
 window.goToApply = (scholarshipId) => {
@@ -193,31 +224,47 @@ window.goToApply = (scholarshipId) => {
 };
 
 // --- Features: Applicant History ---
-function renderHistoryTable() {
+function renderHistory() {
     const apps = db.getUserApplications(currentUser.email);
     const scholarships = db.getScholarships();
     const tbody = document.getElementById('history-table-body');
 
     if (apps.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No tienes postulaciones registradas.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No tienes postulaciones registradas.</td></tr>';
         return;
     }
 
     tbody.innerHTML = apps.map(app => {
         const sch = scholarships.find(s => s.id === app.scholarshipId);
         const date = new Date(app.date).toLocaleDateString();
-        const statusLabels = { 'pending': 'Pendiente', 'approved': 'Aprobada', 'rejected': 'Rechazada' };
-        const statusClasses = { 'pending': 'status-pending', 'approved': 'status-approved', 'rejected': 'status-rejected' };
+
+        const statusMap = {
+            'enviada': { label: 'Enviada', class: 'status-pending' },
+            'revision': { label: 'En Revisión', class: 'status-warning' },
+            'aprobada': { label: 'Aprobada', class: 'status-approved' },
+            'rechazada': { label: 'Rechazada', class: 'status-rejected' }
+        };
+        const status = statusMap[app.status] || { label: app.status, class: 'status-pending' };
 
         return `
             <tr>
                 <td>${sch ? sch.title : 'Desconocida'}</td>
                 <td>${date}</td>
-                <td><span class="status-badge ${statusClasses[app.status]}">${statusLabels[app.status]}</span></td>
+                <td><span class="status-badge ${status.class}">${status.label}</span></td>
+                <td>
+                    ${app.status === 'aprobada' || app.status === 'rechazada' ?
+                `<button class="btn-secondary" onclick="viewResult('${app.id}')">Ver Detalle</button>` : '---'}
+                </td>
             </tr>
         `;
     }).join('');
 }
+
+window.viewResult = (appId) => {
+    const app = db.getApplications().find(a => a.id === appId);
+    const total = (app.scoreEcon || 0) + (app.scoreAcad || 0) + (app.scoreSocial || 0);
+    alert(`Resultado de tu Postulación:\n\nEstado: ${app.status.toUpperCase()}\n\nPuntaje Total: ${total} puntos\n(Econ: ${app.scoreEcon || 0}, Acad: ${app.scoreAcad || 0}, Soc: ${app.scoreSocial || 0})\n\nObservaciones:\n${app.observations || 'Sin observaciones adicionales.'}`);
+};
 
 // --- Features: Application Form ---
 function populateScholarshipSelect() {
@@ -254,18 +301,30 @@ function setupForm() {
             date: new Date().toISOString()
         };
 
-        const req = scholarship.requirements;
-        let errors = [];
-        if (formData.gpa < req.minGPA) errors.push(`Promedio insuficiente (Mín: ${req.minGPA})`);
-        if (formData.age > req.maxAge) errors.push(`Edad excede límite (Máx: ${req.maxAge})`);
-
-        if (errors.length > 0) {
-            alert(`No cumples requisitos:\n- ${errors.join('\n- ')}`);
+        const existingApps = db.getUserApplications(currentUser.email);
+        if (existingApps.some(app => app.scholarshipId === scholarshipId)) {
+            alert("Usted ya ha enviado una postulación para esta beca anteriormente. No se permiten postulaciones duplicadas.");
             return;
         }
 
+        const req = scholarship.requirements;
+        let errors = [];
+        if (formData.gpa < req.minGPA) errors.push(`Promedio insuficiente (Mín: ${req.minGPA})`);
+        if (formData.age > req.maxAge) errors.push(`Edad fuera de rango (Máx: ${req.maxAge})`);
+        if (req.maxIncome && formData.income > req.maxIncome) errors.push(`Ingreso familiar excede el límite (Máx: ₡${req.maxIncome.toLocaleString()})`);
+
+        // Regla de Negocio: Marcado automático del sistema
+        formData.systemRecommendation = errors.length === 0 ? "Apta" : "No apta";
+        formData.status = 'enviada'; // Estado inicial
+
+        if (errors.length > 0) {
+            if (!confirm(`El sistema detecta que no cumples con los siguientes requisitos:\n- ${errors.join('\n- ')}\n\n¿Deseas enviar la solicitud de todas formas para revisión manual?`)) {
+                return;
+            }
+        }
+
         db.addApplication(formData);
-        alert("¡Postulación enviada!");
+        alert("¡Postulación enviada con éxito! Estado: Enviada.");
         form.reset();
         document.querySelector('[data-target="history"]').click();
     });
@@ -348,9 +407,25 @@ function setupViews() {
     });
 
     // Evaluation Modal
-    document.querySelector('.close-modal').addEventListener('click', () => evalModal.classList.add('hidden'));
-    document.getElementById('btn-approve').addEventListener('click', () => finalizeEvaluation('approved'));
-    document.getElementById('btn-reject').addEventListener('click', () => finalizeEvaluation('rejected'));
+    const closeModalBtn = document.querySelector('.close-modal');
+    if (closeModalBtn) closeModalBtn.addEventListener('click', () => evalModal.classList.add('hidden'));
+
+    document.getElementById('btn-review').addEventListener('click', () => finalizeEvaluation('revision'));
+    document.getElementById('btn-approve').addEventListener('click', () => finalizeEvaluation('aprobada'));
+    document.getElementById('btn-reject').addEventListener('click', () => finalizeEvaluation('rechazada'));
+
+    // Score Calculation Listeners
+    ['score-econ', 'score-acad', 'score-social'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', () => {
+                const total = parseInt(document.getElementById('score-econ').value || 0) +
+                    parseInt(document.getElementById('score-acad').value || 0) +
+                    parseInt(document.getElementById('score-social').value || 0);
+                document.getElementById('total-score').value = `${total} puntos`;
+            });
+        }
+    });
 }
 
 // --- Features: Evaluation (Admin & Evaluator) ---
@@ -368,15 +443,20 @@ function renderAdminTable() {
 
     tbody.innerHTML = apps.map(app => {
         const sch = scholarships.find(s => s.id === app.scholarshipId);
-        const statusLabel = { 'pending': 'Pendiente', 'approved': 'Aprobada', 'rejected': 'Rechazada' }[app.status];
-        const statusClass = { 'pending': 'status-pending', 'approved': 'status-approved', 'rejected': 'status-rejected' }[app.status];
+        const statusMap = {
+            'enviada': { label: 'Enviada', class: 'status-pending' },
+            'revision': { label: 'En Revisión', class: 'status-warning' },
+            'aprobada': { label: 'Aprobada', class: 'status-approved' },
+            'rechazada': { label: 'Rechazada', class: 'status-rejected' }
+        };
+        const status = statusMap[app.status] || { label: app.status, class: 'status-pending' };
 
         return `
             <tr>
                 <td>${app.applicantName}</td>
                 <td>${sch ? sch.title : '---'}</td>
                 <td>${app.gpa}</td>
-                <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+                <td><span class="status-badge ${status.class}">${status.label}</span></td>
                 <td>
                     <button class="btn-secondary" onclick="openEvaluation('${app.id}')">Evaluar</button>
                 </td>
@@ -391,22 +471,51 @@ window.openEvaluation = (appId) => {
     const sch = db.getScholarships().find(s => s.id === app.scholarshipId);
 
     document.getElementById('modal-details').innerHTML = `
-        <p><strong>Candidato:</strong> ${app.applicantName}</p>
-        <p><strong>Identificación:</strong> ${app.studentId || 'No provista'}</p>
-        <p><strong>Teléfono:</strong> ${app.phone || 'No provisto'}</p>
-        <p><strong>Institución:</strong> ${app.education || 'No provista'}</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div>
+                <p><strong>Candidato:</strong> ${app.applicantName}</p>
+                <p><strong>Identificación:</strong> ${app.studentId || 'N/A'}</p>
+                <p><strong>Ingreso:</strong> ₡${(app.income || 0).toLocaleString()}</p>
+                <p><strong>Promedio:</strong> ${app.gpa}</p>
+            </div>
+            <div style="background: #f1f5f9; padding: 0.8rem; border-radius: 6px; border-left: 4px solid ${app.systemRecommendation === 'Apta' ? '#10b981' : '#ef4444'};">
+                <p style="margin:0;"><strong>Sugerencia Sistema:</strong></p>
+                <span class="status-badge ${app.systemRecommendation === 'Apta' ? 'status-approved' : 'status-rejected'}">${app.systemRecommendation}</span>
+            </div>
+        </div>
         <hr style="margin: 10px 0; border: 0; border-top: 1px solid #eee;">
         <p><strong>Beca:</strong> ${sch ? sch.title : '---'}</p>
-        <p><strong>Promedio:</strong> ${app.gpa}</p>
-        <p><strong>Ingreso Mensual:</strong> ₡${app.income || 0}</p>
         <p><strong>Motivación:</strong> "${app.motivation}"</p>
     `;
+
+    // Reset/Load evaluation fields
+    document.getElementById('score-econ').value = app.scoreEcon || 0;
+    document.getElementById('score-acad').value = app.scoreAcad || 0;
+    document.getElementById('score-social').value = app.scoreSocial || 0;
+    document.getElementById('total-score').value = `${(app.scoreEcon || 0) + (app.scoreAcad || 0) + (app.scoreSocial || 0)} puntos`;
+    document.getElementById('eval-observations').value = app.observations || '';
+
+    // Disable buttons if already finalized
+    const isFinal = ['aprobada', 'rechazada'].includes(app.status);
+    document.getElementById('btn-review').disabled = isFinal;
+    document.getElementById('btn-approve').disabled = isFinal;
+    document.getElementById('btn-reject').disabled = isFinal;
+
     evalModal.classList.remove('hidden');
 };
 
 function finalizeEvaluation(status) {
     if (currentEvalAppId) {
-        db.updateStatus(currentEvalAppId, status);
+        const evaluationData = {
+            status: status,
+            scoreEcon: parseInt(document.getElementById('score-econ').value || 0),
+            scoreAcad: parseInt(document.getElementById('score-acad').value || 0),
+            scoreSocial: parseInt(document.getElementById('score-social').value || 0),
+            observations: document.getElementById('eval-observations').value
+        };
+
+        db.updateApplication(currentEvalAppId, evaluationData);
+        alert(`Solicitud actualizada a estado: ${status}`);
         evalModal.classList.add('hidden');
         renderAdminTable();
     }
@@ -447,18 +556,37 @@ window.goToApply = function (scholarshipId) {
 };
 
 // Gonzalez: Lógica del Carrusel Hero
+// Gonzalez: Lógica del Carrusel Hero
 let slideIndex = 0;
 let slideInterval;
 
-window.moveCarousel = function (n) {
-    showSlides(slideIndex += n);
-    resetAutoSlide();
-};
+function setupCarousel() {
+    const prevBtn = document.getElementById('carousel-prev');
+    const nextBtn = document.getElementById('carousel-next');
+    const dots = document.querySelectorAll('.carousel-dots .dot');
 
-window.setCarousel = function (n) {
-    showSlides(slideIndex = n);
-    resetAutoSlide();
-};
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            showSlides(slideIndex -= 1);
+            resetAutoSlide();
+        });
+    }
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            showSlides(slideIndex += 1);
+            resetAutoSlide();
+        });
+    }
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            showSlides(slideIndex = index);
+            resetAutoSlide();
+        });
+    });
+
+    showSlides(slideIndex);
+    startAutoSlide();
+}
 
 function showSlides(n) {
     const slides = document.querySelectorAll('.carousel-slide');
@@ -489,11 +617,8 @@ function resetAutoSlide() {
 
 // Inicializar carrusel
 document.addEventListener('DOMContentLoaded', () => {
-    // Nota: El evento DOMContentLoaded ya tiene un listener al inicio de app.js
-    // Solo necesitamos asegurarnos de que showSlides se llame.
     setTimeout(() => {
-        showSlides(slideIndex);
-        startAutoSlide();
+        setupCarousel();
     }, 100);
 });
 // Gonzalez: Lógica para el Modal de Ayuda y Guía de Pasos
@@ -501,12 +626,29 @@ function setupHelpModal() {
     const helpModal = document.getElementById('help-modal');
     const openBtn = document.getElementById('open-help-btn');
     const closeBtn = document.getElementById('close-help-modal');
+    const goToGuideBtn = document.getElementById('go-to-guide-btn');
+    const understoodBtn = document.getElementById('help-understood-btn');
+    const returnToFormBtn = document.getElementById('return-to-form-btn');
 
     if (openBtn) {
-        openBtn.onclick = () => helpModal.classList.remove('hidden');
+        openBtn.addEventListener('click', () => helpModal.classList.remove('hidden'));
     }
     if (closeBtn) {
-        closeBtn.onclick = () => helpModal.classList.add('hidden');
+        closeBtn.addEventListener('click', () => helpModal.classList.add('hidden'));
+    }
+    if (understoodBtn) {
+        understoodBtn.addEventListener('click', () => helpModal.classList.add('hidden'));
+    }
+    if (goToGuideBtn) {
+        goToGuideBtn.addEventListener('click', () => {
+            helpModal.classList.add('hidden');
+            window.switchView('user-guide');
+        });
+    }
+    if (returnToFormBtn) {
+        returnToFormBtn.addEventListener('click', () => {
+            window.switchView('apply');
+        });
     }
 
     // Lógica visual simple para los pasos

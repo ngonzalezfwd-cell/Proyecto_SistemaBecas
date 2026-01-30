@@ -80,17 +80,366 @@ body {
     background: none;
     border: none;
     color: inherit;
-    /* Inherits white or blue depending on state */
     font-weight: 500;
-    font-size: 1rem;
+    font-size: 0.95rem;
     cursor: pointer;
-    padding: 0.5rem 0;
+    padding: 0.5rem 1rem;
     position: relative;
-    transition: opacity 0.2s;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* Espacio para el icono */
+    border-radius: var(--radius);
+}
+
+.nav-links .nav-link i {
+    font-size: 1.1rem;
 }
 
 .nav-links .nav-link:hover {
-    opacity: 0.8;
+    background: rgba(255, 255, 255, 0.1);
+    opacity: 1;
+}
+
+.navbar.scrolled .nav-links .nav-link:hover {
+    background: var(--secondary-bg);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo h2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+}
+
+.nav-logo-img {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.nav-logo-img:hover {
+    transform: scale(1.05);
+}
+
+/* Gonzalez: Refactoring Inline Styles */
+.nav-user-container {
+    display: flex;
+    align-items: center;
+}
+
+.nav-user-info {
+    text-align: right;
+    margin-right: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-user-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.nav-user-role {
+    font-size: 0.75rem;
+    color: #666;
+    display: block;
+}
+
+.view-title {
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+    border-bottom: 3px solid var(--border-color);
+    display: inline-block;
+    padding-bottom: 0.5rem;
+    margin-top: 1rem;
+}
+
+.nav-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 12px;
+}
+
+.nav-logout-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+}
+
+.about-section {
+    margin-bottom: 3rem;
+    background: var(--bg-white);
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.about-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.about-title {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-size: 2.2rem;
+}
+
+.about-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+}
+
+.about-text-muted {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.apply-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.apply-welcome-section {
+    margin-bottom: 3rem;
+    background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
+    padding: 2.5rem;
+    border-radius: 12px;
+    border-left: 5px solid var(--primary-color);
+    box-shadow: var(--shadow);
+}
+
+.apply-welcome-title {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+.apply-welcome-text {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-color);
+}
+
+.help-modal-content {
+    width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.guide-card {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem;
+}
+
+.guide-title {
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.guide-icon {
+    font-size: 2.5rem;
+}
+
+.guide-section-content {
+    line-height: 1.8;
+    color: var(--text-color);
+}
+
+.guide-footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.section-title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.centered-content {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.institution-tagline {
+    color: var(--text-muted);
+}
+
+.mt-4 {
+    margin-top: 4rem;
+}
+
+.m-0 {
+    margin: 0;
+}
+
+.mt-2 {
+    margin-top: 2rem;
+}
+
+.font-italic {
+    font-style: italic;
+}
+
+.modal-header-title {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.help-note-container {
+    background: #f0f7ff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 2rem;
+}
+
+.help-note-text {
+    margin: 0 0 1rem 0;
+    font-size: 0.95rem;
+    color: var(--primary-color);
+}
+
+.help-note-btn {
+    width: 100%;
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.form-tip {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+}
+
+/* Gonzalez: Scholarship Card Enhancements */
+.scholarship-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.category-tag {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+}
+
+.cat-economica {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.cat-social {
+    background: #fef9c3;
+    color: #854d0e;
+}
+
+.cat-academica {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.deadline-badge {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.deadline-safe {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.deadline-warning {
+    background: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fef3c7;
+}
+
+.deadline-urgent {
+    background: #fff1f2;
+    color: #9f1239;
+    border: 1px solid #fecdd3;
+}
+
+.requirements-list {
+    padding-left: 1.2rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.form-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
+
+.mt-3 {
+    margin-top: 1rem;
 }
 
 /* Remove old active styles and add underline */
@@ -526,6 +875,8 @@ textarea:focus {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 2000;
+    /* Asegurar que esté por encima de todo */
 }
 
 .modal-content {
@@ -643,6 +994,11 @@ textarea:focus {
 .hero-carousel-section {
     position: relative;
     background: #000;
+    height: 500px;
+    /* Altura fija para consistencia */
+    overflow: hidden;
+    border-radius: 12px;
+    margin-bottom: 3rem;
 }
 
 .carousel-container {
@@ -802,24 +1158,29 @@ textarea:focus {
     }
 }
 
-/* Gonzalez: Steps Guide Styles */
+/* Gonzalez: Steps Guide Styles - Horizontal Layout */
 .steps-guide {
-    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    margin: 2rem 0 3rem 0;
+    padding: 0 10%;
 }
 
 .step-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     z-index: 5;
     background: var(--bg-white);
-    padding: 0 10px;
+    padding: 0 15px;
 }
 
 .step-number {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     background: #e5e7eb;
     color: var(--text-muted);
     border-radius: 50%;
@@ -827,7 +1188,7 @@ textarea:focus {
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 1rem;
     border: 2px solid transparent;
     transition: all 0.3s;
 }
@@ -839,9 +1200,11 @@ textarea:focus {
 }
 
 .step-text {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 600;
     color: var(--text-muted);
+    text-align: center;
+    white-space: nowrap;
 }
 
 .step-item.active .step-text {
@@ -850,9 +1213,10 @@ textarea:focus {
 
 .step-line {
     position: absolute;
-    top: 20px;
-    left: 10%;
-    right: 10%;
+    top: 17px;
+    /* Centrado con el círculo de 35px */
+    left: 15%;
+    right: 15%;
     height: 2px;
     background: #e5e7eb;
     z-index: 1;
