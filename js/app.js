@@ -427,3 +427,54 @@ window.goToApply = function (scholarshipId) {
         }, 100);
     }
 };
+
+// Gonzalez: Lógica del Carrusel Hero
+let slideIndex = 0;
+let slideInterval;
+
+window.moveCarousel = function (n) {
+    showSlides(slideIndex += n);
+    resetAutoSlide();
+};
+
+window.setCarousel = function (n) {
+    showSlides(slideIndex = n);
+    resetAutoSlide();
+};
+
+function showSlides(n) {
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
+
+    if (slides.length === 0) return;
+
+    if (n >= slides.length) slideIndex = 0;
+    if (n < 0) slideIndex = slides.length - 1;
+
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+
+    slides[slideIndex].classList.add('active');
+    if (dots[slideIndex]) dots[slideIndex].classList.add('active');
+}
+
+function startAutoSlide() {
+    slideInterval = setInterval(() => {
+        showSlides(slideIndex += 1);
+    }, 5000); // Cambia cada 5 segundos
+}
+
+function resetAutoSlide() {
+    clearInterval(slideInterval);
+    startAutoSlide();
+}
+
+// Inicializar carrusel
+document.addEventListener('DOMContentLoaded', () => {
+    // Nota: El evento DOMContentLoaded ya tiene un listener al inicio de app.js
+    // Solo necesitamos asegurarnos de que showSlides se llame.
+    setTimeout(() => {
+        showSlides(slideIndex);
+        startAutoSlide();
+    }, 100);
+});

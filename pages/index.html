@@ -90,34 +90,64 @@
         <!-- Main Content Area -->
         <main class="main-content">
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                <h2 id="page-title" class="section-title">Becas Disponibles</h2>
-                <div class="actions">
-                    <button class="btn-secondary" id="switch-role-btn">Cambiar Rol (Demo)</button>
+            <!-- Gonzalez: Sección Informativa "Sobre Nosotros" -->
+            <section class="about-section"
+                style="margin-bottom: 3rem; background: var(--bg-white); padding: 2.5rem; border-radius: 12px; box-shadow: var(--shadow);">
+                <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                    <h2 style="color: var(--primary-color); margin-bottom: 1.5rem; font-size: 2.2rem;">Impulsando el
+                        Futuro Académico</h2>
+                    <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-color); margin-bottom: 1.5rem;">
+                        En <strong>EduHelper</strong>, nuestra misión es democratizar el acceso a la educación superior.
+                        Somos una plataforma costarricense dedicada a conectar a estudiantes talentosos con las
+                        oportunidades
+                        que merecen. Creemos firmemente que el factor económico nunca debería ser un obstáculo para el
+                        éxito.
+                    </p>
+                    <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-muted);">
+                        A través de alianzas con instituciones líderes como la UCR, TEC y empresas innovadoras como FWD,
+                        facilitamos la postulación y gestión de becas de forma transparente, digital y eficiente.
+                        <em>¡Tu camino hacia el éxito comienza aquí!</em>
+                    </p>
                 </div>
-            </div>
+            </section>
 
-            <!-- Gonzalez: Sección de Accesos Directos a Becas -->
-            <section class="info-requirements-section" style="margin-bottom: 3rem;">
-                <div class="category-grid">
-                    <div class="category-card clickable-card" onclick="goToApply(1)">
-                        <div class="category-icon">🎓</div>
-                        <h3>Beca de Excelencia Académica</h3>
-                        <p>Para estudiantes con promedios superiores a 9.0.</p>
-                        <span class="amount-tag">Monto: 30.000 ₡</span>
+            <!-- Gonzalez: Carrusel Hero Principal -->
+            <section class="hero-carousel-section"
+                style="margin-bottom: 3rem; position: relative; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); height: 400px;">
+                <div class="carousel-container" id="main-carousel">
+                    <div class="carousel-slide active">
+                        <img src="../imgs/BS EduHelper.png" alt="EduHelper Banner">
+                        <div class="carousel-caption">
+                            <h3>Gestión Inteligente de Becas</h3>
+                            <p>Todo el proceso desde tu computadora en pocos pasos.</p>
+                        </div>
                     </div>
-                    <div class="category-card clickable-card" onclick="goToApply(3)">
-                        <div class="category-icon">🏆</div>
-                        <h3>Beca Deportiva</h3>
-                        <p>Para atletas destacados que representan a la institución.</p>
-                        <span class="amount-tag">Monto: 20.000 ₡</span>
+                    <div class="carousel-slide">
+                        <img src="../imgs/img-registrer.jpeg" alt="Registro">
+                        <div class="carousel-caption">
+                            <h3>Oportunidades para Todos</h3>
+                            <p>Explora becas de las mejores instituciones del país.</p>
+                        </div>
                     </div>
-                    <div class="category-card clickable-card" onclick="goToApply(2)">
-                        <div class="category-icon">🤝</div>
-                        <h3>Beca de Ayuda Socioeconómica</h3>
-                        <p>Apoyo para estudiantes en situación de vulnerabilidad.</p>
-                        <span class="amount-tag">Monto: 50.000 ₡</span>
+                    <!-- Agregado de UCR como imagen de ejemplo para el carrusel -->
+                    <div class="carousel-slide">
+                        <img src="../imgs/UCR.jpg" alt="Instituciones">
+                        <div class="carousel-caption">
+                            <h3>Alianzas con Educadores</h3>
+                            <p>Trabajamos con las instituciones públicas y privadas más prestigiosas.</p>
+                        </div>
                     </div>
+                </div>
+
+                <!-- Controles del Carrusel -->
+                <button class="carousel-control prev" onclick="moveCarousel(-1)">&#10094;</button>
+                <button class="carousel-control next" onclick="moveCarousel(1)">&#10095;</button>
+
+                <!-- Indicadores (Dots) -->
+                <div class="carousel-dots">
+                    <span class="dot active" onclick="setCarousel(0)"></span>
+                    <span class="dot" onclick="setCarousel(1)"></span>
+                    <span class="dot" onclick="setCarousel(2)"></span>
                 </div>
             </section>
 
@@ -126,6 +156,13 @@
 
                 <!-- View: Dashboard (Scholarship List) -->
                 <section id="dashboard" class="view active">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h2 id="page-title" class="section-title">Becas Disponibles</h2>
+                        <div class="actions">
+                            <button class="btn-secondary" id="switch-role-btn">Cambiar Rol (Demo)</button>
+                        </div>
+                    </div>
                     <div class="scholarship-grid" id="scholarships-container">
                         <!-- Dynamic Content -->
                     </div>
