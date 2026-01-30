@@ -4,7 +4,7 @@ import { StorageService } from './storage.js';
 const db = new StorageService();
 
 // State
-let currentUserRole = 'applicant'; // 'applicant' | 'admin'
+let currentUser = null;
 
 // DOM Elements
 const views = document.querySelectorAll('.view');
@@ -21,23 +21,27 @@ document.addEventListener('DOMContentLoaded', () => {
     renderDashboard();
     setupNavigation();
     setupForm();
-    setupAdmin();
+    setupViews();
     updateUserInterface();
 });
 
 function checkSession() {
-    const user = JSON.parse(localStorage.getItem('edugrant_current_user'));
-    if (!user) {
-        // Redirect to login if not authenticated
+    currentUser = JSON.parse(localStorage.getItem('edugrant_current_user'));
+    if (!currentUser) {
         window.location.href = 'login.html';
         return;
     }
-    
+
     // Update Profile UI
-    document.getElementById('user-name').textContent = user.fullName;
-    document.getElementById('user-role').textContent = user.role === 'admin' ? 'Administrador' : 'Estudiante';
-    document.getElementById('user-avatar').textContent = user.fullName.charAt(0).toUpperCase();
-    currentUserRole = user.role;
+    document.getElementById('user-name').textContent = currentUser.fullName;
+    document.getElementById('user-avatar').textContent = currentUser.fullName.charAt(0).toUpperCase();
+
+    const roleLabels = {
+        'admin': 'Administrador',
+        'evaluator': 'Evaluador',
+        'applicant': 'Postulante'
+    };
+    document.getElementById('user-role').textContent = roleLabels[currentUser.role] || 'Usuario';
 }
 
 // --- Navigation ---
@@ -46,9 +50,17 @@ function setupNavigation() {
         link.addEventListener('click', (e) => {
             const targetId = link.getAttribute('data-target');
 
-            // Simple guard for Admin tab
-            if (targetId === 'admin' && currentUserRole !== 'admin') {
-                alert("Acceso denegado: Solo para administradores.");
+            // --- Permissions Guard ---
+            if (targetId === 'scholarship-management' && currentUser.role !== 'admin') {
+                alert("Acceso exclusivo para Administradores.");
+                return;
+            }
+            if (targetId === 'evaluations' && !['admin', 'evaluator'].includes(currentUser.role)) {
+                alert("Acceso restringido a Evaluadores o Administradores.");
+                return;
+            }
+            if (targetId === 'reports' && currentUser.role !== 'admin') {
+                alert("Acceso exclusivo para Administradores.");
                 return;
             }
 
@@ -62,59 +74,81 @@ function setupNavigation() {
                 view.classList.remove('active');
             });
             const activeView = document.getElementById(targetId);
-            activeView.classList.remove('hidden');
-            activeView.classList.add('active');
+            if (activeView) {
+                activeView.classList.remove('hidden');
+                activeView.classList.add('active');
+            }
 
             // Update Title & Refresh Data
-            switch (targetId) {
-                case 'dashboard':
-                    pageTitle.textContent = 'Becas Disponibles';
-                    renderDashboard();
-                    break;
-                case 'apply':
-                    pageTitle.textContent = 'Formulario de Postulación';
-                    populateScholarshipSelect();
-                    break;
-                case 'admin':
-                    pageTitle.textContent = 'Panel de Administración';
-                    renderAdminTable();
-                    break;
-                case 'reports':
-                    pageTitle.textContent = 'Reportes y Estadísticas';
-                    renderReports();
-                    break;
-            }
+            updateViewContent(targetId);
         });
     });
 
     switchRoleBtn.addEventListener('click', () => {
-        if (confirm("Para cambiar de rol debes iniciar sesión con otra cuenta. ¿Deseas cerrar sesión?")) {
+        if (confirm("Para cambiar de cuenta debes cerrar sesión. ¿Continuar?")) {
             localStorage.removeItem('edugrant_current_user');
             window.location.href = 'login.html';
         }
     });
 
-    // Logout Handler
     document.getElementById('logout-btn').addEventListener('click', () => {
         localStorage.removeItem('edugrant_current_user');
         window.location.href = 'login.html';
     });
 }
 
-function updateUserInterface() {
-    const roleLabel = document.querySelector('.user-profile .role');
-    const roleAvatar = document.querySelector('.user-profile .avatar');
+function updateViewContent(targetId) {
+    switch (targetId) {
+        case 'dashboard':
+            pageTitle.textContent = 'Becas Disponibles';
+            renderDashboard();
+            break;
+        case 'apply':
+            pageTitle.textContent = 'Nueva Postulación';
+            populateScholarshipSelect();
+            break;
+        case 'history':
+            pageTitle.textContent = 'Mi Historial';
+            renderHistoryTable();
+            break;
+        case 'scholarship-management':
+            pageTitle.textContent = 'Gestión de Becas';
+            renderScholarshipMgmtTable();
+            break;
+        case 'evaluations':
+            pageTitle.textContent = 'Panel de Evaluación';
+            renderAdminTable();
+            break;
+        case 'reports':
+            pageTitle.textContent = 'Estadísticas del Sistema';
+            renderReports();
+            break;
+    }
+}
 
-    if (currentUserRole === 'admin') {
-        roleLabel.textContent = "Administrador";
-        roleAvatar.textContent = "A";
-        roleAvatar.style.backgroundColor = "var(--danger-color)";
-        switchRoleBtn.textContent = "Cambiar a Estudiante";
+function updateUserInterface() {
+    // Hide nav links based on role
+    navLinks.forEach(link => {
+        const target = link.getAttribute('data-target');
+        if (target === 'scholarship-management' || target === 'reports') {
+            link.style.display = currentUser.role === 'admin' ? 'block' : 'none';
+        }
+        if (target === 'evaluations') {
+            link.style.display = ['admin', 'evaluator'].includes(currentUser.role) ? 'block' : 'none';
+        }
+        if (target === 'history' || target === 'apply') {
+            link.style.display = currentUser.role === 'applicant' ? 'block' : 'none';
+        }
+    });
+
+    // Special behavior for Hero and Switch button
+    const hero = document.querySelector('.hero');
+    if (currentUser.role !== 'applicant') {
+        if (hero) hero.style.display = 'none';
+        switchRoleBtn.textContent = "Cambiar a Postulante";
     } else {
-        roleLabel.textContent = "Estudiante";
-        roleAvatar.textContent = "U";
-        roleAvatar.style.backgroundColor = "var(--primary-color)";
-        switchRoleBtn.textContent = "Cambiar a Admin";
+        if (hero) hero.style.display = 'block';
+        switchRoleBtn.textContent = "Cambiar a Admin/Eval";
     }
 }
 
@@ -135,26 +169,50 @@ function renderDashboard() {
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
                 <span style="font-weight: bold; color: var(--primary-color);">${sch.amount}</span>
-                <button class="btn-primary" onclick="window.location.hash = ''; goToApply(${sch.id})">Postular</button>
+                ${currentUser.role === 'applicant' ? `<button class="btn-primary" onclick="goToApply(${sch.id})">Postular</button>` : ''}
             </div>
         </div>
     `).join('');
 }
 
-// Global helper to jump to apply form from dashboard
 window.goToApply = (scholarshipId) => {
     const applyBtn = document.querySelector('[data-target="apply"]');
-    applyBtn.click();
-    // Pre-select the scholarship after a small delay to ensure render
+    if (applyBtn) applyBtn.click();
     setTimeout(() => {
-        scholarshipSelect.value = scholarshipId;
+        if (scholarshipSelect) scholarshipSelect.value = scholarshipId;
     }, 50);
 };
+
+// --- Features: Applicant History ---
+function renderHistoryTable() {
+    const apps = db.getUserApplications(currentUser.email);
+    const scholarships = db.getScholarships();
+    const tbody = document.getElementById('history-table-body');
+
+    if (apps.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No tienes postulaciones registradas.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = apps.map(app => {
+        const sch = scholarships.find(s => s.id === app.scholarshipId);
+        const date = new Date(app.date).toLocaleDateString();
+        const statusLabels = { 'pending': 'Pendiente', 'approved': 'Aprobada', 'rejected': 'Rechazada' };
+        const statusClasses = { 'pending': 'status-pending', 'approved': 'status-approved', 'rejected': 'status-rejected' };
+
+        return `
+            <tr>
+                <td>${sch ? sch.title : 'Desconocida'}</td>
+                <td>${date}</td>
+                <td><span class="status-badge ${statusClasses[app.status]}">${statusLabels[app.status]}</span></td>
+            </tr>
+        `;
+    }).join('');
+}
 
 // --- Features: Application Form ---
 function populateScholarshipSelect() {
     const scholarships = db.getScholarships();
-    // Keep the first option
     scholarshipSelect.innerHTML = '<option value="">-- Seleccione una opción --</option>';
     scholarships.forEach(sch => {
         const option = document.createElement('option');
@@ -167,20 +225,15 @@ function populateScholarshipSelect() {
 function setupForm() {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-
         const scholarshipId = parseInt(scholarshipSelect.value);
-        if (!scholarshipId) {
-            alert("Por favor seleccione una beca.");
-            return;
-        }
+        if (!scholarshipId) { alert("Seleccione una beca."); return; }
 
         const scholarship = db.getScholarships().find(s => s.id === scholarshipId);
-
-        // Gather Data
         const formData = {
             id: 'app_' + Date.now(),
             scholarshipId: scholarshipId,
             applicantName: document.getElementById('full-name').value,
+            applicantEmail: currentUser.email,
             age: parseInt(document.getElementById('age').value),
             gpa: parseFloat(document.getElementById('gpa').value),
             income: parseFloat(document.getElementById('income').value),
@@ -189,153 +242,167 @@ function setupForm() {
             date: new Date().toISOString()
         };
 
-        // --- VALIDATION LOGIC ---
         const req = scholarship.requirements;
         let errors = [];
-
-        if (formData.gpa < req.minGPA) errors.push(`El promedio mínimo es ${req.minGPA}. Tienes ${formData.gpa}.`);
-        if (formData.age > req.maxAge) errors.push(`La edad máxima es ${req.maxAge}. Tienes ${formData.age}.`);
-        if (req.maxIncome && formData.income > req.maxIncome) errors.push(`El ingreso excede el límite de $${req.maxIncome}.`);
+        if (formData.gpa < req.minGPA) errors.push(`Promedio insuficiente (Mín: ${req.minGPA})`);
+        if (formData.age > req.maxAge) errors.push(`Edad excede límite (Máx: ${req.maxAge})`);
 
         if (errors.length > 0) {
-            alert(`No cumples con los requisitos:\n- ${errors.join('\n- ')}`);
-            // Automatically reject? Or just block submission?
-            // "Validar automáticamente requisitos" usually implies blocking or auto-rejecting. 
-            // Let's block submission for better UX.
+            alert(`No cumples requisitos:\n- ${errors.join('\n- ')}`);
             return;
         }
 
-        // Save
         db.addApplication(formData);
-        alert("¡Postulación enviada con éxito!");
+        alert("¡Postulación enviada!");
         form.reset();
-        // Go back to dashboard
-        document.querySelector('[data-target="dashboard"]').click();
+        document.querySelector('[data-target="history"]').click();
     });
 }
 
-// --- Features: Admin Panel ---
+// --- Features: Scholarship Management (Admin) ---
+let currentSchEditingId = null;
+const schModal = document.getElementById('scholarship-modal');
+const schForm = document.getElementById('scholarship-form');
+
+function renderScholarshipMgmtTable() {
+    const list = db.getScholarships();
+    const tbody = document.getElementById('scholarships-mgmt-table-body');
+    tbody.innerHTML = list.map(sch => `
+        <tr>
+            <td>${sch.title}</td>
+            <td>${sch.amount}</td>
+            <td>
+                <button class="btn-secondary" onclick="editSch(${sch.id})">Editar</button>
+                <button class="btn-danger" onclick="deleteSch(${sch.id})">Borrar</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+window.editSch = (id) => {
+    const sch = db.getScholarships().find(s => s.id === id);
+    currentSchEditingId = id;
+    document.getElementById('sch-modal-title').textContent = "Editar Beca";
+    document.getElementById('sch-id').value = sch.id;
+    document.getElementById('sch-title').value = sch.title;
+    document.getElementById('sch-desc').value = sch.description;
+    document.getElementById('sch-amount').value = sch.amount;
+    document.getElementById('sch-min-gpa').value = sch.requirements.minGPA;
+    document.getElementById('sch-max-age').value = sch.requirements.maxAge;
+    document.getElementById('sch-max-income').value = sch.requirements.maxIncome || '';
+    schModal.classList.remove('hidden');
+};
+
+window.deleteSch = (id) => {
+    if (confirm("¿Seguro que quieres eliminar esta beca?")) {
+        db.deleteScholarship(id);
+        renderScholarshipMgmtTable();
+    }
+};
+
+function setupViews() {
+    // Scholarship Modal
+    document.getElementById('add-scholarship-btn').addEventListener('click', () => {
+        currentSchEditingId = null;
+        schForm.reset();
+        document.getElementById('sch-modal-title').textContent = "Nueva Beca";
+        schModal.classList.remove('hidden');
+    });
+
+    document.querySelector('.close-modal-sch').addEventListener('click', () => schModal.classList.add('hidden'));
+
+    schForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const schData = {
+            id: currentSchEditingId || Date.now(),
+            title: document.getElementById('sch-title').value,
+            description: document.getElementById('sch-desc').value,
+            amount: document.getElementById('sch-amount').value,
+            requirements: {
+                minGPA: parseFloat(document.getElementById('sch-min-gpa').value),
+                maxAge: parseInt(document.getElementById('sch-max-age').value),
+                maxIncome: parseFloat(document.getElementById('sch-max-income').value) || null
+            }
+        };
+
+        if (currentSchEditingId) {
+            db.updateScholarship(currentSchEditingId, schData);
+        } else {
+            db.addScholarship(schData);
+        }
+
+        schModal.classList.add('hidden');
+        renderScholarshipMgmtTable();
+    });
+
+    // Evaluation Modal
+    document.querySelector('.close-modal').addEventListener('click', () => evalModal.classList.add('hidden'));
+    document.getElementById('btn-approve').addEventListener('click', () => finalizeEvaluation('approved'));
+    document.getElementById('btn-reject').addEventListener('click', () => finalizeEvaluation('rejected'));
+}
+
+// --- Features: Evaluation (Admin & Evaluator) ---
+const evalModal = document.getElementById('evaluation-modal');
+let currentEvalAppId = null;
+
 function renderAdminTable() {
     const apps = db.getApplications();
     const scholarships = db.getScholarships();
     const tbody = document.getElementById('applications-table-body');
-
-    // Update Stats
     const stats = db.getStats();
+
     document.getElementById('stat-pending').textContent = stats.pending;
     document.getElementById('stat-evaluated').textContent = stats.approved + stats.rejected;
 
     tbody.innerHTML = apps.map(app => {
         const sch = scholarships.find(s => s.id === app.scholarshipId);
-        const date = new Date(app.date).toLocaleDateString();
-
-        let statusClass = 'status-pending';
-        if (app.status === 'approved') statusClass = 'status-approved';
-        if (app.status === 'rejected') statusClass = 'status-rejected';
-
-        const statusLabel = {
-            'pending': 'Pendiente',
-            'approved': 'Aprobada',
-            'rejected': 'Rechazada'
-        }[app.status];
+        const statusLabel = { 'pending': 'Pendiente', 'approved': 'Aprobada', 'rejected': 'Rechazada' }[app.status];
+        const statusClass = { 'pending': 'status-pending', 'approved': 'status-approved', 'rejected': 'status-rejected' }[app.status];
 
         return `
             <tr>
-                <td>
-                    <div style="font-weight: 500;">${app.applicantName}</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted);">${date}</div>
-                </td>
-                <td>${sch ? sch.title : 'Desconocida'}</td>
+                <td>${app.applicantName}</td>
+                <td>${sch ? sch.title : '---'}</td>
                 <td>${app.gpa}</td>
                 <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
                 <td>
-                    <button class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" 
-                        onclick="openEvaluation('${app.id}')">
-                        Evaluar
-                    </button>
+                    <button class="btn-secondary" onclick="openEvaluation('${app.id}')">Evaluar</button>
                 </td>
             </tr>
         `;
     }).join('');
 }
 
-// --- Features: Evaluation Modal ---
-const modal = document.getElementById('evaluation-modal');
-const closeModal = document.querySelector('.close-modal');
-const btnApprove = document.getElementById('btn-approve');
-const btnReject = document.getElementById('btn-reject');
-let currentEvalAppId = null;
-
 window.openEvaluation = (appId) => {
     currentEvalAppId = appId;
     const app = db.getApplications().find(a => a.id === appId);
     const sch = db.getScholarships().find(s => s.id === app.scholarshipId);
 
-    const details = document.getElementById('modal-details');
-    details.innerHTML = `
-        <div style="margin-bottom: 1rem;">
-            <p><strong>Candidato:</strong> ${app.applicantName}</p>
-            <p><strong>Beca:</strong> ${sch.title}</p>
-            <p><strong>Promedio:</strong> ${app.gpa}</p>
-            <p><strong>Edad:</strong> ${app.age}</p>
-            <p><strong>Ingreso:</strong> $${app.income}</p>
-        </div>
-        <div style="background: var(--secondary-bg); padding: 1rem; border-radius: 6px;">
-            <strong>Motivación:</strong>
-            <p style="margin-top: 0.5rem; font-style: italic;">"${app.motivation}"</p>
-        </div>
+    document.getElementById('modal-details').innerHTML = `
+        <p><strong>Candidato:</strong> ${app.applicantName}</p>
+        <p><strong>Beca:</strong> ${sch ? sch.title : '---'}</p>
+        <p><strong>Promedio:</strong> ${app.gpa}</p>
+        <p><strong>Motivación:</strong> "${app.motivation}"</p>
     `;
-
-    modal.classList.remove('hidden');
+    evalModal.classList.remove('hidden');
 };
 
-function setupAdmin() {
-    closeModal.addEventListener('click', () => modal.classList.add('hidden'));
-
-    btnApprove.addEventListener('click', () => {
-        if (currentEvalAppId) {
-            db.updateStatus(currentEvalAppId, 'approved');
-            modal.classList.add('hidden');
-            renderAdminTable(); // Refresh table
-        }
-    });
-
-    btnReject.addEventListener('click', () => {
-        if (currentEvalAppId) {
-            db.updateStatus(currentEvalAppId, 'rejected');
-            modal.classList.add('hidden');
-            renderAdminTable(); // Refresh table
-        }
-    });
+function finalizeEvaluation(status) {
+    if (currentEvalAppId) {
+        db.updateStatus(currentEvalAppId, status);
+        evalModal.classList.add('hidden');
+        renderAdminTable();
+    }
 }
 
-// --- Features: Reports ---
+// --- Reports ---
 function renderReports() {
-    const apps = db.getApplications();
     const stats = db.getStats();
-
-    // Simple HTML Report
-    const reportHTML = `
+    document.getElementById('reports-content').innerHTML = `
         <div class="stats-row">
-            <div class="stat-card">
-                <h4>Total Solicitudes</h4>
-                <span class="stat-number">${stats.total}</span>
-            </div>
-            <div class="stat-card">
-                <h4>Tasa de Aprobación</h4>
-                <span class="stat-number" style="color: var(--success-color);">
-                    ${stats.total > 0 ? Math.round((stats.approved / stats.total) * 100) : 0}%
-                </span>
-            </div>
+            <div class="stat-card"><h4>Total</h4><span class="stat-number">${stats.total}</span></div>
+            <div class="stat-card"><h4>Aprobadas</h4><span class="stat-number">${stats.approved}</span></div>
         </div>
-        
-        <div style="margin-top: 2rem;">
-            <h4>Detalle de Postulantes</h4>
-            <ul style="margin-top: 1rem; list-style-type: disc; padding-left: 1.5rem;">
-                ${apps.map(a => `<li>${a.applicantName} - ${a.status.toUpperCase()}</li>`).join('')}
-            </ul>
-        </div>
+        <p style="margin-top:1rem;">Tasa de éxito: ${stats.total > 0 ? Math.round((stats.approved / stats.total) * 100) : 0}%</p>
     `;
-
-    document.getElementById('reports-content').innerHTML = reportHTML;
 }
