@@ -3,12 +3,8 @@ import { SCHOLARSHIPS, MOCK_APPLICATIONS } from './data.js';
 
 const KEY_APPLICATIONS = 'edugrant_applications';
 const KEY_SCHOLARSHIPS = 'edugrant_scholarships';
-const KEY_USERS = 'edugrant_users';
 const KEY_INIT = 'edugrant_initialized';
 
-/**
- * Servicio de Almacenamiento: Centraliza todas las interacciones con LocalStorage.
- */
 export class StorageService {
 
     constructor() {
@@ -16,16 +12,29 @@ export class StorageService {
     }
 
     init() {
-        // Enforce re-seed to apply enriched data structure (type, dates, status)
-        const currentVersion = 'v2_enriched';
-        const storageVersion = localStorage.getItem('edugrant_version');
+        const hasInit = localStorage.getItem(KEY_INIT);
+        const storedSch = JSON.parse(localStorage.getItem(KEY_SCHOLARSHIPS) || "[]");
 
-        if (!localStorage.getItem(KEY_INIT) || storageVersion !== currentVersion) {
-            console.log("Seeding initial data...");
-            localStorage.setItem(KEY_SCHOLARSHIPS, JSON.stringify(SCHOLARSHIPS));
-            localStorage.setItem(KEY_APPLICATIONS, JSON.stringify(MOCK_APPLICATIONS));
+        // Si no hay datos o si hemos agregado nuevas becas por defecto en data.js
+        if (!hasInit || storedSch.length < SCHOLARSHIPS.length) {
+            console.log("Actualizando catálogo de becas...");
+
+            // Mantenemos las becas que el usuario haya podido crear manualmente,
+            // pero nos aseguramos de que las 'default' de data.js estén presentes.
+            const mergedScholarships = [...SCHOLARSHIPS];
+
+            // Si el usuario ya tenía becas custom (con IDs altos), las preservamos
+            storedSch.forEach(s => {
+                if (!mergedScholarships.find(ms => ms.id === s.id)) {
+                    mergedScholarships.push(s);
+                }
+            });
+
+            localStorage.setItem(KEY_SCHOLARSHIPS, JSON.stringify(mergedScholarships));
+            if (!localStorage.getItem(KEY_APPLICATIONS)) {
+                localStorage.setItem(KEY_APPLICATIONS, JSON.stringify(MOCK_APPLICATIONS));
+            }
             localStorage.setItem(KEY_INIT, 'true');
-            localStorage.setItem('edugrant_version', currentVersion);
         }
     }
 
@@ -75,11 +84,11 @@ export class StorageService {
         localStorage.setItem(KEY_APPLICATIONS, JSON.stringify(apps));
     }
 
-    updateStatus(appId, newStatus) {
+    updateApplication(appId, updatedData) {
         const apps = this.getApplications();
         const appIndex = apps.findIndex(a => a.id === appId);
         if (appIndex !== -1) {
-            apps[appIndex].status = newStatus;
+            apps[appIndex] = { ...apps[appIndex], ...updatedData };
             localStorage.setItem(KEY_APPLICATIONS, JSON.stringify(apps));
             return true;
         }
@@ -94,29 +103,5 @@ export class StorageService {
             approved: apps.filter(a => a.status === 'approved').length,
             rejected: apps.filter(a => a.status === 'rejected').length
         };
-    }
-
-    // --- User/Evaluator Management (Admin) ---
-    getUsers() {
-        const data = localStorage.getItem(KEY_USERS);
-        return data ? JSON.parse(data) : [];
-    }
-
-    getEvaluators() {
-        const users = this.getUsers();
-        return users.filter(u => u.role === 'evaluator');
-    }
-
-    addEvaluator(evaluator) {
-        const users = this.getUsers();
-        evaluator.role = 'evaluator';
-        users.push(evaluator);
-        localStorage.setItem(KEY_USERS, JSON.stringify(users));
-    }
-
-    deleteEvaluator(email) {
-        const users = this.getUsers();
-        const newUsers = users.filter(u => !(u.email === email && u.role === 'evaluator'));
-        localStorage.setItem(KEY_USERS, JSON.stringify(newUsers));
     }
 }

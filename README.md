@@ -3,29 +3,50 @@ Un pequeño proyecto en equipo para el lunes, sobre un Sistema de Gestión de Be
 
 ---
 
+# Actualizaciones Recientes (Gonzalez)
 
+## 🎨 1. El Navbar ahora tiene un estilo mas profesional
+Le metí mano al menú de arriba. Ahora empieza de un color azul sólido (para que se lea bien) pero más pegadito al borde, y cuando bajas (scroll), se pone blanco con letras azules. Se ve mas moderno y limpio.
 
+### 🌊 2. Header (Encabezado) 
+Cambié la imagen estática por un **Header Personalizado** con animaciones y efectos mas agradables a la vista.
+- Fondo gradiente azul cian bien fresco.
+- Un divisor en forma de **ola suave** abajo (SVG) para conectar con el resto de la página.
+- La imagen principal (la ilustración) ahora tiene un efecto de "flotar" y se mezcla con el fondo.
+- La barra de búsqueda ahora es cuadrada y minimalista.
 
+### 🖱️ 3. Tarjetas Interactivas
+en los cuadros de las becas antes teniamos que atinarle al botoncito de "Postular". Ahora **todo el cuadro es cliqueable**. Si le das click a cualquier parte de la tarjeta, te lleva directo al formulario y **te selecciona la beca automáticamente**.
 
+### 🔐 4. Sistema de Roles Inteligente (¡Adiós botón de cambiar rol!)
+Ya no hay que estar dándole al botón de "Cambiar Rol" para probar cosas. Ahora el sistema es listo y sabe quién eres por tu correo:
 
+- Si tu correo tiene **"admin"** -> Eres el Jefe (Ves todo).
+- Si tu correo tiene **"evaluador"** -> Eres Evaluador.
+- Si no dice nada de eso -> Eres un Estudiante normal.
 
+Además, te da la bienvenida en verde cuando entras para que sepas que todo salió bien. ✅
 
+---
 
+# 🧪 Cuentas de Prueba (Test Users)
 
+Para que prueben rápido sin registrarse a cada rato, usen estas cuentas:
 
+### 👑 Administrador (Ve TODO)
+- **Correo:** `admin@admin.com`
+- **Contraseña:** `123456` (o cualquiera)
 
+### 📝 Evaluador (Ve Evaluaciones y Vistas de Usuario)
+- **Correo:** `tormentionrex@evaluador.com`
+- **Contraseña:** `undertale`
 
+### 🎓 Usuario / Postulante (Solo ve sus becas)
+- **Correo:** `juan@gmail.com`
+- **Contraseña:** `123456`
 
+---
 
-
-
-
-
-
-
-
-
-Gonzalez:
 # Guía para el (Main): Cómo Aceptar Cambios
 
 Esta sección es exclusiva para quien maneja la rama `main`. Su trabajo es unir el trabajo de los 3 o 4 compañeros sin que explote nada XD

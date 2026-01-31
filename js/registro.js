@@ -1,12 +1,59 @@
-/**
- * Lógica para el registro de nuevos usuarios.
- * Por defecto asigna el rol 'applicant' (Postulante).
- */
+// JS Logic for Registration
 import { StorageService } from './storage.js';
 
 const db = new StorageService();
 const form = document.getElementById('register-form');
 
+
+
+
+// Setup Dynamic Role Visibility
+document.addEventListener('DOMContentLoaded', () => {
+    const emailInput = document.getElementById('reg-email');
+    const roleContainer = document.querySelector('#reg-role').closest('.form-group'); // Get parent div
+    const roleSelect = document.getElementById('reg-role');
+
+    // Init: Hide by default
+    roleContainer.style.display = 'none';
+
+    emailInput.addEventListener('input', (e) => {
+        const email = e.target.value.toLowerCase();
+
+        // Reset options visibility (re-build options)
+        roleSelect.innerHTML = ''; // Clear
+
+        if (email.includes('admin')) {
+            // Admin sees ALL: Student, Evaluator, Admin
+            roleContainer.style.display = 'block';
+            addOption(roleSelect, 'applicant', 'Estudiante / Postulante');
+            addOption(roleSelect, 'evaluator', 'Evaluador de Becas');
+            addOption(roleSelect, 'admin', 'Administrador de Becas');
+            roleSelect.value = 'admin'; // Auto-select helpful
+        }
+        else if (email.includes('evaluador') || email.includes('evaluator')) {
+            // Evaluator sees: Student, Evaluator
+            roleContainer.style.display = 'block';
+            addOption(roleSelect, 'applicant', 'Estudiante / Postulante');
+            addOption(roleSelect, 'evaluator', 'Evaluador de Becas');
+            roleSelect.value = 'evaluator';
+        }
+        else {
+            // Student: Hidden
+            roleContainer.style.display = 'none';
+            // Default select value to applicant just in case it's submitted
+            addOption(roleSelect, 'applicant', 'Estudiante / Postulante');
+        }
+    });
+
+    function addOption(select, value, text) {
+        const opt = document.createElement('option');
+        opt.value = value;
+        opt.textContent = text;
+        select.appendChild(opt);
+    }
+});
+
+// Re-attach submit handler properly
 form.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -14,12 +61,16 @@ form.addEventListener('submit', (e) => {
     const email = document.getElementById('reg-email').value;
     const password = document.getElementById('reg-password').value;
     const confirmPassword = document.getElementById('reg-confirm-password').value;
-    const role = 'applicant'; // Default role for new registrations
 
-    // Restricted Emails (Staff)
-    const restrictedEmails = ['gnaomy276@gmail.com', 'gnaomy267@gmail.com'];
+    const roleSelect = document.getElementById('reg-role');
+    // If hidden, force 'applicant'. If visible, take value.
+    const isVisible = roleSelect.closest('.form-group').style.display !== 'none';
+    const role = isVisible ? roleSelect.value : 'applicant';
+
+    // Restricted Emails
+    const restrictedEmails = ['gnaomy276@gmail', 'tormentionrex@gmail.com'];
     if (restrictedEmails.includes(email.toLowerCase())) {
-        alert("Este correo está reservado para uso del personal administrativo.");
+        alert("Este correo está reservado para uso del sistema.");
         return;
     }
 
