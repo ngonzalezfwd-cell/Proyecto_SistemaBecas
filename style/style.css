@@ -1,0 +1,1330 @@
+:root {
+    --primary-color: #2563eb;
+    /* Blue 600 */
+    --primary-hover: #1d4ed8;
+    --secondary-bg: #f3f4f6;
+    --text-color: #1f2937;
+    --text-muted: #6b7280;
+    --bg-white: #ffffff;
+    --border-color: #e5e7eb;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --sidebar-width: 250px;
+    --radius: 8px;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--secondary-bg);
+    color: var(--text-color);
+    overflow-x: hidden;
+    /* Prevent horizontal scroll */
+}
+
+/* Layout Re-structure (Gonzalez hizo tal cambio) */
+.app-container {
+    display: block;
+    height: auto;
+    min-height: 100vh;
+}
+
+/* Navbar Global (Gonzalez) */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 1rem 2rem;
+    transition: all 0.3s ease;
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.navbar.scrolled {
+    background-color: var(--bg-white);
+    color: var(--primary-color);
+    /* Azul claro bonito */
+    box-shadow: var(--shadow);
+    padding: 0.8rem 2rem;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo h2 {
+    margin: 0;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links .nav-link {
+    background: none;
+    border: none;
+    color: inherit;
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    position: relative;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* Espacio para el icono */
+    border-radius: var(--radius);
+}
+
+.nav-links .nav-link i {
+    font-size: 1.1rem;
+}
+
+.nav-links .nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    opacity: 1;
+}
+
+.navbar.scrolled .nav-links .nav-link:hover {
+    background: var(--secondary-bg);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo h2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+}
+
+.nav-logo-img {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.nav-logo-img:hover {
+    transform: scale(1.05);
+}
+
+/* Gonzalez: Refactoring Inline Styles */
+.nav-user-container {
+    display: flex;
+    align-items: center;
+}
+
+.nav-user-info {
+    text-align: right;
+    margin-right: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-user-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.nav-user-role {
+    font-size: 0.75rem;
+    color: #666;
+    display: block;
+}
+
+.view-title {
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+    border-bottom: 3px solid var(--border-color);
+    display: inline-block;
+    padding-bottom: 0.5rem;
+    margin-top: 1rem;
+}
+
+.nav-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 12px;
+}
+
+.nav-logout-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+}
+
+.about-section {
+    margin-bottom: 3rem;
+    background: var(--bg-white);
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.about-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.about-title {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-size: 2.2rem;
+}
+
+.about-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+}
+
+.about-text-muted {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.apply-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.apply-welcome-section {
+    margin-bottom: 3rem;
+    background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
+    padding: 2.5rem;
+    border-radius: 12px;
+    border-left: 5px solid var(--primary-color);
+    box-shadow: var(--shadow);
+}
+
+.apply-welcome-title {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+.apply-welcome-text {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-color);
+}
+
+.help-modal-content {
+    width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.guide-card {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem;
+}
+
+.guide-title {
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.guide-icon {
+    font-size: 2.5rem;
+}
+
+.guide-section-content {
+    line-height: 1.8;
+    color: var(--text-color);
+}
+
+.guide-footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.section-title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.centered-content {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.institution-tagline {
+    color: var(--text-muted);
+}
+
+.mt-4 {
+    margin-top: 4rem;
+}
+
+.m-0 {
+    margin: 0;
+}
+
+.mt-2 {
+    margin-top: 2rem;
+}
+
+.font-italic {
+    font-style: italic;
+}
+
+.modal-header-title {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.help-note-container {
+    background: #f0f7ff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 2rem;
+}
+
+.help-note-text {
+    margin: 0 0 1rem 0;
+    font-size: 0.95rem;
+    color: var(--primary-color);
+}
+
+.help-note-btn {
+    width: 100%;
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.form-tip {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+}
+
+/* Gonzalez: Scholarship Card Enhancements */
+.scholarship-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.category-tag {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+}
+
+.cat-economica {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.cat-social {
+    background: #fef9c3;
+    color: #854d0e;
+}
+
+.cat-academica {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.deadline-badge {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.deadline-safe {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.deadline-warning {
+    background: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fef3c7;
+}
+
+.deadline-urgent {
+    background: #fff1f2;
+    color: #9f1239;
+    border: 1px solid #fecdd3;
+}
+
+.requirements-list {
+    padding-left: 1.2rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.form-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
+
+.mt-3 {
+    margin-top: 1rem;
+}
+
+/* Remove old active styles and add underline */
+.nav-links .nav-link.active {
+    background: none;
+    font-weight: 700;
+}
+
+.nav-links .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: currentColor;
+    /* Matches text color */
+}
+
+/* User Profile in Nav */
+.user-profile-nav .avatar {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.2);
+    /* Semi-transparent white */
+    color: inherit;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    border: 2px solid currentColor;
+}
+
+/* Hero Section (Custom Design) */
+.hero-custom {
+    position: relative;
+    width: 100%;
+    min-height: 85vh;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 120px;
+    /* Space for Navbar */
+    padding-bottom: 150px;
+    color: white;
+    overflow: hidden;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 1000px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 2.5rem;
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.hero-illustration-container {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 900px;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    pointer-events: none;
+    /* Prevent interference */
+}
+
+/* Color Integration Overlay */
+.hero-illustration-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Gradient to tint the image with the hero colors */
+    background: linear-gradient(to top, rgba(0, 242, 254, 0.2), rgba(79, 172, 254, 0.3));
+    mix-blend-mode: overlay;
+    /* Blends the blue tint nicely */
+    z-index: 6;
+    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+    /* Match image mask */
+}
+
+/* Floating Animation Keyframes */
+@keyframes floatHero {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.hero-illustration {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    /* Smooth fade at the bottom to merge with the wave */
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+
+    /* Dynamic feel */
+    animation: floatHero 6s ease-in-out infinite;
+
+    /* Glow effect to match environment */
+    filter: drop-shadow(0 10px 20px rgba(0, 242, 254, 0.3));
+}
+
+
+/* Custom Shape Divider (Wave) */
+.custom-shape-divider-bottom-167890 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+    z-index: 20;
+    /* Above illustration */
+}
+
+.custom-shape-divider-bottom-167890 svg {
+    position: relative;
+    display: block;
+    width: calc(137% + 1.3px);
+    height: 150px;
+}
+
+.custom-shape-divider-bottom-167890 .shape-fill {
+    fill: var(--secondary-bg);
+}
+
+/* Updated Search Bar */
+.search-bar-container {
+    background: white;
+    padding: 0.5rem;
+    border-radius: 4px;
+    /* Square/Rectangular look like reference */
+    display: flex;
+    gap: 0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 95%;
+    max-width: 950px;
+    overflow: hidden;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    border-right: 1px solid #eee;
+    padding: 0 1.5rem;
+    height: 55px;
+    font-size: 0.95rem;
+    color: #555;
+    background: white;
+    cursor: pointer;
+    border-radius: 0;
+    appearance: none;
+    /* Remove default arrow if desired, or keep */
+}
+
+.search-input:focus {
+    outline: none;
+    background-color: #fafafa;
+}
+
+.btn-search {
+    background-color: #fbbf24;
+    /* Orange/Yellow */
+    color: white;
+    border: none;
+    font-weight: 800;
+    padding: 0 3rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 5px;
+    /* Slight margin for button inside container */
+}
+
+.btn-search:hover {
+    background-color: #f59e0b;
+    transform: translateY(-2px);
+}
+
+.btn-search::before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    content: "\f002";
+    /* Search Icon */
+}
+
+
+/* Main Content Adjustments */
+.main-content {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-title {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    color: var(--text-color);
+    border-left: 5px solid var(--primary-color);
+    padding-left: 1rem;
+}
+
+/* Categorías (Recuadros de Beca) */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.category-card {
+    background: white;
+    padding: 1.8rem;
+    border-radius: var(--radius);
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--primary-color);
+}
+
+.category-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.category-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+    color: var(--primary-color);
+}
+
+.category-card p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* Sección de Requerimientos (Gonzalez) */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.category-card {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--radius);
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.clickable-card {
+    cursor: pointer;
+}
+
+.clickable-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary-color);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.category-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.category-card h3 {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    margin-bottom: 0.8rem;
+}
+
+.category-card p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+}
+
+.amount-tag {
+    display: inline-block;
+    background: #eff6ff;
+    color: var(--primary-color);
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+/* Cards & Grid */
+.scholarship-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    background: var(--bg-white);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+.card h3 {
+    margin-bottom: 1rem;
+}
+
+.card p {
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+/* Buttons */
+.btn-primary,
+.btn-secondary,
+.btn-success,
+.btn-danger {
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius);
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+}
+
+.btn-secondary {
+    background: white;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.btn-secondary:hover {
+    background: var(--secondary-bg);
+}
+
+.btn-success {
+    background: var(--success-color);
+    color: white;
+}
+
+.btn-danger {
+    background: var(--danger-color);
+    color: white;
+}
+
+/* Forms */
+.form-card {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid var(--primary-color);
+    border-color: transparent;
+}
+
+/* Tables */
+.table-container {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.data-table th {
+    background-color: #f9fafb;
+    font-weight: 600;
+}
+
+/* Badges */
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-pending {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.status-approved {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.status-rejected {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+/* Utilities */
+.hidden {
+    display: none !important;
+}
+
+.stats-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    background: white;
+    flex: 1;
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    /* Asegurar que esté por encima de todo */
+}
+
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--radius);
+    width: 500px;
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.modal-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+/* Institutions Section (Gonzalez hizo tal cambio) */
+.institutions-carousel {
+    display: flex;
+    gap: 2rem;
+    overflow-x: auto;
+    padding: 1rem 0.5rem 2rem 0.5rem;
+    /* Bottom padding for shadow visibility */
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    /* Firefox */
+}
+
+.institutions-carousel::-webkit-scrollbar {
+    height: 8px;
+}
+
+.institutions-carousel::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.institutions-carousel::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.inst-card {
+    min-width: 250px;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    scroll-snap-align: start;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+    border: 1px solid var(--border-color);
+
+    /* Gonzalez: New properties for anchor tag behavior */
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.inst-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.inst-img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    /* Ensures image covers area without distortion */
+    background-color: #f3f4f6;
+    /* Fallback color */
+    display: block;
+}
+
+.inst-img.object-contain {
+    object-fit: contain;
+    padding: 1rem;
+}
+
+.inst-img-placeholder {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 800;
+    font-size: 2rem;
+    letter-spacing: 2px;
+}
+
+.inst-card h3 {
+    padding: 1.5rem 1rem;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin: 0;
+}
+
+/* User Avatar SVG adjustment */
+.avatar svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Gonzalez: Carousel Styles */
+.hero-carousel-section {
+    position: relative;
+    background: #000;
+    height: 500px;
+    /* Altura fija para consistencia */
+    overflow: hidden;
+    border-radius: 12px;
+    margin-bottom: 3rem;
+}
+
+.carousel-container {
+    height: 100%;
+    width: 100%;
+}
+
+.carousel-slide {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: none;
+    /* Hidden by default */
+}
+
+.carousel-slide.active {
+    display: block;
+    animation: slideFade 0.8s ease-in-out;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.65);
+}
+
+.carousel-caption {
+    position: absolute;
+    bottom: 50px;
+    left: 50px;
+    color: white;
+    max-width: 500px;
+    z-index: 10;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    animation: fadeInUp 1s ease-out;
+}
+
+.carousel-caption h3 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.carousel-caption p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* Controls */
+.carousel-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    border: none;
+    color: white;
+    font-size: 2rem;
+    padding: 1rem;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 20;
+    transition: background 0.3s, transform 0.2s;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-control:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-control.prev {
+    left: 20px;
+}
+
+.carousel-control.next {
+    right: 20px;
+}
+
+/* Dots */
+.carousel-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 20;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.dot.active {
+    background: white;
+    transform: scale(1.3);
+}
+
+@keyframes slideFade {
+    from {
+        opacity: 0;
+        transform: scale(1.05);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjust */
+@media (max-width: 768px) {
+    .hero-carousel-section {
+        height: 300px;
+    }
+
+    .carousel-caption {
+        left: 20px;
+        bottom: 20px;
+        padding-right: 20px;
+    }
+
+    .carousel-caption h3 {
+        font-size: 1.8rem;
+    }
+
+    .carousel-caption p {
+        font-size: 1rem;
+    }
+
+    .carousel-control {
+        width: 45px;
+        height: 45px;
+        font-size: 1.2rem;
+    }
+}
+
+/* Gonzalez: Steps Guide Styles - Horizontal Layout */
+.steps-guide {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    margin: 2rem 0 3rem 0;
+    padding: 0 10%;
+}
+
+.step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 5;
+    background: var(--bg-white);
+    padding: 0 15px;
+}
+
+.step-number {
+    width: 35px;
+    height: 35px;
+    background: #e5e7eb;
+    color: var(--text-muted);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    border: 2px solid transparent;
+    transition: all 0.3s;
+}
+
+.step-item.active .step-number {
+    background: var(--primary-color);
+    color: white;
+    box-shadow: 0 0 0 4px #dbeafe;
+}
+
+.step-text {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.step-item.active .step-text {
+    color: var(--primary-color);
+}
+
+.step-line {
+    position: absolute;
+    top: 17px;
+    /* Centrado con el círculo de 35px */
+    left: 15%;
+    right: 15%;
+    height: 2px;
+    background: #e5e7eb;
+    z-index: 1;
+}
+
+.help-content h4 {
+    border-left: 4px solid var(--primary-color);
+    padding-left: 10px;
+    margin-top: 1.5rem;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #9ca3af;
+    opacity: 0.8;
+}

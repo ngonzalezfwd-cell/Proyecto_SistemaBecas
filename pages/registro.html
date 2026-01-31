@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crea tu cuenta - EduHelper</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style/auth-style.css">
+</head>
+
+<body>
+    <div class="split-container">
+        <!-- Panel Izquierdo: Formulario -->
+        <main class="form-panel">
+            <header class="brand-container">
+                <div class="brand-logo">
+                    <!-- User Logo Placeholder -->
+                    <img src="../imgs/BS EduHelper.png" alt="EduHelper Logo" style="height: 40px; margin-right: 10px;">
+                    <span>EduHelper</span>
+                </div>
+            </header>
+
+            <div class="auth-form-wrapper" style="max-width: 450px;">
+                <h1 class="auth-title">Crea tu cuenta</h1>
+                <p class="auth-subtitle">Únete a EduHelper y encuentra la beca ideal para ti.</p>
+
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="reg-fullname">Nombre Completo</label>
+                        <input type="text" id="reg-fullname" required placeholder="Ej. Juan Pérez">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-email">Correo Electrónico</label>
+                        <input type="email" id="reg-email" required placeholder="tu@correo.com">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="reg-password">Contraseña</label>
+                            <input type="password" id="reg-password" required minlength="6" placeholder="••••••••">
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-confirm-password">Confirmar</label>
+                            <input type="password" id="reg-confirm-password" required placeholder="••••••••">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-role">¿Qué tipo de usuario eres?</label>
+                        <select id="reg-role" required>
+                            <option value="applicant">Estudiante / Postulante</option>
+                            <option value="evaluator">Evaluador de Becas</option>
+                            <option value="admin">Administrador de Becas</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-auth-primary">Registrarse</button>
+
+                    <button type="button" class="btn-google">
+                        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google">
+                        Registrarse con Google
+                    </button>
+                </form>
+
+                <p class="auth-redirect">
+                    ¿Ya tienes una cuenta? <a href="login.html">Inicia sesión</a>
+                </p>
+            </div>
+        </main>
+
+        <!-- Panel Derecho: Ilustración -->
+        <aside class="illustration-panel" style="padding: 0; position: relative;">
+            <img src="https://www.upb.edu.co/es/imagenes/img-becamarinayupb-1464224980309.jpg" alt="Fondo Registro"
+                style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+
+            <div class="illustration-content"
+                style="position: relative; z-index: 2; background: rgba(0,0,0,0.3); width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 2rem;">
+                <!-- Content Overlay -->
+                <div style="color: white; margin-bottom: 2rem;">
+                    <h2 style="font-size: 2rem; margin-bottom: 1rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Tu camino
+                        al éxito comienza aquí</h2>
+                    <p style="opacity: 0.9; font-size: 1.1rem; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Accede a cientos
+                        de oportunidades educativas en un solo lugar.</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script type="module" src="../js/registro.js"></script>
+</body>
+
+</html>
