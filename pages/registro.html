@@ -15,12 +15,8 @@
         <main class="form-panel">
             <header class="brand-container">
                 <div class="brand-logo">
-                    <div class="logo-icon">
-                        <div class="logo-dot"></div>
-                        <div class="logo-dot"></div>
-                        <div class="logo-dot"></div>
-                        <div class="logo-dot"></div>
-                    </div>
+                    <!-- User Logo Placeholder -->
+                    <img src="../imgs/BS EduHelper.png" alt="EduHelper Logo" style="height: 40px; margin-right: 10px;">
                     <span>EduHelper</span>
                 </div>
             </header>
@@ -75,22 +71,18 @@
         </main>
 
         <!-- Panel Derecho: Ilustración -->
-        <aside class="illustration-panel" style="background-image: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);">
-            <div class="circle-blur" style="top: 20%; left: 10%;"></div>
-            <div class="circle-blur" style="bottom: 20%; right: 10%;"></div>
+        <aside class="illustration-panel" style="padding: 0; position: relative;">
+            <img src="https://www.upb.edu.co/es/imagenes/img-becamarinayupb-1464224980309.jpg" alt="Fondo Registro"
+                style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
 
-            <div class="illustration-content">
-                <svg class="illustration-svg" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M50 300C50 300 100 250 200 250C300 250 350 300 350 300" stroke="white" stroke-width="8"
-                        stroke-opacity="0.3" stroke-linecap="round" />
-                    <rect x="120" y="100" width="160" height="200" rx="10" stroke="white" stroke-width="4"
-                        stroke-opacity="0.5" />
-                    <circle cx="200" cy="180" r="50" fill="white" fill-opacity="0.2" />
-                    <path d="M180 200L220 200" stroke="white" stroke-width="2" />
-                </svg>
-                <div style="color: white; margin-top: 2rem;">
-                    <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Tu camino al éxito comienza aquí</h2>
-                    <p style="opacity: 0.8;">Accede a cientos de oportunidades educativas en un solo lugar.</p>
+            <div class="illustration-content"
+                style="position: relative; z-index: 2; background: rgba(0,0,0,0.3); width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 2rem;">
+                <!-- Content Overlay -->
+                <div style="color: white; margin-bottom: 2rem;">
+                    <h2 style="font-size: 2rem; margin-bottom: 1rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Tu camino
+                        al éxito comienza aquí</h2>
+                    <p style="opacity: 0.9; font-size: 1.1rem; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Accede a cientos
+                        de oportunidades educativas en un solo lugar.</p>
                 </div>
             </div>
         </aside>

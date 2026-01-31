@@ -15,15 +15,66 @@ const scholarshipGrid = document.getElementById('scholarships-container');
 const scholarshipSelect = document.getElementById('scholarship-select');
 const form = document.getElementById('application-form');
 
+// --- Filter Logic ---
+function initFilters() {
+    const btnFilter = document.getElementById('btn-filter');
+    const filterProvince = document.getElementById('filter-province');
+    const filterInstitution = document.getElementById('filter-institution');
+    const filterLevel = document.getElementById('filter-level');
+
+    if (!btnFilter) return;
+
+    const applyFilters = () => {
+        const province = filterProvince.value;
+        const institution = filterInstitution.value;
+        const level = filterLevel.value;
+
+        const allScholarships = db.getScholarships();
+        const filtered = allScholarships.filter(s => {
+            const matchProv = !province || s.province === province;
+            const matchInst = !institution || s.institution === institution;
+            const matchLevel = !level || s.educationLevel === level;
+            return matchProv && matchInst && matchLevel;
+        });
+
+        renderDashboard(filtered);
+
+        // Auto-scroll to results if button clicked
+        // document.getElementById('dashboard-view').scrollIntoView({ behavior: 'smooth' });
+    };
+
+    btnFilter.addEventListener('click', (e) => {
+        e.preventDefault(); // Prevent form submit if in form
+        applyFilters();
+        // Optional: Scroll to dashboard
+        const dashboard = document.querySelector('.scholarship-grid');
+        if (dashboard) dashboard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Optional: Live filter on change (User didn't explicitly ask, but good UX)
+    // [filterProvince, filterInstitution, filterLevel].forEach(select => {
+    //     select.addEventListener('change', applyFilters);
+    // });
+}
+
+window.resetFilters = function () {
+    document.getElementById('filter-province').value = "";
+    document.getElementById('filter-institution').value = "";
+    document.getElementById('filter-level').value = "";
+    renderDashboard(); // Show all
+};
+
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
     checkSession();
-    renderDashboard();
+    updateUserInterface(); // Set initial state
+    renderDashboard(); // Render initial list
+    initFilters(); // Setup filters
     setupNavigation();
     setupForm();
     setupViews();
-    updateUserInterface();
     setupHelpModal();
+    injectModal(); // Ensure modal is injected on load
 });
 
 function checkSession() {
@@ -146,25 +197,47 @@ function updateUserInterface() {
     // Hide nav links based on role
     navLinks.forEach(link => {
         const target = link.getAttribute('data-target');
-        if (target === 'scholarship-management' || target === 'reports') {
-            link.style.display = currentUser.role === 'admin' ? 'block' : 'none';
+
+        // Admin sees everything
+        if (currentUser.role === 'admin') {
+            link.style.display = 'block';
+            return;
         }
-        if (target === 'evaluations') {
-            link.style.display = ['admin', 'evaluator'].includes(currentUser.role) ? 'block' : 'none';
+
+        // Evaluator sees Evaluations + Standard Views
+        if (currentUser.role === 'evaluator') {
+            if (target === 'scholarship-management' || target === 'reports') {
+                link.style.display = 'none'; // Admin only
+            } else {
+                link.style.display = 'block'; // Includes evaluations, dashboard, apply, history
+            }
+            return;
         }
-        if (target === 'history' || target === 'apply') {
-            link.style.display = currentUser.role === 'applicant' ? 'block' : 'none';
+
+        // Applicant (Standard User)
+        if (currentUser.role === 'applicant') {
+            if (['scholarship-management', 'reports', 'evaluations'].includes(target)) {
+                link.style.display = 'none';
+            } else {
+                link.style.display = 'block';
+            }
         }
     });
 
-    // Special behavior for Hero and Switch button
-    const hero = document.querySelector('.hero');
-    if (currentUser.role !== 'applicant') {
-        if (hero) hero.style.display = 'none';
-        switchRoleBtn.textContent = "Cambiar a Postulante";
-    } else {
-        if (hero) hero.style.display = 'block';
-        switchRoleBtn.textContent = "Cambiar a Admin/Eval";
+    // Special behavior for Hero
+    const hero = document.querySelector('.hero-custom'); // Updated class name
+    if (hero) {
+        // Everyone sees the hero based on current design, or maybe hide for internal roles?
+        // User said "admin puede ver absolutamente todo", so let's keep it visible for all for now,
+        // or hide it for admin/evaluator if it implies "Dashboard focus".
+        // Usually Landing properties are for Applicants.
+        // Let's keep it visible for everyone as "Inicio".
+        hero.style.display = 'flex';
+    }
+
+    // Hide Switch Role Button (Deprecated in favor of login detection)
+    if (switchRoleBtn) {
+        switchRoleBtn.style.display = 'none';
     }
 }
 
@@ -180,38 +253,245 @@ function getDeadlineInfo(deadlineStr) {
     return { class: 'deadline-safe', text: `${days} días restantes` };
 }
 
-function renderDashboard() {
-    const scholarships = db.getScholarships();
+function getProvinceName(code) {
+    const map = {
+        'sanjose': 'San José',
+        'alajuela': 'Alajuela',
+        'cartago': 'Cartago',
+        'heredia': 'Heredia',
+        'guanacaste': 'Guanacaste',
+        'puntarenas': 'Puntarenas',
+        'limon': 'Limón'
+    };
+    return map[code] || code;
+}
+
+// --- Modal Logic ---
+function injectModal() {
+    // Check for the new ID to avoid duplicates
+    if (document.getElementById('scholarship-details-modal')) return;
+
+    const modalHtml = `
+    <div id="scholarship-details-modal" class="modal-overlay" style="z-index: 9999;">
+        <div class="modal-content" style="max-height: 85vh; display: flex; flex-direction: column;">
+            <div class="modal-header" style="flex-shrink: 0;">
+                <div>
+                    <h2 id="detail-modal-title">Título de la Beca</h2>
+                    <div class="modal-location" id="detail-modal-province">San José</div>
+                </div>
+                <button class="btn-close-modal" onclick="closeDetailsModal()">&times;</button>
+            </div>
+            
+            <div class="modal-body" style="overflow-y: auto; flex-grow: 1; padding-right: 1.5rem;">
+                <!-- Main Info Section -->
+                <div class="detail-row">
+                    <div class="detail-label">Definición:</div>
+                    <div class="detail-value" id="detail-modal-description">Descripción...</div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">Nivel al que aplica:</div>
+                    <div class="detail-value" id="detail-modal-level">Grado</div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">Porcentaje:</div>
+                    <div class="detail-value" id="detail-modal-coverage">100%</div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">Duración:</div>
+                    <div class="detail-value" id="detail-modal-duration">8 semestres</div>
+                </div>
+
+                <!-- Extended Information Section (User Requested Slider/Scroll) -->
+                <div class="detail-row" style="display: block; border-bottom: 1px solid #f1f5f9; padding-top: 2rem;">
+                     <h4 style="color: #475569; margin-bottom: 1rem; font-size: 1rem;">Detalles Adicionales</h4>
+                     <div id="detail-modal-extra" style="color: #334155; line-height: 1.8; font-size: 0.95rem;">
+                        <!-- Long text will go here -->
+                     </div>
+                </div>
+
+                <!-- Requirements -->
+                <div class="detail-row" style="border-bottom:none;"> 
+                    <div class="detail-label">Requisitos:</div>
+                    <div class="detail-value" id="detail-modal-requirements">
+                        <!-- List injected here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer" style="flex-shrink: 0;">
+                <button class="btn-secondary" onclick="closeDetailsModal()" style="margin:0; margin-right: 10px;">Cerrar</button>
+                <button id="btn-detail-apply" class="btn-apply-modal">Postular</button>
+            </div>
+        </div>
+    </div>`;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+    // Close on click outside
+    document.getElementById('scholarship-details-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'scholarship-details-modal') closeDetailsModal();
+    });
+}
+
+window.openModal = function (id) {
+    const all = db.getScholarships();
+    const sch = all.find(s => s.id === id);
+    if (!sch) {
+        console.error("No se encontró la beca con ID:", id);
+        return;
+    }
+
+    // Safety checks
+    const safeReq = sch.requirements || { minGPA: 'N/A', maxAge: 'N/A' };
+    const safeCoverage = sch.coverage || (sch.amount ? `${sch.amount}` : 'No especificado');
+    const safeDuration = sch.duration || 'Según plan de estudios aprobado';
+
+    // Populate new modal IDs
+    document.getElementById('detail-modal-title').textContent = sch.title;
+    document.getElementById('detail-modal-province').textContent = getProvinceName(sch.province);
+    document.getElementById('detail-modal-description').textContent = sch.description || "Descripción no disponible.";
+
+    // Capitalize level
+    const levelBase = sch.educationLevel ? (sch.educationLevel.charAt(0).toUpperCase() + sch.educationLevel.slice(1)) : 'No especificado';
+    document.getElementById('detail-modal-level').textContent = `${levelBase}. Aplica para estudiantes de nuevo ingreso y regulares.`;
+
+    document.getElementById('detail-modal-coverage').textContent = safeCoverage;
+    document.getElementById('detail-modal-duration').textContent = safeDuration;
+
+    // Generate Extra Text to force scroll (Simulated "More Info" requested by user)
+    // In a real app, this would be a field in data.js. For now, we simulate it or use description if long.
+    const genericExtra = `
+        <p style="margin-bottom: 1rem;">Esta beca representa una oportunidad única para el desarrollo profesional. 
+        El programa incluye mentorías personalizadas, acceso a laboratorios de última generación y posibilidades de intercambio.</p>
+        <p style="margin-bottom: 1rem;"><strong>Compromisos del Becario:</strong></p>
+        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
+            <li>Mantener el rendimiento académico estipulado.</li>
+            <li>Participar en al menos 10 horas de servicio comunitario por semestre.</li>
+            <li>Asistir a las reuniones de seguimiento trimestrales.</li>
+        </ul>
+        <p>Para más información sobre el reglamento, consulte el sitio web oficial de la institución otorgante.</p>
+    `;
+    document.getElementById('detail-modal-extra').innerHTML = genericExtra;
+
+    // Requirements
+    const reqList = `
+        <ul style="padding-left: 1rem; margin: 0;">
+            <li>Promedio mínimo: ${safeReq.minGPA}</li>
+            <li>Edad máxima: ${safeReq.maxAge} años</li>
+            ${safeReq.maxIncome ? `<li>Ingreso familiar máx: ${safeReq.maxIncome}` : ''}
+        </ul>
+    `;
+    document.getElementById('detail-modal-requirements').innerHTML = reqList;
+
+    // Apply Button
+    const btnApply = document.getElementById('btn-detail-apply');
+    if (btnApply) {
+        btnApply.onclick = () => {
+            closeDetailsModal();
+            goToApply(sch.id);
+        };
+    }
+
+    const modal = document.getElementById('scholarship-details-modal');
+    if (modal) {
+        modal.classList.add('active');
+    }
+};
+
+window.closeDetailsModal = function () {
+    const modal = document.getElementById('scholarship-details-modal');
+    if (modal) modal.classList.remove('active');
+};
+
+function renderDashboard(scholarshipsToRender = null) {
+    // Inject modal if not present
+    injectModal();
+
+    // --- FORCE DATA REFRESH (Versioning) ---
+    const CURRENT_DATA_VERSION = 'v9_data_restore';
+    const savedVersion = localStorage.getItem('edugrant_data_version');
+
+    if (savedVersion !== CURRENT_DATA_VERSION) {
+        console.log("Detectada nueva versión de datos. Actualizando...");
+        localStorage.removeItem('edugrant_scholarships'); // Borra datos viejos
+        localStorage.setItem('edugrant_data_version', CURRENT_DATA_VERSION); // Guarda nueva versión
+        location.reload(); // Recarga para leer de data.js
+        return;
+    }
+
+    const scholarships = scholarshipsToRender || db.getScholarships();
+
+    if (scholarships.length === 0) {
+        scholarshipGrid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                <p style="font-size: 1.2rem; color: #64748b;">No se encontraron becas con esos filtros.</p>
+                <button class="btn-secondary" onclick="resetFilters()">Ver todas</button>
+            </div>
+        `;
+        return;
+    }
+
     scholarshipGrid.innerHTML = scholarships.map(sch => {
         const deadlineInfo = getDeadlineInfo(sch.deadline);
         const catClass = `cat-${sch.category.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`;
+        const provinceName = getProvinceName(sch.province);
 
         return `
-        <div class="card scholarship-card">
+        <div class="card scholarship-card" onclick="openModal(${sch.id})" style="cursor: pointer; transition: transform 0.2s;">
+            <!-- Image Section -->
+            <div style="width: 100%; height: 160px; overflow: hidden; border-radius: 8px 8px 0 0; margin-bottom: 1rem;">
+                <img src="${sch.image || '../imgs/default-scholarship.jpg'}" alt="${sch.title}" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+
             <div class="category-tag ${catClass}">${sch.category}</div>
-            <h3>${sch.title}</h3>
-            <p>${sch.description}</p>
+            
+            <h3 style="margin-bottom: 0.2rem;">${sch.title}</h3>
+            
+            <!-- Location Indicator -->
+            <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 4px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                ${provinceName}
+            </p>
+
+            <p style="
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;  
+                overflow: hidden;
+                font-size: 0.95rem;
+                color: #475569;
+                line-height: 1.5;
+                height: 4.5em; /* Fallback height */
+            ">${sch.description}</p>
             
             <div class="requirements-container">
                 <strong>Requisitos:</strong>
                 <ul class="requirements-list">
                     <li>Promedio mín: ${sch.requirements.minGPA}</li>
-                    <li>Edad máx: ${sch.requirements.maxAge} años</li>
-                    ${sch.requirements.maxIncome ? `<li>Ingreso máx: ₡${sch.requirements.maxIncome.toLocaleString()}</li>` : ''}
+                    <li>Edad máx: ${sch.requirements.maxAge || 'N/A'}</li>
                 </ul>
             </div>
 
-            ${deadlineInfo ? `
-            <div class="deadline-badge ${deadlineInfo.class}">
-                <span>⏳</span> ${deadlineInfo.text}
-            </div>` : ''}
-
-            <div class="card-footer">
-                <span class="scholarship-amount">${sch.amount}</span>
-                ${currentUser.role === 'applicant' ? `<button class="btn-primary" onclick="goToApply(${sch.id})">Postular</button>` : ''}
+            <!-- Footer info -->
+            <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+                    <span style="font-weight: 600; color: var(--primary-color); font-size: 0.95rem;">${sch.amount}</span>
+                    ${deadlineInfo ? `<span style="font-size: 0.75rem; color: #64748b;">${deadlineInfo.text}</span>` : ''}
+                </div>
+                <span 
+                    class="btn-text" 
+                    onclick="event.stopPropagation(); goToApply(${sch.id});" 
+                    style="color: #3b82f6; font-weight: bold; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; gap: 4px; transition: color 0.2s;"
+                    onmouseover="this.style.color='#2563eb'" 
+                    onmouseout="this.style.color='#3b82f6'"
+                >
+                    Postular &rarr;
+                </span>
             </div>
         </div>
-    `;
+        `;
     }).join('');
 }
 

@@ -43,9 +43,9 @@ body {
     left: 0;
     width: 100%;
     z-index: 1000;
-    padding: 1.5rem 2rem;
+    padding: 1rem 2rem;
     transition: all 0.3s ease;
-    background-color: transparent;
+    background-color: var(--primary-color);
     color: white;
 }
 
@@ -474,37 +474,29 @@ body {
     border: 2px solid currentColor;
 }
 
-/* Hero Section (Gonzalez) */
-.hero {
-    height: 70vh;
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(30, 58, 138, 0.6)), url('../imgs/Banner-becas');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: white;
-    padding-top: 60px;
+/* Hero Section (Custom Design) */
+.hero-custom {
     position: relative;
-}
-
-/* Diagonal shape separator at bottom of hero */
-.hero::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
     width: 100%;
-    height: 80px;
-    background: var(--secondary-bg);
-    clip-path: polygon(0 100%, 100% 100%, 100% 0);
+    min-height: 85vh;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 120px;
+    /* Space for Navbar */
+    padding-bottom: 150px;
+    color: white;
+    overflow: hidden;
 }
 
 .hero-content {
+    position: relative;
     z-index: 10;
     width: 100%;
+    max-width: 1000px;
+    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -513,63 +505,161 @@ body {
 .hero-content h1 {
     font-size: 3.5rem;
     font-weight: 800;
-    margin-bottom: 3rem;
-    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    margin-bottom: 2.5rem;
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Search Bar Container */
+.hero-illustration-container {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 900px;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    pointer-events: none;
+    /* Prevent interference */
+}
+
+/* Color Integration Overlay */
+.hero-illustration-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Gradient to tint the image with the hero colors */
+    background: linear-gradient(to top, rgba(0, 242, 254, 0.2), rgba(79, 172, 254, 0.3));
+    mix-blend-mode: overlay;
+    /* Blends the blue tint nicely */
+    z-index: 6;
+    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+    /* Match image mask */
+}
+
+/* Floating Animation Keyframes */
+@keyframes floatHero {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.hero-illustration {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    /* Smooth fade at the bottom to merge with the wave */
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+
+    /* Dynamic feel */
+    animation: floatHero 6s ease-in-out infinite;
+
+    /* Glow effect to match environment */
+    filter: drop-shadow(0 10px 20px rgba(0, 242, 254, 0.3));
+}
+
+
+/* Custom Shape Divider (Wave) */
+.custom-shape-divider-bottom-167890 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+    z-index: 20;
+    /* Above illustration */
+}
+
+.custom-shape-divider-bottom-167890 svg {
+    position: relative;
+    display: block;
+    width: calc(137% + 1.3px);
+    height: 150px;
+}
+
+.custom-shape-divider-bottom-167890 .shape-fill {
+    fill: var(--secondary-bg);
+}
+
+/* Updated Search Bar */
 .search-bar-container {
     background: white;
-    padding: 0.8rem;
-    border-radius: 50px;
-    /* Pill shape */
+    padding: 0.5rem;
+    border-radius: 4px;
+    /* Square/Rectangular look like reference */
     display: flex;
-    gap: 0.5rem;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    width: 90%;
-    max-width: 900px;
+    gap: 0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 95%;
+    max-width: 950px;
+    overflow: hidden;
 }
 
 .search-input {
     flex: 1;
     border: none;
-    border-right: 1px solid var(--border-color);
+    border-right: 1px solid #eee;
     padding: 0 1.5rem;
-    height: 50px;
-    font-size: 1rem;
-    color: var(--text-muted);
-    background: transparent;
+    height: 55px;
+    font-size: 0.95rem;
+    color: #555;
+    background: white;
     cursor: pointer;
     border-radius: 0;
-}
-
-.search-input:last-of-type {
-    border-right: none;
+    appearance: none;
+    /* Remove default arrow if desired, or keep */
 }
 
 .search-input:focus {
     outline: none;
-    background-color: #f9fafb;
+    background-color: #fafafa;
 }
 
 .btn-search {
-    background-color: var(--warning-color);
+    background-color: #fbbf24;
+    /* Orange/Yellow */
     color: white;
     border: none;
-    font-weight: 700;
-    padding: 0 2.5rem;
-    border-radius: 50px;
+    font-weight: 800;
+    padding: 0 3rem;
+    border-radius: 4px;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: all 0.2s;
     font-size: 1rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 5px;
+    /* Slight margin for button inside container */
 }
 
 .btn-search:hover {
-    transform: scale(1.05);
-    background-color: #d97706;
-    /* shade darker */
+    background-color: #f59e0b;
+    transform: translateY(-2px);
+}
+
+.btn-search::before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    content: "\f002";
+    /* Search Icon */
 }
 
 
