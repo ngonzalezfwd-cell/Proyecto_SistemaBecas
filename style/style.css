@@ -112,6 +112,7 @@ body {
     gap: 12px;
 }
 
+
 .logo h2 {
     display: flex;
     align-items: center;
@@ -150,7 +151,7 @@ body {
 
 .nav-user-role {
     font-size: 0.75rem;
-    color: #666;
+    color: #1d1b1b;
     display: block;
 }
 
