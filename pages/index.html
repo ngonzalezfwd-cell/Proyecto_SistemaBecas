@@ -44,7 +44,10 @@
                 <button class="nav-link" data-target="history">
                     <i class="fas fa-list-ul"></i> Mis Becas
                 </button>
-
+                <li class="nav-link" data-target="user-notifications">
+                    <span class="icon">🔔</span> Notificaciones <span class="badge-dot" id="nav-notif-badge"
+                        style="display:none"></span>
+                </li>
                 <button class="nav-link" data-target="scholarship-management">
                     <i class="fas fa-tasks"></i> Gestionar
                 </button>
@@ -54,7 +57,8 @@
                 </button>
 
                 <button class="nav-link" data-target="evaluations">
-                    <i class="fas fa-clipboard-check"></i> Evaluación
+                    <i class="fas fa-clipboard-check"></i> Evaluación <span id="admin-pending-badge" class="badge-count"
+                        style="display:none">0</span>
                 </button>
 
             </div>
@@ -425,9 +429,11 @@
                                         placeholder="Ej: 9.2">
                                 </div>
                                 <div class="form-group">
-                                    <label for="income">Ingreso Familiar Mensual Aproximado (₡)</label>
-                                    <input type="number" id="income" required min="0"
-                                        placeholder="Monto neto en colones">
+                                    <label for="income">Ingreso Familiar Mensual Aproximado</label>
+                                    <div class="currency-wrapper">
+                                        <span class="currency-symbol">₡</span>
+                                        <input type="number" id="income" required min="0" placeholder="0">
+                                    </div>
                                 </div>
                             </div>
 
@@ -559,11 +565,67 @@
                 </section>
 
                 <!-- View: Reports -->
+                <!-- View: Reports (Admin) -->
                 <section id="reports" class="view hidden">
+                    <div class="card reports-card">
+                        <div class="reports-header">
+                            <h3>Dashboard de Métricas</h3>
+                            <button class="btn-primary" onclick="exportData()">📥 Exportar Data</button>
+                        </div>
+
+                        <!-- KPIs -->
+                        <div class="kpi-grid">
+                            <div class="kpi-card blue">
+                                <span class="kpi-icon">📄</span>
+                                <div class="kpi-info">
+                                    <h4>Total Postulaciones</h4>
+                                    <span id="kpi-total" class="kpi-number">0</span>
+                                </div>
+                            </div>
+                            <div class="kpi-card green">
+                                <span class="kpi-icon">✅</span>
+                                <div class="kpi-info">
+                                    <h4>Becas Otorgadas</h4>
+                                    <span id="kpi-approved" class="kpi-number">0</span>
+                                </div>
+                            </div>
+                            <div class="kpi-card purple">
+                                <span class="kpi-icon">💰</span>
+                                <div class="kpi-info">
+                                    <h4>Monto Asignado</h4>
+                                    <span id="kpi-amount" class="kpi-number">₡0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Charts & Activity -->
+                        <div class="reports-main-grid">
+                            <div class="chart-container">
+                                <h4>Distribución de Solicitudes</h4>
+                                <div class="status-bars-chart" id="status-chart">
+                                    <!-- Bars injected via JS -->
+                                </div>
+                                <div class="top-scholarships" id="top-scholarships-list">
+                                    <!-- Top list -->
+                                </div>
+                            </div>
+
+                            <div class="activity-log-container">
+                                <h4>Actividad Reciente 🔔</h4>
+                                <ul id="activity-log-list" class="activity-list">
+                                    <li class="empty-log">Sin actividad reciente.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- NEW View: User Notifications -->
+                <section id="user-notifications" class="view hidden">
                     <div class="card">
-                        <h3>Reporte General</h3>
-                        <div id="reports-content">
-                            <p>Generando estadísticas...</p>
+                        <h3>Mis Notificaciones</h3>
+                        <div class="notifications-list" id="user-notifications-list">
+                            <p class="text-muted">No tienes notificaciones nuevas.</p>
                         </div>
                     </div>
                 </section>
@@ -740,21 +802,22 @@
             </div>
 
             <div class="social-links">
-                <a href="#" class="social-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                <a href="https://www.facebook.com/BecasCostaRica/?locale=es_LA" target="_blank"
+                    class="social-icon facebook"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
                         <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
                     </svg></a>
-                <a href="#" class="social-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
+                <a href="https://x.com/Becas_CostaRica/with_replies" target="_blank" class="social-icon twitter"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path
                             d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z">
                         </path>
                     </svg></a>
-                <a href="#" class="social-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
+                <a href="https://www.instagram.com/becascostarica/" target="_blank" class="social-icon instagram"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                         <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                         <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
@@ -763,9 +826,9 @@
 
                 <span style="margin: 0 15px; color: #cbd5e1;">|</span>
 
-                <a href="#" class="social-icon" style="color: #25d366;"><svg xmlns="http://www.w3.org/2000/svg"
-                        width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
+                <a href="#" class="social-icon whatsapp"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
                         <path
                             d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
                         </path>
@@ -779,22 +842,40 @@
         </div>
 
         <div class="footer-bottom-bar">
-            <div class="footer-container">
-                <button class="btn-pqrsf">PQRSF</button> <!-- Red button implementation -->
-                <div class="footer-nav">
-                    <a href="#">Preguntas frecuentes</a>
-                    <a href="#">EduGrant en el ranking</a>
-                    <a href="#">Aliados</a>
+            <div class="footer-legal-container">
+
+                <!-- Logo & Branding -->
+                <div class="footer-brand-section">
+                    <h3 class="footer-brand-name">EduGrant</h3>
+                    <div class="footer-logo-wrapper">
+                        <!-- Replaced PNG with Inline SVG for better clarity and transparency -->
+                        <svg class="footer-shield-logo" width="64" height="64" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            <path d="M12 8v8" />
+                            <path d="M8 12h8" />
+                        </svg>
+                    </div>
                 </div>
-                <div class="footer-logos">
-                    <!-- Logos placeholders using text for now or simple SVG shapes -->
-                    <div
-                        style="background: white; padding: 5px 10px; border-radius: 20px; font-weight: bold; color: #333; font-size: 0.8rem;">
-                        MINEP</div>
-                    <div
-                        style="background: white; padding: 5px 10px; border-radius: 20px; font-weight: bold; color: #333; font-size: 0.8rem; margin-left: 10px;">
-                        CONARE</div>
+
+                <!-- Horizontal Navigation Links -->
+                <ul class="footer-legal-links">
+                    <li><a href="#">Repositorio Institucional</a></li>
+                    <li><a href="#">Términos y Condiciones</a></li>
+                    <li><a href="#">Política de Privacidad</a></li>
+                    <li><a href="#">Política de Seguridad de la Información</a></li>
+                    <li><a href="#">Reglamento de Becas</a></li>
+                </ul>
+
+                <!-- Legal Text -->
+                <div class="footer-legal-text">
+                    <p>Resolución 02026 del 31 de Febrero de 2026. Vigencia Indefinida.</p>
+                    <p>Plataforma gestionada por el Departamento de Bienestar Estudiantil. Sujeta a inspección y
+                        vigilancia.</p>
+                    <p>Nit EduGrant: 890.902.922-6. © 2026 Todos los derechos reservados.</p>
                 </div>
+
             </div>
         </div>
     </footer>

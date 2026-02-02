@@ -191,6 +191,11 @@ function updateViewContent(targetId) {
             pageTitle.textContent = 'Estadísticas del Sistema';
             renderReports();
             break;
+        case 'user-notifications':
+            pageTitle.textContent = 'Mis Notificaciones';
+            renderUserNotifications();
+            markNotificationsAsRead();
+            break;
     }
 }
 
@@ -210,7 +215,7 @@ function updateUserInterface() {
             if (target === 'scholarship-management' || target === 'reports') {
                 link.style.display = 'none'; // Admin only
             } else {
-                link.style.display = 'block'; // Includes evaluations, dashboard, apply, history
+                link.style.display = 'block'; // Includes evaluations, dashboard, apply, history, notifications
             }
             return;
         }
@@ -224,6 +229,9 @@ function updateUserInterface() {
             }
         }
     });
+
+    // Update Badges
+    updateBadges();
 
     // Special behavior for Hero
     const hero = document.querySelector('.hero-custom'); // Updated class name
@@ -598,6 +606,8 @@ function setupForm() {
         }
 
         db.addApplication(formData);
+        addActivityLog(`Nueva postulación recibida de <strong>${formData.applicantName}</strong>`, '📥');
+        updateBadges(); // Refresh badges
         alert("¡Postulación enviada con éxito! Estado: Enviada.");
         form.reset();
         document.querySelector('[data-target="history"]').click();
@@ -818,22 +828,210 @@ function finalizeEvaluation(status) {
         };
 
         db.updateApplication(currentEvalAppId, evaluationData);
+
+        // 1. Notify User (Applicant)
+        const app = db.getApplications().find(a => a.id === currentEvalAppId);
+        if (app) {
+            let msg = `Tu solicitud ha sido actualizada a: ${status.toUpperCase()}.`;
+            let type = 'info';
+            if (status === 'aprobada') {
+                msg = `¡Felicidades! Tu postulación para la beca ha sido APROBADA.`;
+                type = 'success';
+            }
+            if (status === 'rechazada') {
+                msg = `Lo sentimos, tu postulación ha sido rechazada.`;
+                type = 'error';
+            }
+            if (status === 'revision') {
+                msg = `Tu solicitud ha sido puesta en REVISIÓN para análisis adicional.`;
+                type = 'info';
+            }
+
+            // Include observations if present
+            if (evaluationData.observations) {
+                msg += `\n\n💬 Mensaje del Evaluador: "${evaluationData.observations}"`;
+            }
+
+            notifyUser(type, app.applicantEmail, msg);
+            addActivityLog(`Solicitud de ${app.applicantName} marcada como <strong>${status.toUpperCase()}</strong>`, '📝');
+
+            // 2. Notify Admin (if action done by Evaluator)
+            if (currentUser.role === 'evaluator') {
+                notifyUser('info', 'admin', `El Evaluador ${currentUser.fullName} ha marcado la solicitud de ${app.applicantName} como ${status.toUpperCase()}.\nNota: "${evaluationData.observations || 'Sin observaciones'}"`);
+            }
+
+            // 3. Notify Evaluators (if action done by Admin)
+            if (currentUser.role === 'admin') {
+                // Broadcast to evaluators? Or just log. User asked for "messages to admin".
+                // User also said "si admin hace un mensaje para el evaluador". 
+                // We'll treat 'evaluator' as a target role.
+                notifyUser('info', 'evaluator', `El Administrador ha actualizado la solicitud de ${app.applicantName} a ${status.toUpperCase()}.`);
+            }
+        }
+
         alert(`Solicitud actualizada a estado: ${status.toUpperCase()}`);
         evalModal.classList.add('hidden');
         renderAdminTable();
+        updateBadges(); // Refresh badges
     }
 }
 
-// --- Reports ---
+// --- Reports & Notifications Logic ---
+
 function renderReports() {
     const stats = db.getStats();
-    document.getElementById('reports-content').innerHTML = `
-        <div class="stats-row">
-            <div class="stat-card"><h4>Total</h4><span class="stat-number">${stats.total}</span></div>
-            <div class="stat-card"><h4>Aprobadas</h4><span class="stat-number">${stats.approved}</span></div>
+    const apps = db.getApplications();
+    const scholarships = db.getScholarships();
+
+    // 1. KPIs
+    const totalAmount = scholarships.reduce((sum, sch) => {
+        // Parse amount logic (simple approximation)
+        const amount = parseInt(sch.amount.replace(/[^0-9]/g, '')) || 0;
+        return sum + (amount * stats.approved); // Assuming monthly amount * approved students (simplified)
+    }, 0);
+
+    document.getElementById('kpi-total').textContent = stats.total;
+    document.getElementById('kpi-approved').textContent = stats.approved;
+    document.getElementById('kpi-amount').textContent = "₡" + totalAmount.toLocaleString();
+
+    // 2. Charts (Distribution)
+    const approvedPct = stats.total ? (stats.approved / stats.total) * 100 : 0;
+    const rejectedPct = stats.total ? (stats.rejected / stats.total) * 100 : 0;
+    const pendingPct = stats.total ? (stats.pending / stats.total) * 100 : 0;
+
+    const chartHtml = `
+        <div class="bar-row">
+            <div class="bar-label"><span>Aprobadas</span> <span>${stats.approved} (${Math.round(approvedPct)}%)</span></div>
+            <div class="bar-track"><div class="bar-fill approved" style="width: ${approvedPct}%"></div></div>
         </div>
-        <p style="margin-top:1rem;">Tasa de éxito: ${stats.total > 0 ? Math.round((stats.approved / stats.total) * 100) : 0}%</p>
+        <div class="bar-row">
+            <div class="bar-label"><span>Rechazadas</span> <span>${stats.rejected} (${Math.round(rejectedPct)}%)</span></div>
+            <div class="bar-track"><div class="bar-fill rejected" style="width: ${rejectedPct}%"></div></div>
+        </div>
+        <div class="bar-row">
+            <div class="bar-label"><span>Pendientes</span> <span>${stats.pending} (${Math.round(pendingPct)}%)</span></div>
+            <div class="bar-track"><div class="bar-fill pending" style="width: ${pendingPct}%"></div></div>
+        </div>
     `;
+    document.getElementById('status-chart').innerHTML = chartHtml;
+
+    // 3. Activity Log
+    renderActivityLog();
+}
+
+function renderActivityLog() {
+    const logs = JSON.parse(localStorage.getItem('edugrant_activity_log')) || [];
+    const logContainer = document.getElementById('activity-log-list');
+
+    if (logs.length === 0) {
+        logContainer.innerHTML = '<li class="empty-log">Sin actividad reciente.</li>';
+        return;
+    }
+
+    logContainer.innerHTML = logs.slice(0, 10).map(log => `
+        <li class="activity-item">
+            <span style="font-size: 1.2rem;">${log.icon || '📌'}</span>
+            <div>
+                <p style="margin:0; font-weight: 500;">${log.message}</p>
+                <span class="log-time">${new Date(log.date).toLocaleString()}</span>
+            </div>
+        </li>
+    `).join('');
+}
+
+function addActivityLog(message, icon = '📌') {
+    const logs = JSON.parse(localStorage.getItem('edugrant_activity_log')) || [];
+    logs.unshift({ message, icon, date: new Date().toISOString() });
+    localStorage.setItem('edugrant_activity_log', JSON.stringify(logs));
+}
+
+function notifyUser(type, userId, message) {
+    const notifs = JSON.parse(localStorage.getItem('edugrant_notifications')) || [];
+    notifs.unshift({
+        id: Date.now(),
+        userId: userId, // Target user
+        type: type, // 'info', 'success', 'error'
+        message: message,
+        read: false,
+        date: new Date().toISOString()
+    });
+    localStorage.setItem('edugrant_notifications', JSON.stringify(notifs));
+}
+
+function markNotificationsAsRead() {
+    const notifs = JSON.parse(localStorage.getItem('edugrant_notifications')) || [];
+    let changed = false;
+
+    // Mark specific user notifications as read
+    const updated = notifs.map(n => {
+        if ((n.userId === currentUser.email || n.userId === currentUser.role) && !n.read) {
+            changed = true;
+            return { ...n, read: true };
+        }
+        return n;
+    });
+
+    if (changed) {
+        localStorage.setItem('edugrant_notifications', JSON.stringify(updated));
+        updateBadges(); // Refresh UI to clear badge
+    }
+}
+
+function renderUserNotifications() {
+    const notifs = JSON.parse(localStorage.getItem('edugrant_notifications')) || [];
+
+    // Filter logic: Match Email OR Role
+    const myNotifs = notifs.filter(n => {
+        if (n.userId === currentUser.email) return true; // Direct message
+        if (n.userId === currentUser.role) return true; // Role broadcast (e.g. 'admin', 'evaluator')
+        return false;
+    });
+
+    const container = document.getElementById('user-notifications-list');
+
+    if (myNotifs.length === 0) {
+        container.innerHTML = '<p class="text-muted" style="text-align:center; padding: 2rem;">No tienes notificaciones nuevas.</p>';
+        return;
+    }
+
+    container.innerHTML = myNotifs.map(n => {
+        let icon = '📢';
+        let colorClass = '';
+        if (n.type === 'success') { icon = '🎉'; colorClass = 'unread'; }
+        if (n.type === 'error') { icon = '❌'; }
+        if (n.type === 'info') { icon = 'ℹ️'; }
+
+        return `
+        <div class="notif-card ${!n.read ? 'unread' : ''}">
+            <div class="notif-icon">${icon}</div>
+            <div class="notif-content">
+                <h5>${n.type === 'success' ? '¡Buenas Noticias!' : 'Actualización'}</h5>
+                <p style="white-space: pre-wrap;">${n.message}</p>
+                <span class="notif-date">${new Date(n.date).toLocaleString()}</span>
+            </div>
+        </div>
+        `;
+    }).join('');
+}
+
+window.exportData = function () {
+    const apps = db.getApplications();
+    if (apps.length === 0) { alert("No hay datos para exportar."); return; }
+
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "ID,Estudiante,Beca,Estado,Promedio\r\n";
+
+    apps.forEach(app => {
+        csvContent += `${app.id},${app.applicantName},${app.scholarshipId},${app.status},${app.gpa}\r\n`;
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "reporte_becas_2026.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 // Gonzalez: Función para redirigir al formulario desde las tarjetas de inicio
@@ -1043,3 +1241,30 @@ function updateFooterContent(provinceName) {
         emailContainer.innerHTML = data.emails.map(e => `<p>${e}</p>`).join('');
     }
 }
+
+// --- Badges Logic ---
+window.updateBadges = function () {
+    if (!currentUser) return;
+
+    if (currentUser.role === 'admin' || currentUser.role === 'evaluator') {
+        const stats = db.getStats();
+        const badge = document.getElementById('admin-pending-badge');
+        if (badge) {
+            if (stats.pending > 0) {
+                badge.style.display = 'inline-block';
+                badge.textContent = stats.pending;
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+    }
+
+    // Unified Badge Logic for All Roles
+    if (['applicant', 'admin', 'evaluator'].includes(currentUser.role)) {
+        const notifs = JSON.parse(localStorage.getItem('edugrant_notifications')) || [];
+        const unread = notifs.filter(n => (n.userId === currentUser.email || n.userId === currentUser.role) && !n.read).length;
+        const badge = document.getElementById('nav-notif-badge');
+        if (badge) badge.style.display = unread > 0 ? 'inline-block' : 'none';
+        if (badge) badge.textContent = unread; // Show number
+    }
+};

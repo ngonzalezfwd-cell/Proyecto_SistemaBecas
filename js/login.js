@@ -47,13 +47,26 @@ form.addEventListener('submit', (e) => {
 
     if (user) {
         user.role = 'applicant';
-        localStorage.setItem('edugrant_current_user', JSON.stringify(user));
-        alert(`¡Hola de nuevo, ${user.fullName}!`);
-        window.location.href = 'index.html';
+        loginSuccess(user, 'Estudiante', 'text-success');
+    } else if (email.endsWith('@gmail.com')) {
+        // --- NEW RULE: Any Gmail user can join ---
+        // Create an implicit user account
+        const implicitUser = {
+            id: 'user_' + Date.now(),
+            fullName: 'Estudiante ' + email.split('@')[0], // Extract name from email
+            email: email,
+            role: 'applicant',
+            password: password // Keep for session
+        };
+
+        // Optionally save them to DB so they persist? User said "puede unirse", implying registration.
+        // Let's look up if they exist first (already done), if not, add them.
+        users.push(implicitUser);
+        localStorage.setItem('edugrant_users', JSON.stringify(users));
+
+        loginSuccess(implicitUser, 'Nuevo Estudiante', 'text-success');
     } else {
-        // Fallback for demo purposes if not registered but following pattern
-        // If user wants strict checking, we should remove this fallback, but keeping it flexible for demo.
-        // Actually, let's keep it strict for applicants: must exist in DB.
-        alert("Correo o contraseña incorrectos.");
+        messageDiv.style.color = 'var(--error-color, #ef4444)';
+        messageDiv.textContent = "Correo no registrado o contraseña incorrecta.";
     }
 });
