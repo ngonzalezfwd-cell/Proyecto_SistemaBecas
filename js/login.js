@@ -26,47 +26,25 @@ form.addEventListener('submit', (e) => {
         }, 1500);
     };
 
-    // --- Role Detection by Email Pattern ---
-    if (email.includes('admin')) {
-        // Mock Admin Login (Accepts any password for demo, or match specific)
-        // For security in a real app, validation should be backend-side.
-        const adminUser = { fullName: 'Administrador', email, role: 'admin' };
-        loginSuccess(adminUser, 'Administrador', 'text-success');
-        return;
-    }
-
-    if (email.includes('evaluador') || email.includes('evaluator')) {
-        const evalUser = { fullName: 'Evaluador', email, role: 'evaluator' };
-        loginSuccess(evalUser, 'Evaluador', 'text-success');
-        return;
-    }
-
-    // --- Standard User Check (Applicants) ---
+    // --- Standard User Check (Applicants, Admin, Evaluators) ---
     const users = JSON.parse(localStorage.getItem('edugrant_users') || '[]');
-    const user = users.find(u => u.email === email && u.password === password);
+    const user = users.find(u => u.email === email);
 
     if (user) {
-        user.role = 'applicant';
-        loginSuccess(user, 'Estudiante', 'text-success');
-    } else if (email.endsWith('@gmail.com')) {
-        // --- NEW RULE: Any Gmail user can join ---
-        // Create an implicit user account
-        const implicitUser = {
-            id: 'user_' + Date.now(),
-            fullName: 'Estudiante ' + email.split('@')[0], // Extract name from email
-            email: email,
-            role: 'applicant',
-            password: password // Keep for session
-        };
+        if (user.password === password) {
+            // Determine role title for the welcome message
+            let roleTitle = 'Estudiante';
+            if (user.role === 'admin') roleTitle = 'Administrador';
+            if (user.role === 'evaluator') roleTitle = 'Evaluador';
 
-        // Optionally save them to DB so they persist? User said "puede unirse", implying registration.
-        // Let's look up if they exist first (already done), if not, add them.
-        users.push(implicitUser);
-        localStorage.setItem('edugrant_users', JSON.stringify(users));
-
-        loginSuccess(implicitUser, 'Nuevo Estudiante', 'text-success');
+            loginSuccess(user, roleTitle, 'text-success');
+        } else {
+            messageDiv.style.color = 'var(--error-color, #ef4444)';
+            messageDiv.textContent = "Contraseña incorrecta. Por favor intente de nuevo.";
+        }
     } else {
+        // User not found in localStorage
         messageDiv.style.color = 'var(--error-color, #ef4444)';
-        messageDiv.textContent = "Correo no registrado o contraseña incorrecta.";
+        messageDiv.textContent = "Esta cuenta no está registrada. Por favor regístrese primero.";
     }
 });
