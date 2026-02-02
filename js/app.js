@@ -145,6 +145,13 @@ function setupNavigation() {
             targetView.classList.add('active');
         }
 
+        // --- Custom Interaction: Mark Evaluations as Seen ---
+        if (targetId === 'evaluations') {
+            localStorage.setItem('edugrant_last_eval_view', new Date().toISOString());
+            // Small delay to let database or state settle if needed, then update badges
+            setTimeout(() => window.updateBadges(), 100);
+        }
+
         // Update Title & Refresh Data
         updateViewContent(targetId);
     };
@@ -1247,12 +1254,26 @@ window.updateBadges = function () {
     if (!currentUser) return;
 
     if (currentUser.role === 'admin' || currentUser.role === 'evaluator') {
-        const stats = db.getStats();
+        const apps = db.getApplications();
+        const lastViewed = localStorage.getItem('edugrant_last_eval_view');
+
+        // Count ONLY pending apps that are NEWER than the last time the user looked at the evaluation tab
+        const newPendingApps = apps.filter(app => {
+            const isPending = app.status === 'pending' || app.status === 'enviada';
+            if (!isPending) return false;
+
+            // If user has never viewed it, everything pending is "new"
+            if (!lastViewed) return true;
+
+            // Compare dates
+            return new Date(app.date) > new Date(lastViewed);
+        });
+
         const badge = document.getElementById('admin-pending-badge');
         if (badge) {
-            if (stats.pending > 0) {
+            if (newPendingApps.length > 0) {
                 badge.style.display = 'inline-block';
-                badge.textContent = stats.pending;
+                badge.textContent = newPendingApps.length;
             } else {
                 badge.style.display = 'none';
             }
