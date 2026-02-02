@@ -1179,29 +1179,29 @@ function setupHelpModal() {
 // --- Footer Logic (Dynamic) ---
 const FOOTER_DATA = {
     'San José': {
-        address: 'San Pedro, Montes de Oca. Edificio EduGrant, Piso 3.<br><span style="font-size: 0.85rem; color: #64748b;">Bloque 21. Ecocampus.</span>',
+        address: 'San Pedro, Montes de Oca. Edificio EduHelper, Piso 3.<br><span style="font-size: 0.85rem; color: #64748b;">Bloque 21. Ecocampus.</span>',
         phones: ['(+506) 2234-5678', '(+506) 2234-9900'],
-        emails: ['decano.sj@edugrant.cr', 'bienestar.sj@edugrant.cr', 'info@edugrant.cr']
+        emails: ['decano.sj@eduHelper.cr', 'bienestar.sj@eduHelper.cr', 'info@eduHelper.cr']
     },
     'Heredia': {
         address: 'Campus Omar Dengo, Frente a Plaza Heredia.<br><span style="font-size: 0.85rem; color: #64748b;">Edificio de Ciencias Sociales, Aula 4.</span>',
         phones: ['(+506) 2277-3000', '(+506) 2277-3500'],
-        emails: ['decano.heredia@edugrant.cr', 'bienestar.heredia@edugrant.cr', 'info@edugrant.cr']
+        emails: ['decano.heredia@eduHelper.cr', 'bienestar.heredia@eduHelper.cr', 'info@eduHelper.cr']
     },
     'Alajuela': {
         address: 'Sede Interuniversitaria, Desamparados de Alajuela.<br><span style="font-size: 0.85rem; color: #64748b;">Contiguo a la UTN, Módulo B.</span>',
         phones: ['(+506) 2435-5000', '(+506) 2435-5050'],
-        emails: ['decano.alajuela@edugrant.cr', 'bienestar.alajuela@edugrant.cr', 'info@edugrant.cr']
+        emails: ['decano.alajuela@eduHelper.cr', 'bienestar.alajuela@eduHelper.cr', 'info@eduHelper.cr']
     },
     'Cartago': {
         address: 'Campus Tecnológico Central, Cartago.<br><span style="font-size: 0.85rem; color: #64748b;">Edificio de Vida Estudiantil, 2do Piso.</span>',
         phones: ['(+506) 2550-2000', '(+506) 2550-2200'],
-        emails: ['decano.cartago@edugrant.cr', 'bienestar.cartago@edugrant.cr', 'info@edugrant.cr']
+        emails: ['decano.cartago@eduHelper.cr', 'bienestar.cartago@eduHelper.cr', 'info@eduHelper.cr']
     },
     'Puntarenas': {
         address: 'El Roble, Puntarenas. Frente al Liceo.<br><span style="font-size: 0.85rem; color: #64748b;">Sede del Pacífico, Oficina 12.</span>',
         phones: ['(+506) 2661-1000', '(+506) 2661-1500'],
-        emails: ['decano.puntarenas@edugrant.cr', 'bienestar.puntarenas@edugrant.cr', 'info@edugrant.cr']
+        emails: ['decano.puntarenas@eduHelper.cr', 'bienestar.puntarenas@eduHelper.cr', 'info@eduHelper.cr']
     }
 };
 
