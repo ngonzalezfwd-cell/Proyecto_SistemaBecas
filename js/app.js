@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupViews();
     setupHelpModal();
     injectModal(); // Ensure modal is injected on load
+    initFooterTabs(); // Dynamic footer tabs
 });
 
 function checkSession() {
@@ -362,18 +363,11 @@ window.openModal = function (id) {
 
     // Generate Extra Text to force scroll (Simulated "More Info" requested by user)
     // In a real app, this would be a field in data.js. For now, we simulate it or use description if long.
-    const genericExtra = `
-        <p style="margin-bottom: 1rem;">Esta beca representa una oportunidad única para el desarrollo profesional. 
-        El programa incluye mentorías personalizadas, acceso a laboratorios de última generación y posibilidades de intercambio.</p>
-        <p style="margin-bottom: 1rem;"><strong>Compromisos del Becario:</strong></p>
-        <ul style="padding-left: 1.5rem; margin-bottom: 1rem;">
-            <li>Mantener el rendimiento académico estipulado.</li>
-            <li>Participar en al menos 10 horas de servicio comunitario por semestre.</li>
-            <li>Asistir a las reuniones de seguimiento trimestrales.</li>
-        </ul>
-        <p>Para más información sobre el reglamento, consulte el sitio web oficial de la institución otorgante.</p>
+    // Dynamic Extra Details (Unique per scholarship)
+    const extraInfo = sch.extraDetails ? sch.extraDetails : `
+        <p>No hay detalles adicionales registrados para esta beca. Por favor consulte directamente con la institución otorgante o revise los requisitos generales.</p>
     `;
-    document.getElementById('detail-modal-extra').innerHTML = genericExtra;
+    document.getElementById('detail-modal-extra').innerHTML = extraInfo;
 
     // Requirements
     const reqList = `
@@ -410,7 +404,7 @@ function renderDashboard(scholarshipsToRender = null) {
     injectModal();
 
     // --- FORCE DATA REFRESH (Versioning) ---
-    const CURRENT_DATA_VERSION = 'v9_data_restore';
+    const CURRENT_DATA_VERSION = 'v10_details_added';
     const savedVersion = localStorage.getItem('edugrant_data_version');
 
     if (savedVersion !== CURRENT_DATA_VERSION) {
@@ -775,11 +769,40 @@ window.openEvaluation = (appId) => {
     document.getElementById('total-score').value = `${(app.scoreEcon || 0) + (app.scoreAcad || 0) + (app.scoreSocial || 0)} puntos`;
     document.getElementById('eval-observations').value = app.observations || '';
 
-    // Disable buttons if already finalized
+    // Disable buttons if already finalized? Only if NOT Admin
     const isFinal = ['aprobada', 'rechazada'].includes(app.status);
-    document.getElementById('btn-review').disabled = isFinal;
-    document.getElementById('btn-approve').disabled = isFinal;
-    document.getElementById('btn-reject').disabled = isFinal;
+    const shouldDisable = isFinal && currentUser.role !== 'admin';
+
+    document.getElementById('btn-review').disabled = shouldDisable;
+    document.getElementById('btn-approve').disabled = shouldDisable;
+    document.getElementById('btn-reject').disabled = shouldDisable;
+
+    // Admin Delete Button Injection
+    const actionsDiv = document.querySelector('#evaluation-modal .modal-actions');
+    let deleteBtn = document.getElementById('btn-delete-app');
+
+    if (currentUser.role === 'admin') {
+        if (!deleteBtn) {
+            deleteBtn = document.createElement('button');
+            deleteBtn.id = 'btn-delete-app';
+            deleteBtn.className = 'btn-danger';
+            deleteBtn.innerText = 'Eliminar';
+            deleteBtn.style.background = '#dc2626'; // Darker red to distinguish
+            deleteBtn.style.marginLeft = '10px';
+            deleteBtn.onclick = () => {
+                if (confirm("¿Está seguro de que desea eliminar esta postulación permanentemente? Esta acción no se puede deshacer.")) {
+                    db.deleteApplication(currentEvalAppId);
+                    evalModal.classList.add('hidden');
+                    renderAdminTable();
+                    alert("Postulación eliminada del sistema.");
+                }
+            };
+            actionsDiv.appendChild(deleteBtn);
+        }
+        deleteBtn.style.display = 'inline-block';
+    } else {
+        if (deleteBtn) deleteBtn.style.display = 'none';
+    }
 
     evalModal.classList.remove('hidden');
 };
@@ -795,7 +818,7 @@ function finalizeEvaluation(status) {
         };
 
         db.updateApplication(currentEvalAppId, evaluationData);
-        alert(`Solicitud actualizada a estado: ${status}`);
+        alert(`Solicitud actualizada a estado: ${status.toUpperCase()}`);
         evalModal.classList.add('hidden');
         renderAdminTable();
     }
@@ -952,5 +975,71 @@ function setupHelpModal() {
             if (i <= index) s.classList.add('active');
             else s.classList.remove('active');
         });
+    }
+}
+
+// --- Footer Logic (Dynamic) ---
+const FOOTER_DATA = {
+    'San José': {
+        address: 'San Pedro, Montes de Oca. Edificio EduGrant, Piso 3.<br><span style="font-size: 0.85rem; color: #64748b;">Bloque 21. Ecocampus.</span>',
+        phones: ['(+506) 2234-5678', '(+506) 2234-9900'],
+        emails: ['decano.sj@edugrant.cr', 'bienestar.sj@edugrant.cr', 'info@edugrant.cr']
+    },
+    'Heredia': {
+        address: 'Campus Omar Dengo, Frente a Plaza Heredia.<br><span style="font-size: 0.85rem; color: #64748b;">Edificio de Ciencias Sociales, Aula 4.</span>',
+        phones: ['(+506) 2277-3000', '(+506) 2277-3500'],
+        emails: ['decano.heredia@edugrant.cr', 'bienestar.heredia@edugrant.cr', 'info@edugrant.cr']
+    },
+    'Alajuela': {
+        address: 'Sede Interuniversitaria, Desamparados de Alajuela.<br><span style="font-size: 0.85rem; color: #64748b;">Contiguo a la UTN, Módulo B.</span>',
+        phones: ['(+506) 2435-5000', '(+506) 2435-5050'],
+        emails: ['decano.alajuela@edugrant.cr', 'bienestar.alajuela@edugrant.cr', 'info@edugrant.cr']
+    },
+    'Cartago': {
+        address: 'Campus Tecnológico Central, Cartago.<br><span style="font-size: 0.85rem; color: #64748b;">Edificio de Vida Estudiantil, 2do Piso.</span>',
+        phones: ['(+506) 2550-2000', '(+506) 2550-2200'],
+        emails: ['decano.cartago@edugrant.cr', 'bienestar.cartago@edugrant.cr', 'info@edugrant.cr']
+    },
+    'Puntarenas': {
+        address: 'El Roble, Puntarenas. Frente al Liceo.<br><span style="font-size: 0.85rem; color: #64748b;">Sede del Pacífico, Oficina 12.</span>',
+        phones: ['(+506) 2661-1000', '(+506) 2661-1500'],
+        emails: ['decano.puntarenas@edugrant.cr', 'bienestar.puntarenas@edugrant.cr', 'info@edugrant.cr']
+    }
+};
+
+function initFooterTabs() {
+    const tabs = document.querySelectorAll('.footer-tab');
+
+    // Default load (San José)
+    updateFooterContent('San José');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Remove active class
+            tabs.forEach(t => t.classList.remove('active'));
+            // Add active to clicked
+            tab.classList.add('active');
+            // Update content
+            updateFooterContent(tab.textContent.trim());
+        });
+    });
+}
+
+function updateFooterContent(provinceName) {
+    const data = FOOTER_DATA[provinceName];
+    if (!data) return;
+
+    const locContainer = document.getElementById('footer-location');
+    const phoneContainer = document.getElementById('footer-phones');
+    const emailContainer = document.getElementById('footer-emails');
+
+    if (locContainer) locContainer.innerHTML = `<p>${data.address}</p>`;
+
+    if (phoneContainer) {
+        phoneContainer.innerHTML = data.phones.map(p => `<p>${p}</p>`).join('');
+    }
+
+    if (emailContainer) {
+        emailContainer.innerHTML = data.emails.map(e => `<p>${e}</p>`).join('');
     }
 }

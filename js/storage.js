@@ -95,13 +95,19 @@ export class StorageService {
         return false;
     }
 
+    deleteApplication(id) {
+        const apps = this.getApplications();
+        const newApps = apps.filter(a => a.id !== id);
+        localStorage.setItem(KEY_APPLICATIONS, JSON.stringify(newApps));
+    }
+
     getStats() {
         const apps = this.getApplications();
         return {
             total: apps.length,
-            pending: apps.filter(a => a.status === 'pending').length,
-            approved: apps.filter(a => a.status === 'approved').length,
-            rejected: apps.filter(a => a.status === 'rejected').length
+            pending: apps.filter(a => a.status === 'pending' || a.status === 'enviada').length,
+            approved: apps.filter(a => a.status === 'approved' || a.status === 'aprobada').length,
+            rejected: apps.filter(a => a.status === 'rejected' || a.status === 'rechazada').length
         };
     }
 }
