@@ -22,7 +22,7 @@ form.addEventListener('submit', (e) => {
         document.querySelector('.btn-auth-primary').disabled = true;
 
         setTimeout(() => {
-            window.location.href = 'index.html';
+            window.location.href = '../pages/index.html';
         }, 1500);
     };
 

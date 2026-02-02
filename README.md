@@ -1,47 +1,26 @@
-# Proyecto_SistemaBecas
-Un pequeño proyecto en equipo para el lunes, sobre un Sistema de Gestión de Becas y Ayudas que permita administrar de forma digital y transparente todo el proceso de asignación de becas, desde la postulación hasta la evaluación, aprobación y seguimiento histórico, garantizando trazabilidad, control y generación de reportes.
+# Estado del Proyecto - Sistema de Gestión de Becas
+
+El sistema de gestión de becas y ayudas ya está completamente terminado y funcional. Hemos implementado todas las características solicitadas utilizando únicamente HTML, CSS y JavaScript puro, logrando la persistencia de datos mediante el uso de localStorage para simular una base de datos real sin necesidad de backend.
+
+La aplicación integra correctamente los tres roles de usuario definidos. El administrador tiene control absoluto sobre la plataforma, pudiendo crear, editar y eliminar convocatorias de becas, así como gestionar usuarios y eliminar solicitudes erróneas. Los evaluadores disponen de un panel especializado donde pueden revisar los detalles de cada candidato, asignar puntajes numéricos a los criterios económicos, académicos y sociales, y decidir la aprobación o rechazo de las solicitudes. Los postulantes tienen un flujo completo que les permite registrarse, explorar las becas disponibles con filtros y enviar sus solicitudes mediante un formulario que valida automáticamente si cumplen con los requisitos de edad y promedio.
+
+Toda la lógica de negocio se encuentra activa, incluyendo el bloqueo de postulaciones duplicadas, el cálculo automático de notas de evaluación y la visualización del historial de trámites. Este es un comentario de Christopher confirmando que el sistema cumple con todos los requerimientos y está listo para su entrega.
 
 ---
 
-# Actualizaciones Recientes (Gonzalez)
-
-## 🎨 1. El Navbar ahora tiene un estilo mas profesional
-Le metí mano al menú de arriba. Ahora empieza de un color azul sólido (para que se lea bien) pero más pegadito al borde, y cuando bajas (scroll), se pone blanco con letras azules. Se ve mas moderno y limpio.
-
-### 🌊 2. Header (Encabezado) 
-Cambié la imagen estática por un **Header Personalizado** con animaciones y efectos mas agradables a la vista.
-- Fondo gradiente azul cian bien fresco.
-- Un divisor en forma de **ola suave** abajo (SVG) para conectar con el resto de la página.
-- La imagen principal (la ilustración) ahora tiene un efecto de "flotar" y se mezcla con el fondo.
-- La barra de búsqueda ahora es cuadrada y minimalista.
-
-### 🖱️ 3. Tarjetas Interactivas
-en los cuadros de las becas antes teniamos que atinarle al botoncito de "Postular". Ahora **todo el cuadro es cliqueable**. Si le das click a cualquier parte de la tarjeta, te lleva directo al formulario y **te selecciona la beca automáticamente**.
-
-### 🔐 4. Sistema de Roles Inteligente (¡Adiós botón de cambiar rol!)
-Ya no hay que estar dándole al botón de "Cambiar Rol" para probar cosas. Ahora el sistema es listo y sabe quién eres por tu correo:
-
-- Si tu correo tiene **"admin"** -> Eres el Jefe (Ves todo).
-- Si tu correo tiene **"evaluador"** -> Eres Evaluador.
-- Si no dice nada de eso -> Eres un Estudiante normal.
-
-Además, te da la bienvenida en verde cuando entras para que sepas que todo salió bien. ✅
-
----
-
-# 🧪 Cuentas de Prueba (Test Users)
+#  Cuentas de Prueba 
 
 Para que prueben rápido sin registrarse a cada rato, usen estas cuentas:
 
-### 👑 Administrador (Ve TODO)
+###  Administrador (Ve TODO)
 - **Correo:** `admin@admin.com`
-- **Contraseña:** `123456` (o cualquiera)
+- **Contraseña:** `123456` (o cualquier otra contra)
 
-### 📝 Evaluador (Ve Evaluaciones y Vistas de Usuario)
+###  Evaluador (Ve Evaluaciones y Vistas de Usuario)
 - **Correo:** `tormentionrex@evaluador.com`
 - **Contraseña:** `undertale`
 
-### 🎓 Usuario / Postulante (Solo ve sus becas)
+### Usuario / Postulante (Solo ve sus becas)
 - **Correo:** `juan@gmail.com`
 - **Contraseña:** `123456`
 
@@ -67,12 +46,12 @@ Debes hacer esto con CADA solicitud, una por una:
 4.  Presiona **"Confirm merge"**.
 
 ### Paso 3: Sincronizar tu PC
-Una vez que aceptaste los 3 o 4 Pull Requests en GitHub, **TU PC TODAVÍA NO LO SABE**.
+Una vez que aceptaste los 3 o 4 Pull Requests en GitHub
 Debes descargarlos para tener el proyecto completo:
 
 1.  Abre tu terminal en la carpeta del proyecto.
 2.  Ejecuta: `git pull origin main`
-y listo, ya tienes los cambios de todos los compañeros.
+y listo, ya tienes los cambios de todas las demas ramas.
 
 ---
 

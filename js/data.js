@@ -14,8 +14,9 @@ export const SCHOLARSHIPS = [
         province: "sanjose",
         institution: "UCR",
         educationLevel: "grado",
-        image: "../imgs/beca-ucr-excelencia.png", // Imagen - González
-        deadline: new Date(Date.now() + 30 * 86400000).toISOString()
+        image: "../imgs/beca-ucr-excelencia.png",
+        deadline: new Date(Date.now() + 30 * 86400000).toISOString(),
+        extraDetails: "Esta beca premia la excelencia académica en la Universidad de Costa Rica. Los beneficiarios tendrán acceso preferencial a los laboratorios de investigación avanzada y prioridad en programas de intercambio internacional. Además, se incluye tutoría personalizada por parte de profesores catedráticos. <br><br><strong>Apoyo Económico:</strong> Recibirá depositado mensualmente un monto de <strong>185.000 ₡</strong> para cubrir gastos de manutención y materiales."
     },
     {
         id: 2,
@@ -29,8 +30,9 @@ export const SCHOLARSHIPS = [
         province: "sanjose",
         institution: "MICITT",
         educationLevel: "grado",
-        image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?q=80&w=600&auto=format&fit=crop", // Imagen - González
-        deadline: new Date(Date.now() + 15 * 86400000).toISOString()
+        image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?q=80&w=600&auto=format&fit=crop",
+        deadline: new Date(Date.now() + 15 * 86400000).toISOString(),
+        extraDetails: "Iniciativa del MICITT para cerrar la brecha de género en carreras STEM. Incluye acceso a redes de mentoría con científicas destacadas y participación en congresos nacionales. <br><br><strong>Apoyo Económico:</strong> Se otorgará una asistencia financiera mensual de <strong>150.000 ₡</strong> para facilitar la dedicación exclusiva al estudio."
     },
     {
         id: 3,
@@ -44,8 +46,9 @@ export const SCHOLARSHIPS = [
         province: "sanjose",
         institution: "FWD",
         educationLevel: "posgrado",
-        image: "https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?q=80&w=600&auto=format&fit=crop", // Imagen - González
-        deadline: new Date(Date.now() + 10 * 86400000).toISOString()
+        image: "https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?q=80&w=600&auto=format&fit=crop",
+        deadline: new Date(Date.now() + 10 * 86400000).toISOString(),
+        extraDetails: "Bootcamp intensivo diseñado para la inserción laboral rápida en el sector tecnológico. Incluye certificación oficial, portafolio de proyectos reales y simulacros de entrevistas técnicas. <br><br><strong>Apoyo Económico:</strong> Durante el curso, el estudiante recibirá <strong>250.000 ₡</strong> mensuales para asegurar su conectividad y manutención."
     },
     {
         id: 4,
@@ -59,7 +62,8 @@ export const SCHOLARSHIPS = [
         province: "sanjose",
         institution: "INA",
         educationLevel: "pregrado",
-        image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=600&auto=format&fit=crop" // Imagen - González
+        image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=600&auto=format&fit=crop",
+        extraDetails: "Formación práctica en infraestructura de redes Cisco y seguridad informática. Los estudiantes realizarán prácticas profesionales en empresas líderes del sector telecomunicaciones. <br><br><strong>Apoyo Económico:</strong> El INA subsidia sus estudios y aporta <strong>90.000 ₡</strong> mensuales para transporte y alimentación."
     },
 
     // --- Heredia (3) ---
@@ -73,8 +77,9 @@ export const SCHOLARSHIPS = [
         province: "heredia",
         institution: "UNA",
         educationLevel: "grado",
-        image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=600&auto=format&fit=crop", // Imagen - González
-        deadline: new Date(Date.now() + 5 * 86400000).toISOString()
+        image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=600&auto=format&fit=crop",
+        deadline: new Date(Date.now() + 5 * 86400000).toISOString(),
+        extraDetails: "Destinada a estudiantes con potencial académico que requieren soporte financiero. Incluye acceso gratuito al comedor estudiantil y préstamo de libros de texto. <br><br><strong>Apoyo Económico:</strong> Se brinda un subsidio mensual de <strong>145.000 ₡</strong> para gastos de alojamiento y necesidades básicas."
     },
     {
         id: 6,
@@ -86,7 +91,8 @@ export const SCHOLARSHIPS = [
         province: "heredia",
         institution: "INA",
         educationLevel: "pregrado",
-        image: "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?q=80&w=600&auto=format&fit=crop" // Imagen - González
+        image: "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?q=80&w=600&auto=format&fit=crop",
+        extraDetails: "Programa inmersivo enfocado en el dominio del idioma inglés para el sector servicios y corporativo. Incluye certificación TOEIC al finalizar el programa. <br><br><strong>Apoyo Económico:</strong> Recibirá <strong>60.000 ₡</strong> mensuales como ayuda para materiales didácticos y transporte."
     },
     {
         id: 7,
@@ -98,7 +104,8 @@ export const SCHOLARSHIPS = [
         province: "heredia",
         institution: "UNA",
         educationLevel: "posgrado",
-        image: "https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?q=80&w=600&auto=format&fit=crop" // Imagen - González
+        image: "https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?q=80&w=600&auto=format&fit=crop",
+        extraDetails: "Beca de posgrado para educadores que buscan transformar el sistema educativo. Permite dedicación exclusiva a la investigación y desarrollo de tesis, con acceso a bibliotecas digitales internacionales. <br><br><strong>Apoyo Económico:</strong> Beca robusta de <strong>300.000 ₡</strong> mensuales para sostener al investigador durante su maestría."
     },
 
     // --- Alajuela (3) ---
@@ -112,8 +119,9 @@ export const SCHOLARSHIPS = [
         province: "alajuela",
         institution: "UTN",
         educationLevel: "grado",
-        image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=600&auto=format&fit=crop", // Imagen - González
-        deadline: new Date(Date.now() + 20 * 86400000).toISOString()
+        image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=600&auto=format&fit=crop",
+        deadline: new Date(Date.now() + 20 * 86400000).toISOString(),
+        extraDetails: "Carrera enfocada en las últimas tecnologías de desarrollo ágil y cloud computing. La UTN ofrece laboratorios equipados con hardware de última generación y licencias de software profesional. <br><br><strong>Apoyo Económico:</strong> El estudiante recibirá <strong>130.000 ₡</strong> por mes para apoyar sus estudios."
     },
     {
         id: 9,
@@ -125,7 +133,8 @@ export const SCHOLARSHIPS = [
         province: "alajuela",
         institution: "INA",
         educationLevel: "pregrado",
-        image: "https://images.unsplash.com/photo-1504222490345-c075b6008014?q=80&w=600&auto=format&fit=crop" // Imagen - González
+        image: "https://images.unsplash.com/photo-1504222490345-c075b6008014?q=80&w=600&auto=format&fit=crop",
+        extraDetails: "Aprenda diagnóstico y reparación de vehículos modernos, incluyendo híbridos y eléctricos. El programa incluye prácticas supervisadas en talleres certificados. <br><br><strong>Apoyo Económico:</strong> Se otorga un monto de <strong>100.000 ₡</strong> mensuales para herramientas básicas y transporte."
     },
     {
         id: 10,
@@ -137,7 +146,8 @@ export const SCHOLARSHIPS = [
         province: "alajuela",
         institution: "FWD",
         educationLevel: "posgrado",
-        image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=600&auto=format&fit=crop" // Imagen - González
+        image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=600&auto=format&fit=crop",
+        extraDetails: "Certificación PMP orientada a líderes de equipos ágiles. Incluye acceso a herramientas de gestión como Jira y Asana, además de talleres de liderazgo. <br><br><strong>Apoyo Económico:</strong> Ayuda financiera de <strong>180.000 ₡</strong> mensuales para facilitar la participación en el curso."
     },
 
     // --- Cartago (3) ---
@@ -153,8 +163,9 @@ export const SCHOLARSHIPS = [
         province: "cartago",
         institution: "TEC",
         educationLevel: "grado",
-        image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=600&auto=format&fit=crop", // Imagen - González
-        deadline: new Date(Date.now() + 12 * 86400000).toISOString()
+        image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=600&auto=format&fit=crop",
+        deadline: new Date(Date.now() + 12 * 86400000).toISOString(),
+        extraDetails: "Estudie en la universidad tecnológica líder de la región. Acceso a clusters de computación de alto rendimiento y grupos de investigación en IA. <br><br><strong>Apoyo Económico:</strong> El TEC otorga <strong>160.000 ₡</strong> mensuales para residencias y alimentación dentro del campus."
     },
     {
         id: 12,
@@ -166,7 +177,8 @@ export const SCHOLARSHIPS = [
         province: "cartago",
         institution: "INA",
         educationLevel: "pregrado",
-        image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=600&auto=format&fit=crop" // Imagen - González
+        image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=600&auto=format&fit=crop",
+        extraDetails: "Especialización en automatización y control industrial. Incluye manejo de PLCs y robótica básica, con alta demanda en zonas francas de Cartago. <br><br><strong>Apoyo Económico:</strong> Beca de <strong>95.000 ₡</strong> mensuales para apoyar al estudiante durante su formación técnica."
     },
     {
         id: 13,
@@ -178,7 +190,8 @@ export const SCHOLARSHIPS = [
         province: "cartago",
         institution: "TEC",
         educationLevel: "posgrado",
-        image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=600&auto=format&fit=crop" // Imagen - González
+        image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=600&auto=format&fit=crop",
+        extraDetails: "Fondo exclusivo para investigación avanzada en biotecnología vegetal y médica. Cubre reactivos de laboratorio y publicaciones en revistas indexadas. <br><br><strong>Apoyo Económico:</strong> Asignación mensual de <strong>350.000 ₡</strong> para que el investigador se dedique a tiempo completo a su tesis."
     },
 
     // --- Puntarenas (3) ---
@@ -194,8 +207,9 @@ export const SCHOLARSHIPS = [
         province: "puntarenas",
         institution: "UNED",
         educationLevel: "grado",
-        image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=600&auto=format&fit=crop", // Imagen - González
-        deadline: new Date(Date.now() + 8 * 86400000).toISOString()
+        image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=600&auto=format&fit=crop",
+        deadline: new Date(Date.now() + 8 * 86400000).toISOString(),
+        extraDetails: "Carrera enfocada en el desarrollo turístico responsable. Incluye giras de campo y proyectos de vinculación con comunidades costeras. <br><br><strong>Apoyo Económico:</strong> La UNED aporta <strong>80.000 ₡</strong> mensuales para facilitar el transporte a centros universitarios y giras."
     },
     {
         id: 15,
@@ -207,19 +221,21 @@ export const SCHOLARSHIPS = [
         province: "puntarenas",
         institution: "UNA",
         educationLevel: "grado",
-        image: "https://images.unsplash.com/photo-1583212292454-1fe6229603b7?q=80&w=600&auto=format&fit=crop" // Imagen - González
+        image: "https://images.unsplash.com/photo-1583212292454-1fe6229603b7?q=80&w=600&auto=format&fit=crop",
+        extraDetails: "Estudie la biodiversidad marina en el sitio. Acceso a la estación de biología marina de la UNA y participación en censos de especies. <br><br><strong>Apoyo Económico:</strong> Beca de <strong>140.000 ₡</strong> mensuales para gastos de residencia cerca de la estación biológica."
     },
     {
         id: 16,
         title: "Computación en la Nube (FWD)",
         category: "Académica",
-        description: "Cursos remotos para residentes del pacífico.",
+        description: "Cursos remotos para residents del pacífico.",
         requirements: { minGPA: 8.0, maxAge: 30 },
         amount: "200.000 ₡",
         province: "puntarenas",
         institution: "FWD",
         educationLevel: "pregrado",
-        image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop" // Imagen - González
+        image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop",
+        extraDetails: "Certificación en AWS y Azure para fomentar el teletrabajo desde zonas costeras. Incluye voucher para examenes de certificación internacionales. <br><br><strong>Apoyo Económico:</strong> Subsidio de <strong>200.000 ₡</strong> mensuales para asegurar buena conectividad a internet y equipo adecuado."
     },
 
     // --- Guanacaste (2) ---
@@ -235,8 +251,9 @@ export const SCHOLARSHIPS = [
         province: "guanacaste",
         institution: "UCR",
         educationLevel: "grado",
-        image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=600&auto=format&fit=crop", // Imagen - González
-        deadline: new Date(Date.now() + 25 * 86400000).toISOString()
+        image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=600&auto=format&fit=crop",
+        deadline: new Date(Date.now() + 25 * 86400000).toISOString(),
+        extraDetails: "Investigación aplicada en cultivos resilientes al cambio climático. Prácticas en fincas experimentales de la región Chorotega. <br><br><strong>Apoyo Económico:</strong> Se brinda <strong>190.000 ₡</strong> mensuales para manutención y traslados a las fincas."
     },
     {
         id: 18,
@@ -248,7 +265,8 @@ export const SCHOLARSHIPS = [
         province: "guanacaste",
         institution: "INA",
         educationLevel: "pregrado",
-        image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=600&auto=format&fit=crop" // Imagen - González
+        image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=600&auto=format&fit=crop",
+        extraDetails: "Técnico enfocado en la instalación y mantenimiento de paneles solares y turbinas eólicas, aprovechando el potencial de la zona. <br><br><strong>Apoyo Económico:</strong> El INA aporta <strong>105.000 ₡</strong> al mes para apoyar al estudiante durante su capacitación."
     },
 
     // --- Limón (2) ---
@@ -264,8 +282,9 @@ export const SCHOLARSHIPS = [
         province: "limon",
         institution: "UCR",
         educationLevel: "grado",
-        image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=600&auto=format&fit=crop", // Imagen - González
-        deadline: new Date(Date.now() + 18 * 86400000).toISOString()
+        image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=600&auto=format&fit=crop",
+        deadline: new Date(Date.now() + 18 * 86400000).toISOString(),
+        extraDetails: "Formación especializada en la gestión de logística internacional y operaciones portuarias en la Sede del Caribe. Incluye pasantías en APM Terminals o JAPDEVA. <br><br><strong>Apoyo Económico:</strong> Beca mensual de <strong>170.000 ₡</strong> para cubrir gastos de estudio y transporte."
     },
     {
         id: 20,
@@ -277,7 +296,8 @@ export const SCHOLARSHIPS = [
         province: "limon",
         institution: "MICITT",
         educationLevel: "pregrado",
-        image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?q=80&w=600&auto=format&fit=crop" // Imagen - González
+        image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?q=80&w=600&auto=format&fit=crop",
+        extraDetails: "Programa intensivo para formar expertos en seguridad digital en la zona caribeña. Fomenta el talento local para empresas tecnológicas remotas. <br><br><strong>Apoyo Económico:</strong> Subsidio de <strong>155.000 ₡</strong> mensuales para que los jóvenes puedan dedicarse a su formación técnica."
     }
 ];
 
