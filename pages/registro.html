@@ -48,6 +48,14 @@
                         <input type="email" id="reg-email" required placeholder="tu@correo.com">
                     </div>
 
+                    <!-- Role Selection (Hidden by default, shown by JS for admin/evaluator emails) -->
+                    <div class="form-group" style="display: none;">
+                        <label for="reg-role">Tipo de Usuario</label>
+                        <select id="reg-role" class="form-control">
+                            <option value="applicant">Estudiante / Postulante</option>
+                        </select>
+                    </div>
+
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
 
                         <div class="form-group">
@@ -87,11 +95,9 @@
 
         <aside class="illustration-panel" style="padding: 0; position: relative;">
             <img src="../imgs/img-si.jpg" alt="Fondo Registro"
-
                 style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
 
             <div class="illustration-content"
-
                 style="position: relative; z-index: 2; background: rgba(0,0,0,0.3); width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 2rem;">
 
                 <!-- Content Overlay -->

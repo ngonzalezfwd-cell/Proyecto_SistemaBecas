@@ -16,7 +16,12 @@ form.addEventListener('submit', (e) => {
         localStorage.setItem('edugrant_current_user', JSON.stringify(user));
 
         messageDiv.style.color = 'var(--success-color, #10b981)'; // Green
-        messageDiv.textContent = `¡Bienvenido, ${title} ${user.fullName}!`;
+
+        let welcomeName = user.fullName;
+        if (user.role === 'admin') welcomeName = 'Administrador';
+        if (user.role === 'evaluator') welcomeName = 'Evaluador';
+
+        messageDiv.textContent = `¡Bienvenido, ${welcomeName}!`;
 
         // Disable button to prevent double submit
         document.querySelector('.btn-auth-primary').disabled = true;
@@ -30,6 +35,23 @@ form.addEventListener('submit', (e) => {
     const users = JSON.parse(localStorage.getItem('edugrant_users') || '[]');
     const user = users.find(u => u.email === email);
 
+    // --- GOLDEN RULE EXCEPTIONS (Cuentas de Prueba) ---
+
+    // 1. Admin Exception: admin@admin.com (Any password)
+    if (email === 'admin@admin.com') {
+        const adminUser = user || { id: 'admin_test', fullName: 'Administrador', email, role: 'admin' };
+        loginSuccess(adminUser, 'Administrador', 'text-success');
+        return;
+    }
+
+    // 2. Evaluator Exception: tormentionrex@evaluador.com (Password: undertale)
+    if (email === 'tormentionrex@evaluador.com' && password === 'undertale') {
+        const evalUser = user || { id: 'eval_test', fullName: 'Evaluador', email, role: 'evaluator' };
+        loginSuccess(evalUser, 'Evaluador', 'text-success');
+        return;
+    }
+
+    // --- Regular User Check (Must be registered in localStorage) ---
     if (user) {
         if (user.password === password) {
             // Determine role title for the welcome message
@@ -43,7 +65,7 @@ form.addEventListener('submit', (e) => {
             messageDiv.textContent = "Contraseña incorrecta. Por favor intente de nuevo.";
         }
     } else {
-        // User not found in localStorage
+        // User not found in localStorage and doesn't match specific test accounts
         messageDiv.style.color = 'var(--error-color, #ef4444)';
         messageDiv.textContent = "Esta cuenta no está registrada. Por favor regístrese primero.";
     }

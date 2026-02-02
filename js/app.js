@@ -85,16 +85,26 @@ function checkSession() {
         return;
     }
 
-    // Update Profile UI
-    document.getElementById('user-name').textContent = currentUser.fullName;
-    document.getElementById('user-avatar').textContent = currentUser.fullName.charAt(0).toUpperCase();
+    const userNameEl = document.getElementById('user-name');
+    const userRoleEl = document.getElementById('user-role');
+    const userAvatarEl = document.getElementById('user-avatar');
 
     const roleLabels = {
         'admin': 'Administrador',
         'evaluator': 'Evaluador',
-        'applicant': 'Postulante'
+        'applicant': 'Estudiante'
     };
-    document.getElementById('user-role').textContent = roleLabels[currentUser.role] || 'Usuario';
+
+    if (currentUser.role === 'admin' || currentUser.role === 'evaluator') {
+        const title = roleLabels[currentUser.role];
+        userNameEl.textContent = title;
+        userRoleEl.textContent = '';
+        userAvatarEl.textContent = title.charAt(0).toUpperCase();
+    } else {
+        userNameEl.textContent = currentUser.fullName;
+        userRoleEl.textContent = roleLabels[currentUser.role] || 'Usuario';
+        userAvatarEl.textContent = currentUser.fullName.charAt(0).toUpperCase();
+    }
 }
 // --- Navigation ---
 function setupNavigation() {
@@ -598,7 +608,14 @@ function setupForm() {
 
         const req = scholarship.requirements;
         let errors = [];
-        if (formData.gpa < req.minGPA) errors.push(`Promedio insuficiente (Mín: ${req.minGPA})`);
+
+        // REGLA DE ORO: BLOQUEO ESTRICTO POR PROMEDIO
+        if (formData.gpa < req.minGPA) {
+            alert(`No eres apto para esta beca. Tu promedio (${formData.gpa}) es inferior al mínimo solicitado (${req.minGPA}). Por favor, busca otra beca que se ajuste a tu perfil.`);
+            return;
+        }
+
+        // Otros requisitos (Edad, Ingresos) - Siguen permitiendo revisión manual con advertencia
         if (formData.age > req.maxAge) errors.push(`Edad fuera de rango (Máx: ${req.maxAge})`);
         if (req.maxIncome && formData.income > req.maxIncome) errors.push(`Ingreso familiar excede el límite (Máx: ₡${req.maxIncome.toLocaleString()})`);
 

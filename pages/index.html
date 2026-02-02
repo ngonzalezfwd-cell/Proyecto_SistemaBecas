@@ -44,10 +44,10 @@
                 <button class="nav-link" data-target="history">
                     <i class="fas fa-list-ul"></i> Mis Becas
                 </button>
-                <li class="nav-link" data-target="user-notifications">
-                    <span class="icon">🔔</span> Notificaciones <span class="badge-dot" id="nav-notif-badge"
+                <button class="nav-link" data-target="user-notifications">
+                    <i class="fas fa-bell"></i> Notificaciones <span class="badge-dot" id="nav-notif-badge"
                         style="display:none"></span>
-                </li>
+                </button>
                 <button class="nav-link" data-target="scholarship-management">
                     <i class="fas fa-tasks"></i> Gestionar
                 </button>
@@ -635,39 +635,45 @@
     </div>
 
     <!-- Modals -->
+    <!-- Evaluation Modal -->
     <div id="evaluation-modal" class="modal hidden">
         <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h3 id="eval-modal-title">Evaluar Solicitud</h3>
-            <div id="modal-details" class="mb-4"></div>
+            <div class="modal-header">
+                <h3 id="eval-modal-title">Evaluar Solicitud</h3>
+                <span class="close-modal">&times;</span>
+            </div>
 
-            <div class="evaluation-form">
-                <h4 class="mb-2">Puntuación del Candidato</h4>
-                <div class="form-grid-3">
-                    <div class="form-group">
-                        <label>Económico (0-40)</label>
-                        <input type="number" id="score-econ" min="0" max="40" value="0">
-                    </div>
-                    <div class="form-group">
-                        <label>Académico (0-30)</label>
-                        <input type="number" id="score-acad" min="0" max="30" value="0">
-                    </div>
-                    <div class="form-group">
-                        <label>Social (0-30)</label>
-                        <input type="number" id="score-social" min="0" max="30" value="0">
-                    </div>
-                </div>
+            <div id="modal-body-eval" class="modal-body">
+                <div id="modal-details" class="mb-4"></div>
 
-                <div class="form-group mt-3">
-                    <label>Puntaje Total Calculado</label>
-                    <input type="text" id="total-score" readonly value="0 puntos"
-                        style="background: #f8fafc; font-weight: bold;">
-                </div>
+                <div class="evaluation-form">
+                    <h4 class="mb-2">Puntuación del Candidato</h4>
+                    <div class="form-grid-3">
+                        <div class="form-group">
+                            <label>Económico (0-40)</label>
+                            <input type="number" id="score-econ" min="0" max="40" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Académico (0-30)</label>
+                            <input type="number" id="score-acad" min="0" max="30" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Social (0-30)</label>
+                            <input type="number" id="score-social" min="0" max="30" value="0">
+                        </div>
+                    </div>
 
-                <div class="form-group">
-                    <label>Observaciones del Evaluador</label>
-                    <textarea id="eval-observations"
-                        placeholder="Escriba aquí los comentarios sobre la postulación..."></textarea>
+                    <div class="form-group mt-3">
+                        <label>Puntaje Total Calculado</label>
+                        <input type="text" id="total-score" readonly value="0 puntos"
+                            style="background: #f8fafc; font-weight: bold;">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Observaciones del Evaluador</label>
+                        <textarea id="eval-observations" rows="4"
+                            placeholder="Escriba aquí los comentarios sobre la postulación..."></textarea>
+                    </div>
                 </div>
             </div>
 
@@ -679,11 +685,14 @@
         </div>
     </div>
 
+    <!-- Help Modal -->
     <div id="help-modal" class="modal hidden">
         <div class="modal-content help-modal-content">
-            <span class="close-modal" id="close-help-modal">&times;</span>
-            <h2 style="color: var(--primary-color); margin-bottom: 1.5rem;">Guía de Postulación EduHelper</h2>
-            <div class="help-content">
+            <div class="modal-header">
+                <h2 style="color: var(--primary-color); margin: 0;">Guía de Postulación EduHelper</h2>
+                <span class="close-modal" id="close-help-modal" style="position: static;">&times;</span>
+            </div>
+            <div class="modal-body help-content">
                 <p>Bienvenido al proceso de postulación. Siga estas instrucciones para asegurar que su solicitud sea
                     procesada correctamente:</p>
                 <h4>1. Identificación y Datos Personales</h4>
@@ -714,41 +723,48 @@
         </div>
     </div>
 
+    <!-- Scholarship Management Modal -->
     <div id="scholarship-modal" class="modal hidden">
         <div class="modal-content">
-            <span class="close-modal-sch">&times;</span>
-            <h3 id="sch-modal-title">Nueva Beca</h3>
-            <form id="scholarship-form">
-                <input type="hidden" id="sch-id">
-                <div class="form-group">
-                    <label>Título</label>
-                    <input type="text" id="sch-title" required>
-                </div>
-                <div class="form-group">
-                    <label>Descripción</label>
-                    <textarea id="sch-desc" rows="3" required></textarea>
-                </div>
-                <div class="form-row">
+            <div class="modal-header">
+                <h3 id="sch-modal-title" style="margin: 0;">Nueva Beca</h3>
+                <span class="close-modal-sch" style="font-size: 1.5rem; cursor: pointer;">&times;</span>
+            </div>
+            <form id="scholarship-form" style="display: contents;">
+                <div class="modal-body">
+                    <input type="hidden" id="sch-id">
                     <div class="form-group">
-                        <label>Monto</label>
-                        <input type="text" id="sch-amount" required placeholder="Ej: 50.000 ₡">
+                        <label>Título</label>
+                        <input type="text" id="sch-title" required>
                     </div>
                     <div class="form-group">
-                        <label>Promedio Mín.</label>
-                        <input type="number" id="sch-min-gpa" step="0.1" required>
+                        <label>Descripción</label>
+                        <textarea id="sch-desc" rows="3" required></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Monto</label>
+                            <input type="text" id="sch-amount" required placeholder="Ej: 50.000 ₡">
+                        </div>
+                        <div class="form-group">
+                            <label>Promedio Mín.</label>
+                            <input type="number" id="sch-min-gpa" step="0.1" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Edad Máx.</label>
+                            <input type="number" id="sch-max-age" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Ingreso Máx. (Opcional)</label>
+                            <input type="number" id="sch-max-income">
+                        </div>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Edad Máx.</label>
-                        <input type="number" id="sch-max-age" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Ingreso Máx. (Opcional)</label>
-                        <input type="number" id="sch-max-income">
-                    </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary w-100">Guardar Beca</button>
                 </div>
-                <button type="submit" class="btn-primary w-100">Guardar Beca</button>
             </form>
         </div>
     </div>

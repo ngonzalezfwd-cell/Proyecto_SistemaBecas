@@ -58,11 +58,14 @@ body {
 }
 
 .nav-container {
-    max-width: 1200px;
+    max-width: 1400px;
+    /* Increased to push logo more to the left */
     margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    /* Middle column only takes necessary space, outer columns take remainder */
     align-items: center;
+    gap: 1rem;
 }
 
 .nav-logo h2 {
@@ -73,7 +76,9 @@ body {
 
 .nav-links {
     display: flex;
-    gap: 2rem;
+    gap: 1.5rem;
+    /* Slightly more compact for many items */
+    justify-content: center;
 }
 
 .nav-links .nav-link {
@@ -110,6 +115,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
+    justify-self: start;
 }
 
 
@@ -135,6 +141,8 @@ body {
 .nav-user-container {
     display: flex;
     align-items: center;
+    justify-self: end;
+    /* Align to the right of the grid cell */
 }
 
 .nav-user-info {
@@ -165,16 +173,25 @@ body {
 }
 
 .nav-avatar {
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     background-color: var(--primary-color);
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
-    margin-right: 12px;
+    font-weight: 700;
+    margin-right: 15px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    font-size: 1.1rem;
+    transition: transform 0.2s ease;
+}
+
+.nav-avatar:hover {
+    transform: scale(1.05);
 }
 
 .nav-logout-btn {
@@ -971,10 +988,42 @@ textarea:focus {
 
 .modal-content {
     background: white;
-    padding: 2rem;
+    padding: 0;
+    /* Removing padding from container to allow header/footer to reach edges */
     border-radius: var(--radius);
-    width: 500px;
+    width: 90%;
+    max-width: 700px;
+    /* Increased from 500px for better evaluation view */
+    max-height: 90vh;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* Ensure rounded corners clip content */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.modal-body {
+    padding: 2rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.modal-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-actions {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    background-color: #f8fafc;
 }
 
 .close-modal {
